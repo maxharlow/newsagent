@@ -1,0 +1,192 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Datastash - Store",
+    "Parameters": {
+    },
+    "Resources": {
+        "Role": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "Path": "/",
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": "sts:AssumeRole",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [ "ec2.amazonaws.com" ]
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "DescribeInstancesPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "ec2-describeinstances",
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": "ec2:DescribeInstances",
+                            "Effect": "Allow",
+                            "Resource": "*"
+                        }
+                    ]
+                },
+                "Roles": [ { "Ref": "Role" } ]
+            }
+        },
+        "InstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": "/",
+                "Roles": [ { "Ref": "Role" } ]
+            }
+        },
+        "LoadBalancer": {
+            "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+            "Properties": {
+                "AvailabilityZones": { "Fn::GetAZs": "" },
+                "CrossZone": true,
+                "Listeners": [
+                    {
+                        "Protocol": "HTTP",
+                        "LoadBalancerPort": "80",
+                        "InstancePort": "80"
+                    },
+                    {
+                        "Protocol": "HTTP",
+                        "LoadBalancerPort": "9200",
+                        "InstancePort": "9200"
+                    }
+                ],
+                "HealthCheck": {
+                    "Target": "HTTP:9200/",
+                    "Timeout": "5",
+                    "Interval": "10",
+                    "UnhealthyThreshold": "10",
+                    "HealthyThreshold": "2"
+                }
+            }
+        },
+        "AutoscalingGroup": {
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "Properties": {
+                "AvailabilityZones": { "Fn::GetAZs": "" },
+                "LaunchConfigurationName": { "Ref": "LaunchConfig" },
+                "MinSize": "1",
+                "MaxSize": "3",
+                "DesiredCapacity": "3",
+                "HealthCheckType": "ELB",
+                "HealthCheckGracePeriod": 120,
+                "LoadBalancerNames": [ { "Ref": "LoadBalancer" } ],
+                "Tags": [
+                    {
+                        "Key": "Stack",
+                        "Value": "datastash",
+                        "PropagateAtLaunch": "true"
+                    },
+                    {
+                        "Key": "App",
+                        "Value": "store",
+                        "PropagateAtLaunch": "true"
+                    }
+                ]
+            }
+        },
+        "LaunchConfig": {
+            "Type": "AWS::AutoScaling::LaunchConfiguration",
+            "Properties": {
+                "ImageId": "ami-896c96fe",
+                "SecurityGroups": [
+		    { "Ref": "ElasticsearchSecurityGroup" },
+		    { "Ref": "SecurityGroup" }
+		],
+                "InstanceType": "m3.medium",
+                "IamInstanceProfile": { "Ref": "InstanceProfile" },
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [ "\n", [
+                            "#!/usr/bin/env bash",
+
+                            "mkdir /data",
+                            "mount /dev/xvdb /data",
+
+                            "apt-get -y update",
+                            "apt-get -y install language-pack-en openjdk-7-jre-headless nginx",
+
+                            "adduser --disabled-password datastash",
+                            "curl https://github.com/maxharlow.keys > /home/ubuntu/.ssh/authorized_keys",
+                            "cd /home/datastash",
+
+                            "mkdir logs",
+
+                            "wget https://s3-eu-west-1.amazonaws.com/datastash/store.tar.gz",
+                            "tar xfv store.tar.gz",
+
+                            { "Fn::Join": [ "", [ "sed -i",
+                                " -e 's,@@REGION,", { "Ref": "AWS::Region" }, ",g'",
+                                " elasticsearch/config/elasticsearch.yml" ] ] },
+
+                            "chown -R datastash /home/datastash /data",
+                            "chgrp -R datastash /home/datastash /data",
+
+                            "service nginx stop",
+                            "rm /etc/init.d/nginx",
+                            "rm /etc/nginx/sites-enabled/default",
+                            "mv nginx-sites.conf /etc/nginx/sites-enabled",
+
+                            "mv elasticsearch.conf /etc/init",
+                            "mv nginx.conf /etc/init",
+
+                            "start elasticsearch",
+                            "start nginx"
+                        ] ]
+                    }
+                }
+            }
+        },
+        "ElasticsearchSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Elasticsearch nodes",
+                "SecurityGroupIngress": [ ]
+            }
+        },
+        "SecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "SSH, Elasticsearch, and HTTP",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "SourceSecurityGroupName": "amazon-elb-sg",
+                        "SourceSecurityGroupOwnerId": "amazon-elb"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9200",
+                        "ToPort": "9200",
+                        "SourceSecurityGroupName": "amazon-elb-sg",
+                        "SourceSecurityGroupOwnerId": "amazon-elb"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9300",
+                        "ToPort": "9300",
+                        "SourceSecurityGroupName": { "Ref": "ElasticsearchSecurityGroup" }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            }
+        }
+    }
+}

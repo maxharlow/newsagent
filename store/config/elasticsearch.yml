@@ -1,0 +1,29 @@
+
+cluster.name: datastash
+
+index:
+	number_of_shards: 3
+	number_of_replicas: 1
+
+path:
+	conf: elasticsearch/config
+	logs: logs
+	data: /data
+
+gateway:
+	expected_nodes: 3
+	recover_after_nodes: 2
+	recover_after_time: 2m
+
+discovery:
+	type: ec2
+	ec2.tag.Stack: datastash
+	ec2.tag.App: store
+	zen.minimum_master_nodes: 1
+	zen.ping.multicast.enabled: false
+
+plugin.mandatory: cloud-aws
+
+cloud.aws.region: "@@REGION"
+
+bootstrap.mlockall: true

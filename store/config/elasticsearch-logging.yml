@@ -1,0 +1,10 @@
+
+rootLogger: INFO, file
+
+appender.file:
+	type: dailyRollingFile
+	file: ${path.logs}/elasticsearch.log
+	maxBackupIndex: 7
+	datePattern: "'.'yyyy-MM-dd"
+	layout.type: pattern
+	layout.conversionPattern: "%d{ISO8601} %-5p %-25c %m%n"
