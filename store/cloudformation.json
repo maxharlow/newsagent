@@ -76,7 +76,7 @@
                 "AvailabilityZones": { "Fn::GetAZs": "" },
                 "LaunchConfigurationName": { "Ref": "LaunchConfig" },
                 "MinSize": "1",
-                "MaxSize": "3",
+                "MaxSize": "6",
                 "DesiredCapacity": "3",
                 "HealthCheckType": "ELB",
                 "HealthCheckGracePeriod": 120,
@@ -187,6 +187,11 @@
                     }
                 ]
             }
+        }
+    },
+    "Outputs": {
+        "LoadBalancer": {
+            "Value": { "Fn::GetAtt": [ "LoadBalancer", "DNSName" ] }
         }
     }
 }
