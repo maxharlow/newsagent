@@ -104,14 +104,14 @@ stack.delete:
 	@aws cloudformation delete-stack \
 		--stack-name 'datastash-store'
 
-local: elasticsearch kibana local.stop
+local: target/elasticsearch target/kibana local.stop
 	@mkdir -p .local
 	@rm -rf .local/elasticsearch
-	@mv elasticsearch .local
+	@cp -r target/elasticsearch .local
 	@ln -sf config/elasticsearch.yml $(shell pwd)/.local/elasticsearch/config/elasticsearch.yml
 	@ln -sf config/elasticsearch-logging.yml $(shell pwd)/.local/elasticsearch/config/logging.yml
 	@rm -rf .local/kibana
-	@mv kibana .local
+	@cp -r target/kibana .local
 
 local.start:
 	@./.local/elasticsearch/bin/elasticsearch -d \
@@ -121,11 +121,11 @@ local.start:
 		--path.logs=.local/logs \
 		--gateway.expected_nodes=1 \
 		--gateway.recover_after_nodes=1 \
-		--discovery.type=zen
+		--discovery.type=zen &> /dev/null
 	@cd .local/kibana && (python -m SimpleHTTPServer 8000 &> /dev/null &) && cd ../..
 	@echo 'Elasticsearch now running at http://localhost:9200/_plugin/head/'
 	@echo 'Kibana now running at        http://localhost:8000/'
 
 local.stop:
-	-pkill -f SimpleHTTPServer
-	-pkill -f org.elasticsearch
+	@pkill -f SimpleHTTPServer | true
+	@pkill -f org.elasticsearch | true
