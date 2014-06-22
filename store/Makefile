@@ -41,7 +41,7 @@ target/store.tar.gz: target/elasticsearch target/kibana
 upload: target/store.tar.gz
 	@aws s3 cp \
 		--acl public-read \
-		target/store.tar.gz s3://datastash
+		target/store.tar.gz s3://datastash > /dev/null
 
 update: stack.update
 	$(eval group-name = $(shell aws autoscaling describe-auto-scaling-groups \
@@ -68,7 +68,7 @@ update: stack.update
 	@for c in $$(seq $(group-desired-double) $(group-desired)); \
 		do \
 		while [[ $$(curl -s '$(loadbalancer):9200/_cat/health?h=status') -ne 'green' ]]; \
-			do sleep 5 && printf '^'; done; \
+			do sleep 5 && printf ' '; done; \
 		aws autoscaling set-desired-capacity --auto-scaling-group-name $(group-name) --desired-capacity $$c; \
 		while [[ $$(curl -s '$(loadbalancer):9200/_cat/health?h=node.total') -ne $$c ]]; \
 			do sleep 5 && printf '.'; done; \
@@ -79,17 +79,18 @@ stack:
 	@aws cloudformation create-stack \
 		--capabilities 'CAPABILITY_IAM' \
 		--stack-name 'datastash-store' \
-		--template-body "$$(cat cloudformation.json)"
+		--template-body "$$(cat cloudformation.json)" > /dev/null
 	@printf 'Creating stack'
 	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-store' --query 'Stacks[0].StackStatus') =~ 'CREATE_IN_PROGRESS' ]]; \
 		do sleep 5 && printf '.'; done
 	@printf '\n'
+	@printf '(now wait for Elasticsearch to start...)'
 
 stack.update: upload
 	@aws cloudformation update-stack \
 		--capabilities 'CAPABILITY_IAM' \
 		--stack-name 'datastash-store' \
-		--template-body "$$(cat cloudformation.json)" | true > /dev/null
+		--template-body "$$(cat cloudformation.json)" &> /dev/null | true
 	@printf 'Updating stack'
 	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-store' --query 'Stacks[0].StackStatus') =~ 'UPDATE_IN_PROGRESS' ]]; \
 		do sleep 5 && printf '.'; done
