@@ -78,6 +78,7 @@
                 "MinSize": "1",
                 "MaxSize": "6",
                 "DesiredCapacity": "3",
+		"TerminationPolicies": [ "OldestInstance" ],
                 "HealthCheckType": "ELB",
                 "HealthCheckGracePeriod": 120,
                 "LoadBalancerNames": [ { "Ref": "LoadBalancer" } ],
