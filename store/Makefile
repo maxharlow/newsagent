@@ -44,15 +44,19 @@ upload: target/store.tar.gz
 		target/store.tar.gz s3://datastash > /dev/null
 
 update: stack.update
-	$(eval group-name = $(shell aws autoscaling describe-auto-scaling-groups \
-		--query 'AutoScalingGroups[?AutoScalingGroupName>=`datastash-store`].AutoScalingGroupName|[0]'))
+	$(eval group-name = $(shell aws cloudformation list-stack-resources \
+		--stack-name 'datastash-store' \
+		--query 'StackResourceSummaries[?ResourceType==`AWS::AutoScaling::AutoScalingGroup`].PhysicalResourceId' \
+		--output text))
 	$(eval group-max = $(shell aws autoscaling describe-auto-scaling-groups \
-		--query 'AutoScalingGroups[?AutoScalingGroupName>=`datastash-store`].MaxSize|[0]'))
+		--auto-scaling-group-names $(group-name) \
+		--query 'AutoScalingGroups[0].MaxSize'))
 	$(eval group-desired = $(shell aws autoscaling describe-auto-scaling-groups \
-		--query 'AutoScalingGroups[?AutoScalingGroupName>=`datastash-store`].DesiredCapacity|[0]'))
+		--auto-scaling-group-names $(group-name) \
+		--query 'AutoScalingGroups[0].DesiredCapacity'))
 	$(eval group-desired-double = $(shell bc <<< '$(group-desired) * 2'))
 	$(eval loadbalancer = $(shell aws cloudformation describe-stacks \
-		--stack-name datastash-store \
+		--stack-name 'datastash-store' \
 		--query 'Stacks[0].Outputs[?OutputKey==`LoadBalancer`].OutputValue' \
 		--output text))
 	@test $(group-desired-double) -le $(group-max)
