@@ -2,8 +2,8 @@
 # Upload and stack creation require the AWS CLI
 # Upload requires an S3 bucket named 'datastash'
 
-elasticsearch-version = 1.1.1
-kibana-version = 3.0.1
+elasticsearch-version = 1.2.1
+kibana-version = 3.1.0
 
 .PHONY: target.clean upload update stack stack.update stack.delete local local.start local.stop
 
@@ -20,7 +20,7 @@ target/elasticsearch: | target
 	@tar -xf target/elasticsearch.tar.gz -C target
 	@rm target/elasticsearch.tar.gz
 	@mv target/elasticsearch-$(elasticsearch-version) target/elasticsearch
-	@./target/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-cloud-aws/2.1.1
+	@./target/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-cloud-aws/2.2.0
 	@./target/elasticsearch/bin/plugin -install mobz/elasticsearch-head
 	@./target/elasticsearch/bin/plugin -install lukas-vlcek/bigdesk/2.4.0
 	@./target/elasticsearch/bin/plugin -install karmi/elasticsearch-paramedic
