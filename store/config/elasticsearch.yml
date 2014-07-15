@@ -3,7 +3,7 @@ cluster.name: datastash
 
 index:
 	number_of_shards: 3
-	number_of_replicas: 1
+	number_of_replicas: 0
 
 path:
 	conf: elasticsearch/config
@@ -11,8 +11,8 @@ path:
 	data: /data
 
 gateway:
-	expected_nodes: 3
-	recover_after_nodes: 2
+	expected_nodes: 1
+	recover_after_nodes: 1
 	recover_after_time: 2m
 
 discovery:
