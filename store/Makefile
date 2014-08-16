@@ -2,7 +2,7 @@
 # Upload and stack creation require the AWS CLI
 # Upload requires an S3 bucket named 'datastash'
 
-elasticsearch-version = 1.2.1
+elasticsearch-version = 1.3.2
 kibana-version = 3.1.0
 
 .PHONY: target.clean upload update stack stack.update stack.delete local local.start local.stop
@@ -41,7 +41,7 @@ target/store.tar.gz: target/elasticsearch target/kibana
 upload: target/store.tar.gz
 	@aws s3 cp \
 		--acl public-read \
-		target/store.tar.gz s3://datastash > /dev/null
+		target/store.tar.gz s3://datastash
 
 update: stack.update
 	$(eval group-name = $(shell aws cloudformation list-stack-resources \
@@ -103,6 +103,8 @@ stack.update: upload
 stack.delete:
 	@aws cloudformation delete-stack \
 		--stack-name 'datastash-store'
+	@aws s3 rm \
+		s3://datastash/store.tar.gz
 
 local: target/elasticsearch target/kibana local.stop
 	@mkdir -p .local
