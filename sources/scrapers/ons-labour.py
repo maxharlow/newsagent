@@ -30,10 +30,9 @@ with tempfile.NamedTemporaryFile() as temp:
         while sheet.cell_type(row, col_start + 1) is 2:
             quarter = sheet.cell_value(row, col_start)
             timestamp = datetime.strptime(quarter[4:], '%b %Y').isoformat() # todo: what is the interval here?? overlapping quarters?
-            identifier = 'Labour' + country + timestamp
+            identifier = country + timestamp
             data = {
                 '@timestamp': timestamp,
-                'type': 'Labour',
                 'country': country,
                 'all16AndOver': sheet.cell_value(row, col_start + 1),
                 'totalEconomicallyActive': sheet.cell_value(row, col_start + 3),
