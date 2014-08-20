@@ -33,7 +33,7 @@ with tempfile.NamedTemporaryFile() as temp:
             identifier = 'Labour' + country + timestamp
             data = {
                 '@timestamp': timestamp,
-                'type': 'Labour'
+                'type': 'Labour',
                 'country': country,
                 'all16AndOver': sheet.cell_value(row, col_start + 1),
                 'totalEconomicallyActive': sheet.cell_value(row, col_start + 3),
