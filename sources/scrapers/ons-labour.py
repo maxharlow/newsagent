@@ -1,14 +1,21 @@
 import requests
 import tempfile
 import xlrd
-from datetime import datetime
 import json
+from datetime import datetime, timedelta
 
 store = 'localhost'
 
+def get_data(date):
+    date_formatted = date.strftime('%B-%Y').lower()
+    return requests.get('http://www.ons.gov.uk/ons/rel/subnational-labour/regional-labour-market-statistics/%(date)s/rft-lm-hi00-%(date)s.xls' % {'date': date_formatted})
+
 print('Retrieving labour market statistics...')
 with tempfile.NamedTemporaryFile() as temp:
-    request = requests.get('http://www.ons.gov.uk/ons/rel/subnational-labour/regional-labour-market-statistics/august-2014/rft-lm-hi00-august-2014.xls')
+    request = get_data(datetime.today())
+    if request.status_code is not 200:
+        request = get_data(datetime.today() - timedelta(months=1))
+    request.raise_for_status()
     temp.write(request.content)
     temp.flush()
     workbook = xlrd.open_workbook(temp.name)
