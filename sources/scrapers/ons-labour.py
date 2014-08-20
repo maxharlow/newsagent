@@ -30,8 +30,10 @@ with tempfile.NamedTemporaryFile() as temp:
         while sheet.cell_type(row, col_start + 1) is 2:
             quarter = sheet.cell_value(row, col_start)
             timestamp = datetime.strptime(quarter[4:], '%b %Y').isoformat() # todo: what is the interval here?? overlapping quarters?
+            identifier = 'Labour' + country + timestamp
             data = {
                 '@timestamp': timestamp,
+                'type': 'Labour'
                 'country': country,
                 'all16AndOver': sheet.cell_value(row, col_start + 1),
                 'totalEconomicallyActive': sheet.cell_value(row, col_start + 3),
@@ -43,6 +45,6 @@ with tempfile.NamedTemporaryFile() as temp:
                 'unemploymentRate': sheet.cell_value(row, col_start + 15),
                 'economicInactivityRate': sheet.cell_value(row, col_start + 17),
             }
-            response = requests.post('http://%s:9200/data/labour/' % store, json.dumps(data)) # todo: needs to overwrite duplicate data (for updates) -- send id?
+            response = requests.put('http://%s:9200/data/labour/%s' % (store, identifier), json.dumps(data))
             response.raise_for_status()
             row += 1
