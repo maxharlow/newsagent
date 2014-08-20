@@ -1,4 +1,7 @@
 .*
 !.gitignore
 
-target/
+target
+
+venv
+*.pyc
