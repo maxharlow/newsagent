@@ -1,6 +1,5 @@
 
 # Upload and stack creation require the AWS CLI
-# Upload requires an S3 bucket named 'datastash'
 
 elasticsearch-version = 1.3.2
 kibana-version = 3.1.0
@@ -39,6 +38,8 @@ target/store.tar.gz: target/elasticsearch target/kibana
 		-C ../target elasticsearch kibana
 
 upload: target/store.tar.gz
+	@aws s3 mb \
+		s3://datastash | true
 	@aws s3 cp \
 		--acl public-read \
 		target/store.tar.gz s3://datastash
@@ -105,6 +106,8 @@ stack.delete:
 		--stack-name 'datastash-store'
 	@aws s3 rm \
 		s3://datastash/store.tar.gz
+	@aws s3 rb \
+		s3://datastash
 
 local: target/elasticsearch target/kibana local.stop
 	@mkdir -p .local
