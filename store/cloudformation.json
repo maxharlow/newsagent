@@ -118,12 +118,12 @@
                             "apt-get -y install language-pack-en openjdk-7-jre-headless nginx",
 
                             "adduser --disabled-password datastash",
-                            "curl https://github.com/maxharlow.keys > /home/ubuntu/.ssh/authorized_keys",
+                            "curl https://github.com/maxharlow.keys -o /home/ubuntu/.ssh/authorized_keys",
                             "cd /home/datastash",
 
                             "mkdir logs",
 
-                            "wget https://s3-eu-west-1.amazonaws.com/datastash/store.tar.gz",
+                            "curl -O https://s3-eu-west-1.amazonaws.com/datastash/store.tar.gz",
                             "tar xfv store.tar.gz",
 
                             { "Fn::Join": [ "", [ "sed -i",

@@ -16,7 +16,7 @@ target.clean:
 
 target/elasticsearch: | target
 	@curl -o target/elasticsearch.tar.gz https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$(elasticsearch-version).tar.gz
-	@tar -xf target/elasticsearch.tar.gz -C target
+	@tar xf target/elasticsearch.tar.gz -C target
 	@rm target/elasticsearch.tar.gz
 	@mv target/elasticsearch-$(elasticsearch-version) target/elasticsearch
 	@./target/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-cloud-aws/2.2.0
@@ -28,12 +28,12 @@ target/elasticsearch: | target
 
 target/kibana: | target
 	@curl -o target/kibana.tar.gz https://download.elasticsearch.org/kibana/kibana/kibana-$(kibana-version).tar.gz
-	@tar -xf target/kibana.tar.gz -C target
+	@tar xf target/kibana.tar.gz -C target
 	@rm target/kibana.tar.gz
 	@mv target/kibana-$(kibana-version) target/kibana
 
 target/store.tar.gz: target/elasticsearch target/kibana
-	@tar -czf target/store.tar.gz \
+	@tar czf target/store.tar.gz \
 		-C config elasticsearch.conf nginx.conf nginx-sites.conf \
 		-C ../target elasticsearch kibana
 
