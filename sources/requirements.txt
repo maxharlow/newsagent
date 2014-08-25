@@ -1,5 +1,6 @@
+boto==2.32.1
 requests==2.3.0
 wsgiref==0.1.2
-xlrd==0.9.3
 xlutils==1.7.1
+xlrd==0.9.3
 xlwt==0.7.5

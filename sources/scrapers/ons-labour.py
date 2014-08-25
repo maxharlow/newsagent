@@ -1,20 +1,27 @@
+#!/usr/bin/env python
+
+import boto.ec2.elb
 import requests
 import tempfile
 import xlrd
 import json
 from datetime import datetime, timedelta
 
-store = 'localhost'
+try:
+    connection = boto.ec2.elb.connect_to_region('eu-west-1')
+    store = connection.get_all_load_balancers(['datastash-store'])[0]
+except:
+    store = 'localhost'
 
-def get_data(date):
+def retrieve(date):
     date_formatted = date.strftime('%B-%Y').lower()
     return requests.get('http://www.ons.gov.uk/ons/rel/subnational-labour/regional-labour-market-statistics/%(date)s/rft-lm-hi00-%(date)s.xls' % {'date': date_formatted})
 
 print('Retrieving labour market statistics...')
 with tempfile.NamedTemporaryFile() as temp:
-    request = get_data(datetime.today())
+    request = retrieve(datetime.today())
     if request.status_code is not 200:
-        request = get_data(datetime.today() - timedelta(months=1))
+        request = retrieve(datetime.today() - timedelta(months=1))
     request.raise_for_status()
     temp.write(request.content)
     temp.flush()
