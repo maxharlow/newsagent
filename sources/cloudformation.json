@@ -24,11 +24,11 @@
         "DescribeInstancesPolicy": {
             "Type": "AWS::IAM::Policy",
             "Properties": {
-                "PolicyName": "ec2-describeinstances",
+                "PolicyName": "DescribeLoadBalancers",
                 "PolicyDocument": {
                     "Statement": [
                         {
-                            "Action": "ec2:DescribeInstances",
+                            "Action": "elasticloadbalancing:DescribeLoadBalancers",
                             "Effect": "Allow",
                             "Resource": "*"
                         }

@@ -47,6 +47,7 @@
         "LoadBalancer": {
             "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
             "Properties": {
+                "LoadBalancerName": "datastash-store",
                 "AvailabilityZones": { "Fn::GetAZs": "" },
                 "CrossZone": true,
                 "Listeners": [

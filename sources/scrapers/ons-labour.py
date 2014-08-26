@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 
 try:
     connection = boto.ec2.elb.connect_to_region('eu-west-1')
-    store = connection.get_all_load_balancers(['datastash-store'])[0]
+    store = connection.get_all_load_balancers(['datastash-store'])[0].dns_name
 except:
     store = 'localhost'
 
