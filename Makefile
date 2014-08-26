@@ -6,6 +6,6 @@ all:
 	@make -C sources
 
 delete:
-	@make -C store stack.delete
-	@make -C sources stack.delete
+	@make -C store stack.delete | true
+	@make -C sources stack.delete | true
 
