@@ -89,7 +89,7 @@ stack:
 	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-store' --query 'Stacks[0].StackStatus') =~ 'CREATE_IN_PROGRESS' ]]; \
 		do sleep 5 && printf '.'; done
 	@printf '\n'
-	@printf '(now wait for Elasticsearch to start...)'
+	@printf '(now wait for Elasticsearch to start...)\n'
 
 stack.update: upload
 	@aws cloudformation update-stack \
