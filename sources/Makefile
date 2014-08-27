@@ -11,7 +11,7 @@ target:
 target.clean:
 	@rm -r target
 
-target/sources.tar.gz: target
+target/sources.tar.gz: | target
 	@tar czf target/sources.tar.gz \
 		requirements.txt scrapers/*.py
 
