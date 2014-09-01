@@ -21,7 +21,7 @@ print('Retrieving labour market statistics...')
 with tempfile.NamedTemporaryFile() as temp:
     request = retrieve(datetime.today())
     if request.status_code is not 200:
-        request = retrieve(datetime.today() - timedelta(months=1))
+        request = retrieve(datetime.today() - timedelta(weeks=4))
     request.raise_for_status()
     temp.write(request.content)
     temp.flush()
