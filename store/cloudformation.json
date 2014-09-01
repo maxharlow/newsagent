@@ -149,13 +149,6 @@
                 }
             }
         },
-        "ElasticsearchSecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties": {
-                "GroupDescription": "Elasticsearch nodes",
-                "SecurityGroupIngress": [ ]
-            }
-        },
         "SecurityGroup": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
@@ -174,12 +167,6 @@
                         "ToPort": "9200",
                         "SourceSecurityGroupName": "amazon-elb-sg",
                         "SourceSecurityGroupOwnerId": "amazon-elb"
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "9300",
-                        "ToPort": "9300",
-                        "SourceSecurityGroupName": { "Ref": "ElasticsearchSecurityGroup" }
                     },
                     {
                         "IpProtocol": "tcp",
