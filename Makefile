@@ -5,7 +5,6 @@ all:
 	@make -C store
 	@make -C sources
 
-delete:
-	@make -C store stack.delete | true
-	@make -C sources stack.delete | true
-
+destroy:
+	@make -C store stack.delete > /dev/null | true
+	@make -C sources stack.delete > /dev/null | true
