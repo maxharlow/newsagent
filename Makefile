@@ -6,5 +6,5 @@ all:
 	@make -C sources
 
 destroy:
-	@make -C store stack.delete > /dev/null | true
-	@make -C sources stack.delete > /dev/null | true
+	@make -C store stack.delete &> /dev/null | true
+	@make -C sources stack.delete &> /dev/null | true
