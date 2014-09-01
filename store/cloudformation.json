@@ -102,7 +102,6 @@
             "Properties": {
                 "ImageId": "ami-896c96fe",
                 "SecurityGroups": [
-		    { "Ref": "ElasticsearchSecurityGroup" },
 		    { "Ref": "SecurityGroup" }
 		],
                 "InstanceType": "m3.medium",
