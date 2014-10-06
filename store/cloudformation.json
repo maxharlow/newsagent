@@ -53,8 +53,8 @@
                 "Listeners": [
                     {
                         "Protocol": "HTTP",
-                        "LoadBalancerPort": "80",
-                        "InstancePort": "80"
+                        "LoadBalancerPort": "5601",
+                        "InstancePort": "5601"
                     },
                     {
                         "Protocol": "HTTP",
@@ -115,7 +115,7 @@
                             "mount /dev/xvdb /data",
 
                             "apt-get -y update",
-                            "apt-get -y install language-pack-en openjdk-7-jre-headless nginx",
+                            "apt-get -y install language-pack-en openjdk-7-jre-headless",
 
                             "adduser --disabled-password datastash",
                             "curl https://github.com/maxharlow.keys -o /home/ubuntu/.ssh/authorized_keys",
@@ -133,16 +133,11 @@
                             "chown -R datastash /home/datastash /data",
                             "chgrp -R datastash /home/datastash /data",
 
-                            "service nginx stop",
-                            "rm /etc/init.d/nginx",
-                            "rm /etc/nginx/sites-enabled/default",
-                            "mv nginx-sites.conf /etc/nginx/sites-enabled",
-
                             "mv elasticsearch.conf /etc/init",
-                            "mv nginx.conf /etc/init",
+                            "mv kibana.conf /etc/init",
 
                             "start elasticsearch",
-                            "start nginx"
+                            "start kibana"
                         ] ]
                     }
                 }
@@ -151,12 +146,12 @@
         "SecurityGroup": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
-                "GroupDescription": "SSH, Elasticsearch, and HTTP",
+                "GroupDescription": "SSH, Elasticsearch, and Kibana",
                 "SecurityGroupIngress": [
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "80",
-                        "ToPort": "80",
+                        "FromPort": "5601",
+                        "ToPort": "5601",
                         "SourceSecurityGroupName": "amazon-elb-sg",
                         "SourceSecurityGroupOwnerId": "amazon-elb"
                     },

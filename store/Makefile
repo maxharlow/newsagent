@@ -1,10 +1,10 @@
 
 # Upload and stack creation require the AWS CLI
 
-elasticsearch-version = 1.3.2
-kibana-version = 3.1.0
+elasticsearch-version = 1.4.0.Beta1
+kibana-version = 4.0.0-BETA1
 
-.PHONY: target.clean upload update stack stack.update stack.delete local local.start local.stop
+.PHONY: target.clean upload update stack stack.update stack.delete local local.clean local.start local.stop
 
 all: upload stack
 
@@ -19,10 +19,8 @@ target/elasticsearch: | target
 	@tar xf target/elasticsearch.tar.gz -C target
 	@rm target/elasticsearch.tar.gz
 	@mv target/elasticsearch-$(elasticsearch-version) target/elasticsearch
-	@./target/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-cloud-aws/2.2.0
-	@./target/elasticsearch/bin/plugin -install mobz/elasticsearch-head
-	@./target/elasticsearch/bin/plugin -install lukas-vlcek/bigdesk/2.4.0
-	@./target/elasticsearch/bin/plugin -install karmi/elasticsearch-paramedic
+	@./target/elasticsearch/bin/plugin --install elasticsearch/elasticsearch-cloud-aws/2.4.0
+	@./target/elasticsearch/bin/plugin --install mobz/elasticsearch-head
 	@cp config/elasticsearch.yml target/elasticsearch/config/elasticsearch.yml
 	@cp config/elasticsearch-logging.yml target/elasticsearch/config/logging.yml
 
@@ -34,7 +32,7 @@ target/kibana: | target
 
 target/store.tar.gz: target/elasticsearch target/kibana
 	@tar czf target/store.tar.gz \
-		-C config elasticsearch.conf nginx.conf nginx-sites.conf \
+		-C config elasticsearch.conf kibana.conf \
 		-C ../target elasticsearch kibana
 
 upload: target/store.tar.gz
@@ -109,14 +107,17 @@ stack.delete:
 	@aws s3 rb \
 		s3://datastash
 
-local: target/elasticsearch target/kibana local.stop
+local: target/elasticsearch target/kibana local.clean local.stop
 	@mkdir -p .local
 	@rm -rf .local/elasticsearch
 	@cp -r target/elasticsearch .local
-	@ln -sf config/elasticsearch.yml $(shell pwd)/.local/elasticsearch/config/elasticsearch.yml
-	@ln -sf config/elasticsearch-logging.yml $(shell pwd)/.local/elasticsearch/config/logging.yml
+	@ln -sf $(shell pwd)/config/elasticsearch.yml .local/elasticsearch/config/elasticsearch.yml
+	@ln -sf $(shell pwd)/config/elasticsearch-logging.yml .local/elasticsearch/config/logging.yml
 	@rm -rf .local/kibana
 	@cp -r target/kibana .local
+
+local.clean:
+	@rm -rf .local | true
 
 local.start:
 	@./.local/elasticsearch/bin/elasticsearch -d \
@@ -127,10 +128,10 @@ local.start:
 		--gateway.expected_nodes=1 \
 		--gateway.recover_after_nodes=1 \
 		--discovery.type=zen &> /dev/null
-	@cd .local/kibana && (python -m SimpleHTTPServer 8000 &> /dev/null &) && cd ../..
-	@echo 'Elasticsearch now running at http://localhost:9200/_plugin/head/'
-	@echo 'Kibana now running at        http://localhost:8000/'
+	@./.local/kibana/bin/kibana &> /dev/null &
+	@echo 'Elasticsearch starting up at http://localhost:9200/_plugin/head/'
+	@echo 'Kibana starting up at http://localhost:5601/'
 
 local.stop:
-	@pkill -f SimpleHTTPServer | true
-	@pkill -f org.elasticsearch | true
+	@pkill -f kibana | true
+	@pkill -f elasticsearch | true
