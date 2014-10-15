@@ -79,6 +79,7 @@ update: stack.update
 	@printf '\n'
 
 stack:
+	@read -p 'This will create resources in AWS. Continue? (y/n) ' a && test $$a == 'y' || exit
 	@aws cloudformation create-stack \
 		--capabilities 'CAPABILITY_IAM' \
 		--stack-name 'datastash-store' \
