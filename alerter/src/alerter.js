@@ -39,7 +39,9 @@ function run() {
 
 function check(alert) {
     var shadowsLocation = '../.shadows'
-    fs.mkdir(shadowsLocation, function () { /* ignored */ })
+    fs.mkdir(shadowsLocation, function (error) {
+	if (error && error.code !== 'EEXIST') throw error
+    })
     elasticsearchClient.search(alert.query, function (searchError, searchResponse) {
 	if (searchError) throw searchError
 	var hits = searchResponse.hits.hits.map(function (result) {
