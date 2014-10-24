@@ -1,3 +1,4 @@
+var aws = require('aws-sdk')
 var highland = require('highland')
 var fs = require('fs')
 var path = require('path')
@@ -10,7 +11,10 @@ var config = require('./config.json')
 var sourcesLocation = path.resolve('sources')
 var clonesLocation = path.resolve('.clones')
 
-var elasticsearchLocation = 'localhost:9200' // todo look this up
+var elasticsearchHost
+new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function(error, data) {
+    elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
+})
 
 function run() {
     fs.readdir(sourcesLocation, function (error, filenames) {
@@ -63,7 +67,7 @@ function load(source, location, type) {
     })
     data.each(function (entry) {
 	request({
-	    uri: 'http://' + elasticsearchLocation + '/' + config.elasticsearchIndex + '/' + type + '/' + entry['@timestamp'],
+	    uri: 'http://' + elasticsearchHost + ':' + config.elasticsearchPort + '/' + config.elasticsearchIndex + '/' + type + '/' + entry['@timestamp'],
 	    method: 'PUT',
 	    json: true,
 	    body: entry

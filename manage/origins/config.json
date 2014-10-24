@@ -1,3 +1,4 @@
 {
+    "elasticsearchPort": 9200,
     "elasticsearchIndex": "data"
 }
