@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Datastash - Sources",
+    "Description": "Datastash - Origins",
     "Parameters": {
     },
     "Resources": {
@@ -64,7 +64,7 @@
                     },
                     {
                         "Key": "App",
-                        "Value": "sources",
+                        "Value": "origins",
                         "PropagateAtLaunch": "true"
                     }
                 ]
@@ -95,8 +95,8 @@
                             "chgrp -R datastash /home/datastash",
 
                             { "Fn::Join": [ "; ", [ "echo '@hourly ( date",
-                                "curl -O https://s3-eu-west-1.amazonaws.com/datastash/sources.tar.gz",
-                                "tar xfv sources.tar.gz",
+                                "curl -O https://s3-eu-west-1.amazonaws.com/datastash/origins.tar.gz",
+                                "tar xfv origins.tar.gz",
                                 "pip install --user -qr requirements.txt",
                                 "for file in scrapers/*",
                                 "do $(pwd)/$file",

@@ -1,0 +1,13 @@
+{
+    "name": "datastash-origins",
+    "private": true,
+    "dependencies": {
+	"highland": "2.0.x",
+	"gitty": "3.1.x",
+	"request": "2.45.x",
+	"csv-parser": "1.4.x"
+    },
+    "scripts": {
+	"start": "node origins"
+    }
+}

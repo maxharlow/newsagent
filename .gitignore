@@ -2,6 +2,4 @@
 !.gitignore
 
 target
-
-venv
-*.pyc
+node_modules
