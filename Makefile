@@ -3,8 +3,8 @@
 
 all:
 	@make -C store
-	@make -C sources
+	@make -C manage
 
 destroy:
 	@make -C store stack.delete &> /dev/null | true
-	@make -C sources stack.delete &> /dev/null | true
+	@make -C manage stack.delete &> /dev/null | true

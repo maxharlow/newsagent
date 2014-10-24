@@ -2,7 +2,7 @@ var fs = require('fs')
 var elasticsearch = require('elasticsearch')
 var mustache = require('mustache')
 var nodemailer = require('nodemailer')
-var config = require('../config.json')
+var config = require('./config.json')
 
 var elasticsearchClient = new elasticsearch.Client({ host: 'localhost:9200' })
 var emailTransport = nodemailer.createTransport(config.email)
@@ -24,7 +24,7 @@ var send = {
 }
 
 function run() {
-    var alertsLocation = '../alerts'
+    var alertsLocation = 'alerts'
     fs.readdir(alertsLocation, function (error, filenames) {
 	if (error) throw error
 	filenames.forEach(function (filename) {
@@ -38,7 +38,7 @@ function run() {
 }
 
 function check(alert) {
-    var shadowsLocation = '../.shadows'
+    var shadowsLocation = '.shadows'
     fs.mkdir(shadowsLocation, function (error) {
 	if (error && error.code !== 'EEXIST') throw error
     })

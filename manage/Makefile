@@ -11,20 +11,20 @@ target:
 target.clean:
 	@rm -r target
 
-target/sources.tar.gz: | target
-	@tar czf target/sources.tar.gz \
-		requirements.txt scrapers/*.py
+target/manage.tar.gz: | target
+	@tar czf target/manage.tar.gz \
+		alerter origins
 
-upload: target/sources.tar.gz
+upload: target/manage.tar.gz
 	@aws s3 mb \
 		s3://datastash | true
 	@aws s3 cp \
 		--acl public-read \
-		target/sources.tar.gz s3://datastash
+		target/manage.tar.gz s3://datastash
 
 update: stack.update
 	$(eval group-name = $(shell aws cloudformation list-stack-resources \
-		--stack-name 'datastash-sources' \
+		--stack-name 'datastash-manage' \
 		--query 'StackResourceSummaries[?ResourceType==`AWS::AutoScaling::AutoScalingGroup`].PhysicalResourceId' \
 		--output text))
 	$(eval group-max = $(shell aws autoscaling describe-auto-scaling-groups \
@@ -54,34 +54,35 @@ stack:
 	@read -p 'This will create resources in AWS. Continue? (y/n) ' a && test $$a == 'y' || exit
 	@aws cloudformation create-stack \
 		--capabilities 'CAPABILITY_IAM' \
-		--stack-name 'datastash-sources' \
+		--stack-name 'datastash-manage' \
 		--template-body "$$(cat cloudformation.json)" > /dev/null
 	@printf 'Creating stack'
-	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-sources' --query 'Stacks[0].StackStatus') =~ 'CREATE_IN_PROGRESS' ]]; \
+	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-manage' --query 'Stacks[0].StackStatus') =~ 'CREATE_IN_PROGRESS' ]]; \
 		do sleep 5 && printf '.'; done
 	@printf '\n'
 
 stack.update: upload
 	@aws cloudformation update-stack \
 		--capabilities 'CAPABILITY_IAM' \
-		--stack-name 'datastash-sources' \
+		--stack-name 'datastash-manage' \
 		--template-body "$$(cat cloudformation.json)" &> /dev/null | true
 	@printf 'Updating stack'
-	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-sources' --query 'Stacks[0].StackStatus') =~ 'UPDATE_IN_PROGRESS' ]]; \
+	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-manage' --query 'Stacks[0].StackStatus') =~ 'UPDATE_IN_PROGRESS' ]]; \
 		do sleep 5 && printf '.'; done
 	@printf '\n'
 
 stack.delete:
 	@aws cloudformation delete-stack \
-		--stack-name 'datastash-sources'
+		--stack-name 'datastash-manage'
 	@aws s3 rm \
-		s3://datastash/sources.tar.gz
+		s3://datastash/manage.tar.gz
 	@aws s3 rb \
 		s3://datastash | true
 
 local:
-	@test -d venv || virtualenv venv
-	@. venv/bin/activate
-	@pip install -qr requirements.txt
-	@for file in scrapers/*.py; \
-		do python $$(pwd)/$$file; done
+	npm --prefix origins install
+	npm --prefix alerter install
+
+local.start:
+	cd origins && node origins
+	cd alerter && node alerter

@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Datastash - Origins",
+    "Description": "Datastash - Manage",
     "Parameters": {
     },
     "Resources": {
@@ -64,7 +64,7 @@
                     },
                     {
                         "Key": "App",
-                        "Value": "origins",
+                        "Value": "manage",
                         "PropagateAtLaunch": "true"
                     }
                 ]
@@ -84,8 +84,9 @@
                         "Fn::Join": [ "\n", [
                             "#!/usr/bin/env bash",
 
+			    "apt-add-repository -y ppa:chris-lea/node.js",
                             "apt-get -y update",
-                            "apt-get -y install language-pack-en python python-pip",
+                            "apt-get -y install language-pack-en build-essential git nodejs",
 
                             "adduser --disabled-password datastash",
                             "curl https://github.com/maxharlow.keys -o /home/ubuntu/.ssh/authorized_keys",
@@ -95,12 +96,12 @@
                             "chgrp -R datastash /home/datastash",
 
                             { "Fn::Join": [ "; ", [ "echo '@hourly ( date",
-                                "curl -O https://s3-eu-west-1.amazonaws.com/datastash/origins.tar.gz",
-                                "tar xfv origins.tar.gz",
-                                "pip install --user -qr requirements.txt",
-                                "for file in scrapers/*",
-                                "do $(pwd)/$file",
-                                "done",
+                                "curl -O https://s3-eu-west-1.amazonaws.com/datastash/manage.tar.gz",
+                                "tar xfv manage.tar.gz",
+				"npm --prefix origins install",
+				"npm --prefix alerter install",
+				"cd origins && node origins && cd ..",
+                                "cd alerter && node alerter && cd ..",
                                 ")' | crontab -u datastash -" ] ] }
                         ] ]
                     }
