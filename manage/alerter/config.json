@@ -1,9 +1,13 @@
 {
+    "alertsLocation": "alerts",
     "email": {
 	"service": "Gmail",
 	"auth": {
             "user": "example@gmail.com",
             "pass": "password"
 	}
+    },
+    "aws": {
+	"region": "eu-west-1"
     }
 }

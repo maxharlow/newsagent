@@ -2,6 +2,7 @@
     "name": "datastash-alerter ",
     "private": true,
     "dependencies": {
+	"aws-sdk": "2.0.x",
 	"elasticsearch": "2.4.x",
 	"mustache": "0.8.x",
 	"nodemailer": "1.3.x"

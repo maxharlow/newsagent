@@ -12,7 +12,10 @@ target.clean:
 	@rm -r target
 
 target/manage.tar.gz: | target
-	@tar czf target/manage.tar.gz \
+	@tar \
+		--exclude '.*' \
+		--exclude 'node_modules' \
+		-czf target/manage.tar.gz \
 		alerter origins
 
 upload: target/manage.tar.gz

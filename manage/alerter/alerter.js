@@ -1,11 +1,12 @@
+var aws = require('aws-sdk')
 var fs = require('fs')
 var elasticsearch = require('elasticsearch')
 var mustache = require('mustache')
 var nodemailer = require('nodemailer')
 var config = require('./config.json')
 
-var elasticsearchClient = new elasticsearch.Client({ host: 'localhost:9200' })
 var emailTransport = nodemailer.createTransport(config.email)
+var elasticsearchClient
 
 var send = {
     'log': console.log,
@@ -24,14 +25,18 @@ var send = {
 }
 
 function run() {
-    var alertsLocation = 'alerts'
-    fs.readdir(alertsLocation, function (error, filenames) {
-	if (error) throw error
-	filenames.forEach(function (filename) {
-	    fs.readFile(alertsLocation + '/' + filename, function (error, data) {
-		if (error) throw error
-		var alert = JSON.parse(data)
-		check(alert)
+    aws.config = config.aws
+    new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function(error, data) {
+	var elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
+	elasticsearchClient = new elasticsearch.Client({ host: elasticsearchHost + ':9200' })
+	fs.readdir(config.alertsLocation, function (error, filenames) {
+	    if (error) throw error
+	    filenames.forEach(function (filename) {
+		fs.readFile(config.alertsLocation + '/' + filename, function (error, data) {
+		    if (error) throw error
+		    var alert = JSON.parse(data)
+		    check(alert)
+		})
 	    })
 	})
     })

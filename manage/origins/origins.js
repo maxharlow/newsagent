@@ -12,18 +12,19 @@ var sourcesLocation = path.resolve('sources')
 var clonesLocation = path.resolve('.clones')
 
 var elasticsearchHost
-new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function(error, data) {
-    elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
-})
 
 function run() {
-    fs.readdir(sourcesLocation, function (error, filenames) {
-	if (error) throw error
-	filenames.forEach(function (filename) {
-	    fs.readFile(sourcesLocation + '/' + filename, function (error, data) {
-		if (error) throw error
-		var source = JSON.parse(data)
-		execute(source)
+    aws.config.region = 'eu-west-1' // todo put in config
+    new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function(error, data) {
+	elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
+	fs.readdir(sourcesLocation, function (error, filenames) {
+	    if (error) throw error
+	    filenames.forEach(function (filename) {
+		fs.readFile(sourcesLocation + '/' + filename, function (error, data) {
+		    if (error) throw error
+		    var source = JSON.parse(data)
+		    execute(source)
+		})
 	    })
 	})
     })
