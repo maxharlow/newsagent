@@ -14,7 +14,7 @@ var clonesLocation = path.resolve('.clones')
 var elasticsearchHost
 
 function run() {
-    aws.config.region = 'eu-west-1' // todo put in config
+    aws.config = config.aws
     new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function(error, data) {
 	elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
 	fs.readdir(sourcesLocation, function (error, filenames) {
