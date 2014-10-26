@@ -4,15 +4,13 @@
 elasticsearch-version = 1.4.0.Beta1
 kibana-version = 4.0.0-BETA1.1
 
-.PHONY: target.clean upload update stack stack.update stack.delete local local.clean local.start local.stop
+.PHONY: upload update stack stack.update stack.delete local local.clean local.start local.stop
 
 all: upload stack
 
-target: | target.clean
-	@mkdir -p target
-
-target.clean:
+target:
 	@rm -rf target/*
+	@mkdir -p target
 
 target/elasticsearch: | target
 	@curl -o target/elasticsearch.tar.gz https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$(elasticsearch-version).tar.gz
