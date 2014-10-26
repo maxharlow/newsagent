@@ -5,11 +5,11 @@
 
 all: upload stack
 
-target:
+target: | target.clean
 	@mkdir -p target
 
 target.clean:
-	@rm -r target
+	@rm -rf target/*
 
 target/manage.tar.gz: | target
 	@tar \

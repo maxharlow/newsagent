@@ -8,11 +8,11 @@ kibana-version = 4.0.0-BETA1.1
 
 all: upload stack
 
-target:
+target: | target.clean
 	@mkdir -p target
 
 target.clean:
-	@rm -r target
+	@rm -rf target/*
 
 target/elasticsearch: | target
 	@curl -o target/elasticsearch.tar.gz https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$(elasticsearch-version).tar.gz
@@ -31,7 +31,9 @@ target/kibana: | target
 	@mv target/kibana-$(kibana-version) target/kibana
 
 target/store.tar.gz: target/elasticsearch target/kibana
-	@tar czf target/store.tar.gz \
+	@tar \
+		--exclude '.*' \
+		-czf target/store.tar.gz \
 		-C config elasticsearch.conf kibana.conf \
 		-C ../target elasticsearch kibana
 
