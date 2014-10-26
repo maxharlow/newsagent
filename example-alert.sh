@@ -1,5 +1,4 @@
-
-HOST='datastash-store-1253779987.eu-west-1.elb.amazonaws.com'
+read -p 'Elasticsearch host: ' HOST
 
 curl -iX POST "http://$HOST:9200/alerts-int/alert/" -d \
 '{
