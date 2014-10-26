@@ -29,14 +29,10 @@ function run() {
     new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function(error, data) {
 	var elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
 	elasticsearchClient = new elasticsearch.Client({ host: elasticsearchHost + ':9200' })
-	fs.readdir(config.alertsLocation, function (error, filenames) {
+	elasticsearchClient.search({index: 'alerts-int'}, function (error, response) {
 	    if (error) throw error
-	    filenames.forEach(function (filename) {
-		fs.readFile(config.alertsLocation + '/' + filename, function (error, data) {
-		    if (error) throw error
-		    var alert = JSON.parse(data)
-		    check(alert)
-		})
+	    response.hits.hits.forEach(function (hit) {
+		check(hit._source)
 	    })
 	})
     })

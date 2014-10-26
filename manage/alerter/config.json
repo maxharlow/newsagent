@@ -1,5 +1,4 @@
 {
-    "alertsLocation": "alerts",
     "email": {
 	"service": "Gmail",
 	"auth": {

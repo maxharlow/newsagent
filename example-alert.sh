@@ -1,4 +1,8 @@
-{
+
+HOST='datastash-store-1253779987.eu-west-1.elb.amazonaws.com'
+
+curl -iX POST "http://$HOST:9200/alerts-int/alert/" -d \
+'{
     "name": "Unemployment rate in England passes 6.1m",
     "query": {
 	"type": "labour",
@@ -19,4 +23,4 @@
     "data": {
 	"recipient": "example@example.com"
     }
-}
+}'
