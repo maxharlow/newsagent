@@ -1,5 +1,5 @@
 {
-    "name": "datastash-alerter ",
+    "name": "datastash-alerter",
     "private": true,
     "dependencies": {
 	"aws-sdk": "2.0.x",

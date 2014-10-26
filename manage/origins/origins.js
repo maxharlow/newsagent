@@ -1,30 +1,27 @@
 var aws = require('aws-sdk')
+var elasticsearch = require('elasticsearch')
 var highland = require('highland')
 var fs = require('fs')
 var path = require('path')
 var childProcess = require('child_process')
 var gitty = require('gitty')
-var request = require('request')
 var csvParser = require('csv-parser')
 var config = require('./config.json')
 
-var sourcesLocation = path.resolve('sources')
 var clonesLocation = path.resolve('.clones')
 
-var elasticsearchHost
+var elasticsearchClient
 
 function run() {
     aws.config = config.aws
-    new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function(error, data) {
-	elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
-	fs.readdir(sourcesLocation, function (error, filenames) {
+    new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function (error, data) {
+	var elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
+	console.log('Using Elasticsearch host: ' + elasticsearchHost)
+	elasticsearchClient = new elasticsearch.Client({ host: elasticsearchHost + ':9200' })
+	elasticsearchClient.search({index: 'sources-int'}, function (error, response) {
 	    if (error) throw error
-	    filenames.forEach(function (filename) {
-		fs.readFile(sourcesLocation + '/' + filename, function (error, data) {
-		    if (error) throw error
-		    var source = JSON.parse(data)
-		    execute(source)
-		})
+	    response.hits.hits.forEach(function (hit) {
+		execute(hit._source)
 	    })
 	})
     })
@@ -67,11 +64,14 @@ function load(source, location, type) {
 	return entry
     })
     data.each(function (entry) {
-	request({
-	    uri: 'http://' + elasticsearchHost + ':' + config.elasticsearchPort + '/' + config.elasticsearchIndex + '/' + type + '/' + entry['@timestamp'],
-	    method: 'PUT',
-	    json: true,
+	var document = {
+	    index: config.elasticsearchIndex,
+	    type: type,
+	    id: entry['@timestamp'],
 	    body: entry
+	}
+	elasticsearchClient.index(document, function (error) {
+	    if (error) throw error
 	})
     })
 }
