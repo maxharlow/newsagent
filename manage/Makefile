@@ -1,15 +1,15 @@
 
 # Upload and stack creation require the AWS CLI
 
-.PHONY: upload update stack stack.update stack.delete local
+.PHONY: target upload update stack stack.update stack.delete local
 
 all: upload stack
 
 target:
-	@rm -rf target/*
+	@rm -rf target
 	@mkdir -p target
 
-target/manage.tar.gz: | target
+target/manage.tar.gz: target
 	@tar \
 		--exclude '.*' \
 		--exclude 'node_modules' \

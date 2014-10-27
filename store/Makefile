@@ -4,15 +4,15 @@
 elasticsearch-version = 1.4.0.Beta1
 kibana-version = 4.0.0-BETA1.1
 
-.PHONY: upload update stack stack.update stack.delete local local.clean local.start local.stop
+.PHONY: target upload update stack stack.update stack.delete local local.clean local.start local.stop
 
 all: upload stack
 
 target:
-	@rm -rf target/*
+	@rm -rf target
 	@mkdir -p target
 
-target/elasticsearch: | target
+target/elasticsearch: target
 	@curl -o target/elasticsearch.tar.gz https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$(elasticsearch-version).tar.gz
 	@tar xf target/elasticsearch.tar.gz -C target
 	@rm target/elasticsearch.tar.gz
@@ -22,7 +22,7 @@ target/elasticsearch: | target
 	@cp config/elasticsearch.yml target/elasticsearch/config/elasticsearch.yml
 	@cp config/elasticsearch-logging.yml target/elasticsearch/config/logging.yml
 
-target/kibana: | target
+target/kibana: target
 	@curl -o target/kibana.tar.gz https://download.elasticsearch.org/kibana/kibana/kibana-$(kibana-version).tar.gz
 	@tar xf target/kibana.tar.gz -C target
 	@rm target/kibana.tar.gz
