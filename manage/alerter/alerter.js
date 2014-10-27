@@ -43,21 +43,21 @@ function check(alert) {
     fs.mkdir(shadowsLocation, function (error) {
 	if (error && error.code !== 'EEXIST') throw error
     })
-    elasticsearchClient.search(alert.query, function (searchError, searchResponse) {
-	if (searchError) throw searchError
+    elasticsearchClient.search(alert.query, function (error, searchResponse) {
+	if (error) throw error
 	var hits = searchResponse.hits.hits.map(function (result) {
 	    return result._source
 	})
 	var key = alert.name.replace(/ /g, '-').toLowerCase()
-	fs.readFile(shadowsLocation + '/' + key, function (shadowsError, shadowsData) {
-	    var shadows = shadowsError ? [] : JSON.parse(shadowsData)
+	fs.readFile(shadowsLocation + '/' + key, function (error, shadowsData) {
+	    var shadows = error ? [] : JSON.parse(shadowsData)
 	    var results = hits.filter(function (result) {
 		return shadows.every(function (shadow) {
 		    result == shadow
 		})
 	    })
-	    fs.writeFile(shadowsLocation + '/' + key, JSON.stringify(results), function (shadowfileError) {
-		if (shadowfileError) throw shadowfileError
+	    fs.writeFile(shadowsLocation + '/' + key, JSON.stringify(results), function (error) {
+		if (error) throw error
 	    })
 	    results.forEach(function (result) {
 		var text = mustache.render(alert.message, result)
