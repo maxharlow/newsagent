@@ -21,15 +21,16 @@ function run() {
 	elasticsearchClient.search({index: 'sources-int'}, function (error, response) {
 	    if (error) throw error
 	    response.hits.hits.forEach(function (hit) {
-		execute(hit._source)
+		var source = hit._source
+		var identifier = source.name.replace(/ /g, '-').toLowerCase()
+		retrieve(source, identifier)
 	    })
 	})
     })
 }
 
-function execute(source) {
-    var id = source.name.replace(/ /g, '-').toLowerCase()
-    var location = clonesLocation + '/' + id
+function retrieve(source, identifier) {
+    var location = clonesLocation + '/' + identifier
     console.log('Executing: ' + source.name)
     fs.mkdir(location, function (error) {
 	if (error && error.code !== 'EEXIST' && error.code !== 'ENOENT') throw error
@@ -37,23 +38,32 @@ function execute(source) {
 	    if (error && error.indexOf('already exists') < 0) throw error
 	    gitty(location).pull('origin', 'master', function (error) {
 	    	if (error) throw error
-		console.log('Installing...')
-		childProcess.exec('cd ' + location + ';' + source.install, function (error, installLog) {
-		    if (error) throw error
-		    console.log(installLog)
-		    console.log('Running...')
-		    childProcess.exec('cd ' + location + ';' + source.run, function (error, runLog) {
-			if (error) throw error
-			console.log(runLog) // todo: store results in file
-			load(source, location, id)
-		    })
-		})
+		execute(source, identifier)
 	    })
 	})
     })
 }
 
-function load(source, location, type) {
+function execute(source, identifier) {
+    var location = clonesLocation + '/' + identifier
+    console.log('Installing...')
+    childProcess.exec('cd ' + location + ';' + source.install, function (error, installOut, installErrors) {
+	if (error) throw error
+	console.log(installOut)
+	console.error(installErrors)
+	console.log('Running...')
+	childProcess.exec('cd ' + location + ';' + source.run, function (error, runOut, runErrors) {
+	    if (error) throw error
+	    console.log(runOut)
+	    console.error(runErrors)
+	    load(source, identifier)
+	})
+    })
+}
+
+function load(source, identifier) {
+    console.log('Loading...')
+    var location = clonesLocation + '/' + identifier
     var datafile = highland(fs.createReadStream(location + '/' + source.output)).through(csvParser())
     var data = datafile.map(function (entry) {
 	entry['@timestamp'] = entry[source.timestampedBy]
@@ -66,7 +76,7 @@ function load(source, location, type) {
     data.each(function (entry) {
 	var document = {
 	    index: config.elasticsearch.index,
-	    type: type,
+	    type: identifier,
 	    id: entry['@timestamp'],
 	    body: entry
 	}
