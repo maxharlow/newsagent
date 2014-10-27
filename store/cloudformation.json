@@ -100,7 +100,7 @@
         "LaunchConfig": {
             "Type": "AWS::AutoScaling::LaunchConfiguration",
             "Properties": {
-                "ImageId": "ami-7aa8080d",
+                "ImageId": "ami-00b11177"",
                 "SecurityGroups": [
 		    { "Ref": "SecurityGroup" }
 		],
