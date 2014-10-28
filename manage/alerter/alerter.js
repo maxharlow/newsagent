@@ -45,7 +45,8 @@ function check(alert, identifier) {
 	})
 	elasticsearchClient.search({index: 'alerts-int', type: 'shadow', id: identifier}, function (error, shadowResponse) {
 	    if (error) throw error
-	    var shadow = shadowResponse.hits.hits.length ? shadowResponse.hits.hits[0]._source.results : []
+	    var hasShadow = shadowResponse.hits.hits.length.length > 0
+	    var shadow = hasShadow ? shadowResponse.hits.hits[0]._source.results : []
 	    var results = matches.filter(function (result) {
 		return shadow.every(function (shadowResult) {
 		    result == shadowResult
@@ -60,7 +61,7 @@ function check(alert, identifier) {
 	    elasticsearchClient.index(document, function (error) {
 		if (error) throw error
 	    })
-	    results.forEach(function (result) {
+	    if (hasShadow) results.forEach(function (result) {
 		var text = mustache.render(alert.message, result)
 		send[alert.notification](text, alert.data)
 	    })
