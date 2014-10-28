@@ -1,8 +1,4 @@
 {
-    "elasticsearch": {
-	"port": 9200,
-	"index": "data"
-    },
     "aws": {
 	"region": "eu-west-1"
     }
