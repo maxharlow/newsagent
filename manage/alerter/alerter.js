@@ -1,5 +1,4 @@
 var aws = require('aws-sdk')
-var fs = require('fs')
 var elasticsearch = require('elasticsearch')
 var mustache = require('mustache')
 var nodemailer = require('nodemailer')
@@ -29,34 +28,36 @@ function run() {
     new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function (error, data) {
 	var elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
 	elasticsearchClient = new elasticsearch.Client({ host: elasticsearchHost + ':' + 9200 })
-	elasticsearchClient.search({index: 'alerts-int'}, function (error, response) {
+	elasticsearchClient.search({index: 'alerts-int', type: 'alert'}, function (error, response) {
 	    if (error) throw error
 	    response.hits.hits.forEach(function (hit) {
-		check(hit._source)
+		check(hit._source, hit._id)
 	    })
 	})
     })
 }
 
-function check(alert) {
-    var shadowsLocation = '.shadows'
-    fs.mkdir(shadowsLocation, function (error) {
-	if (error && error.code !== 'EEXIST') throw error
-    })
-    elasticsearchClient.search(alert.query, function (error, searchResponse) {
+function check(alert, identifier) {
+    elasticsearchClient.search(alert.query, function (error, queryResponse) {
 	if (error) throw error
-	var hits = searchResponse.hits.hits.map(function (result) {
-	    return result._source
+	var matches = queryResponse.hits.hits.map(function (hit) {
+	    return hit._source
 	})
-	var key = alert.name.replace(/ /g, '-').toLowerCase()
-	fs.readFile(shadowsLocation + '/' + key, function (error, shadowsData) {
-	    var shadows = error ? [] : JSON.parse(shadowsData)
-	    var results = hits.filter(function (result) {
-		return shadows.every(function (shadow) {
-		    result == shadow
+	elasticsearchClient.search({index: 'alerts-int', type: 'shadow', id: identifier}, function (error, shadowResponse) {
+	    if (error) throw error
+	    var shadow = shadowResponse.hits.hits.length ? shadowResponse.hits.hits[0]._source.results : []
+	    var results = matches.filter(function (result) {
+		return shadow.every(function (shadowResult) {
+		    result == shadowResult
 		})
 	    })
-	    fs.writeFile(shadowsLocation + '/' + key, JSON.stringify(results), function (error) {
+	    var document = {
+		index: 'alerts-int',
+		type: 'shadow',
+		id: identifier,
+		body: { results: results }
+	    }
+	    elasticsearchClient.index(document, function (error) {
 		if (error) throw error
 	    })
 	    results.forEach(function (result) {
