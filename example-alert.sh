@@ -4,7 +4,7 @@ curl -iX POST "http://$HOST:9200/alerts-int/alert/" -d \
 '{
     "name": "Claimant count passes 1200",
     "query": {
-	"type": "ons-labour-market-statistic",
+	"type": "ons-labour-market-statistics",
 	"body": {
 	    "filter": {
 		"and": [
