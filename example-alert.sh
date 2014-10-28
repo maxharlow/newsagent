@@ -7,7 +7,7 @@ curl -iX POST "http://$HOST:9200/alerts-int/alert/" -d \
 	"type": "ons-labour-market-statistics",
 	"body": {
 	    "filter": {
-	        "range": { "unemploymentRate": { "from": 6.2 } }
+	        "range": { "unemploymentRate": { "to": 6.2 } }
 	    }
 	}
     },
