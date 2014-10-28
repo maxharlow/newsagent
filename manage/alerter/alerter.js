@@ -26,7 +26,7 @@ var send = {
 
 function run() {
     aws.config = config.aws
-    new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function(error, data) {
+    new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function (error, data) {
 	var elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
 	elasticsearchClient = new elasticsearch.Client({ host: elasticsearchHost + ':9200' })
 	elasticsearchClient.search({index: 'alerts-int'}, function (error, response) {
