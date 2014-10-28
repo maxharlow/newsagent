@@ -1,4 +1,4 @@
-read -p 'Elasticsearch host: ' HOST
+read -ep 'Elasticsearch host: ' HOST
 
 curl -iX POST "http://$HOST:9200/sources-int/source/" -d \
 '{

@@ -1,20 +1,17 @@
-read -p 'Elasticsearch host: ' HOST
+read -ep 'Elasticsearch host: ' HOST
 
 curl -iX POST "http://$HOST:9200/alerts-int/alert/" -d \
 '{
-    "name": "Claimant count passes 1200",
+    "name": "Unemployment rate falls under 6.2%",
     "query": {
 	"type": "ons-labour-market-statistics",
 	"body": {
 	    "filter": {
-		"and": [
-		    { "range": { "@timestamp": { "from": "now-4M" } } },
-		    { "range": { "claimantCount": { "from": 100 } } }
-		]
+	        "range": { "unemploymentRate": { "from": 6.2 } }
 	    }
 	}
     },
-    "message": "The claimant count was {{claimantCount}} as of {{@timestamp}}",
+    "message": "The unemployment rate fell to {{unemploymentRate}} as of {{@timestamp}}",
     "notification": "log",
     "data": {
 	"recipient": "example@example.com"
