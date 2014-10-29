@@ -38,7 +38,9 @@ function run() {
 }
 
 function check(alert, identifier) {
-    elasticsearchClient.search(alert.query, function (error, queryResponse) {
+    var query = alert.query
+    query.size = 100
+    elasticsearchClient.search(query, function (error, queryResponse) {
 	if (error) throw error
 	var matches = queryResponse.hits.hits.map(function (hit) {
 	    return hit._source
@@ -61,10 +63,10 @@ function check(alert, identifier) {
 	    elasticsearchClient.index(document, function (error) {
 		if (error) throw error
 	    })
-	    if (hasShadow) results.forEach(function (result) {
-		var text = mustache.render(alert.message, result)
-		send[alert.notification](text, alert.data)
-	    })
+	    var text = results.reduce(function (previous, result) {
+		return previous + '\n' + mustache.render(alert.message, result)
+	    }, '')
+	    if (hasShadow && text != '') send[alert.notification](text, alert.data)
 	})
     })
 }
