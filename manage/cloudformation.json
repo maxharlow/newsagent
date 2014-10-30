@@ -52,7 +52,7 @@
                 "MinSize": "1",
                 "MaxSize": "2",
                 "DesiredCapacity": "1",
-		"TerminationPolicies": [ "OldestInstance" ],
+                "TerminationPolicies": [ "OldestInstance" ],
                 "HealthCheckType": "EC2",
                 "HealthCheckGracePeriod": 120,
                 "LoadBalancerNames": [ ],
@@ -75,8 +75,8 @@
             "Properties": {
                 "ImageId": "ami-00b11177",
                 "SecurityGroups": [
-		    { "Ref": "SecurityGroup" }
-		],
+                    { "Ref": "SecurityGroup" }
+                ],
                 "InstanceType": "t1.micro",
                 "IamInstanceProfile": { "Ref": "InstanceProfile" },
                 "UserData": {
@@ -84,7 +84,7 @@
                         "Fn::Join": [ "\n", [
                             "#!/usr/bin/env bash",
 
-			    "apt-add-repository -y ppa:chris-lea/node.js",
+                            "apt-add-repository -y ppa:chris-lea/node.js",
                             "apt-get -y update",
                             "apt-get -y install language-pack-en build-essential git nodejs",
 
@@ -95,12 +95,13 @@
                             "chown -R datastash /home/datastash",
                             "chgrp -R datastash /home/datastash",
 
+                            "curl -O https://s3-eu-west-1.amazonaws.com/datastash/manage.tar.gz",
+                            "tar xfv manage.tar.gz",
+                            "npm --prefix origins install",
+                            "npm --prefix alerter install",
+
                             { "Fn::Join": [ "; ", [ "echo '@hourly ( date",
-                                "curl -O https://s3-eu-west-1.amazonaws.com/datastash/manage.tar.gz",
-                                "tar xfv manage.tar.gz",
-				"npm --prefix origins install",
-				"npm --prefix alerter install",
-				"cd origins && node origins && cd ..",
+                                "cd origins && node origins && cd ..",
                                 "cd alerter && node alerter && cd ..",
                                 ")' | crontab -u datastash -" ] ] }
                         ] ]

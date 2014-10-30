@@ -79,7 +79,7 @@
                 "MinSize": "1",
                 "MaxSize": "2",
                 "DesiredCapacity": "1",
-		"TerminationPolicies": [ "OldestInstance" ],
+                "TerminationPolicies": [ "OldestInstance" ],
                 "HealthCheckType": "ELB",
                 "HealthCheckGracePeriod": 120,
                 "LoadBalancerNames": [ { "Ref": "LoadBalancer" } ],
@@ -100,10 +100,10 @@
         "LaunchConfig": {
             "Type": "AWS::AutoScaling::LaunchConfiguration",
             "Properties": {
-                "ImageId": "ami-00b11177"",
+                "ImageId": "ami-00b11177",
                 "SecurityGroups": [
-		    { "Ref": "SecurityGroup" }
-		],
+                    { "Ref": "SecurityGroup" }
+                ],
                 "InstanceType": "m3.medium",
                 "IamInstanceProfile": { "Ref": "InstanceProfile" },
                 "UserData": {
