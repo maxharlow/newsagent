@@ -118,7 +118,7 @@ local: target/elasticsearch target/kibana local.clean local.stop
 	@cp -r target/kibana .local
 
 local.clean:
-	@rm -rf .local | true
+	@rm -rf .local
 
 local.start:
 	@./.local/elasticsearch/bin/elasticsearch -d \
