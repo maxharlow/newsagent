@@ -84,6 +84,14 @@ local:
 	npm --prefix sources install
 	npm --prefix alerter install
 
-local.start:
+local.run:
 	cd sources && node sources
 	cd alerter && node alerter
+
+local.start:
+	@echo 'Adding Crontab...'
+	@crontab -l | cat && echo "@hourly cd $$(pwd); cd sources && node sources && cd ../alerter && node alerter" | crontab -
+
+local.stop:
+	@echo 'Removing Crontab...'
+	@crontab -l | grep -v 'datastash' | crontab -
