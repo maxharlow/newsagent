@@ -97,11 +97,11 @@
 
                             "curl -O https://s3-eu-west-1.amazonaws.com/datastash/manage.tar.gz",
                             "tar xfv manage.tar.gz",
-                            "npm --prefix origins install",
+                            "npm --prefix sources install",
                             "npm --prefix alerter install",
 
                             { "Fn::Join": [ "; ", [ "echo '@hourly ( date",
-                                "cd origins && node origins && cd ..",
+                                "cd sources && node sources && cd ..",
                                 "cd alerter && node alerter && cd ..",
                                 ")' | crontab -u datastash -" ] ] }
                         ] ]

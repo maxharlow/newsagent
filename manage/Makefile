@@ -14,7 +14,7 @@ target/manage.tar.gz: target
 		--exclude '.*' \
 		--exclude 'node_modules' \
 		-czf target/manage.tar.gz \
-		alerter origins
+		alerter sources
 
 upload: target/manage.tar.gz
 	@aws s3 mb \
@@ -81,9 +81,9 @@ stack.delete:
 		s3://datastash | true
 
 local:
-	npm --prefix origins install
+	npm --prefix sources install
 	npm --prefix alerter install
 
 local.start:
-	cd origins && node origins
+	cd sources && node sources
 	cd alerter && node alerter

@@ -1,5 +1,5 @@
 {
-    "name": "datastash-origins",
+    "name": "datastash-sources",
     "private": true,
     "dependencies": {
 	"aws-sdk": "2.0.x",
@@ -9,6 +9,6 @@
 	"csv-parser": "1.4.x"
     },
     "scripts": {
-	"start": "node origins"
+	"start": "node sources"
     }
 }
