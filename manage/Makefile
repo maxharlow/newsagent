@@ -81,12 +81,12 @@ stack.delete:
 		s3://datastash | true
 
 local:
-	npm --prefix sources install
-	npm --prefix alerter install
+	@npm --prefix sources install
+	@npm --prefix alerter install
 
 local.run:
-	cd sources && node sources
-	cd alerter && node alerter
+	@cd sources && node sources
+	@cd alerter && node alerter
 
 local.start:
 	@echo 'Adding Crontab...'
