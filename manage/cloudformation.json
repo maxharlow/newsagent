@@ -100,10 +100,7 @@
                             "npm --prefix sources install",
                             "npm --prefix alerter install",
 
-                            { "Fn::Join": [ "; ", [ "echo '@hourly ( date",
-                                "cd sources && node sources && cd ..",
-                                "cd alerter && node alerter && cd ..",
-                                ")' | crontab -u datastash -" ] ] }
+                            "echo '@hourly export PATH=$PATH; cd $(pwd); (cd sources && node sources); (cd alerter && node alerter)' | crontab -u datastash -"
                         ] ]
                     }
                 }
