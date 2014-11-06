@@ -53,9 +53,7 @@ function execute(source, identifier) {
 	console.error(installErrors)
 	console.log('Running...')
 	childProcess.exec('cd ' + location + ';' + source.run, function (error, runOut, runErrors) {
-	    if (error) throw error
-	    console.log(runOut)
-	    console.error(runErrors)
+	    console.log(error, runOut, runErrors)
 	    load(source, identifier)
 	})
     })
