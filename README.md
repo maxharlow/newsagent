@@ -66,6 +66,16 @@ Usage
 Look in the `examples` directory.
 
 
+Future plans
+------------
+
+* Use Docker for process isolation in sources -- take array of requirements to install in source config
+* Currently updates to a source can trigger alerts because they change the output -- possibly delete shadow if pull results in an update
+* Allow setting of how often sources are run -- hourly will be too often or not often enough for some (esp. long running ones)
+* Alerts should be on all records being modified -- including deleted and modified records, not just added
+* Twitter alert support (DMs?)
+
+
 Prior art
 ---------
 
