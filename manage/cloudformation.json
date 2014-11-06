@@ -91,16 +91,17 @@
                             "adduser --disabled-password datastash",
                             "curl https://github.com/maxharlow.keys -o /home/ubuntu/.ssh/authorized_keys",
                             "cd /home/datastash",
-
-                            "chown -R datastash /home/datastash",
-                            "chgrp -R datastash /home/datastash",
+                            "export HOME=/home/datastash",
 
                             "curl -O https://s3-eu-west-1.amazonaws.com/datastash/manage.tar.gz",
                             "tar xfv manage.tar.gz",
                             "npm --prefix sources install",
                             "npm --prefix alerter install",
 
-                            "echo '@hourly export PATH=$PATH; cd $(pwd); (cd sources && node sources); (cd alerter && node alerter)' | crontab -u datastash -"
+                            "chown -R datastash /home/datastash",
+                            "chgrp -R datastash /home/datastash",
+
+                            "echo '@hourly (cd sources && node sources); (cd alerter && node alerter)' | crontab -u datastash -"
                         ] ]
                     }
                 }
