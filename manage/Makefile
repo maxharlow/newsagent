@@ -90,7 +90,7 @@ local.run:
 
 local.start:
 	@echo 'Adding Crontab...'
-	@(crontab -l 2> /dev/null; echo "@hourly export PATH=$$PATH; cd $$(pwd); (cd sources && node sources); (cd alerter && node alerter) >> datastash.log 2>&1") | crontab -
+	@(crontab -l 2> /dev/null; echo "@hourly export PATH=$$PATH; cd $$(pwd); ((cd sources && node sources); (cd alerter && node alerter)) >> datastash.log 2>&1") | crontab -
 
 local.stop:
 	@echo 'Removing Crontab...'

@@ -101,7 +101,7 @@
                             "chown -R datastash /home/datastash",
                             "chgrp -R datastash /home/datastash",
 
-                            "echo '@hourly (cd sources && node sources); (cd alerter && node alerter) >> datastash.log 2>&1' | crontab -u datastash -"
+                            "echo '@hourly ((cd sources && node sources); (cd alerter && node alerter)) >> datastash.log 2>&1' | crontab -u datastash -"
                         ] ]
                     }
                 }
