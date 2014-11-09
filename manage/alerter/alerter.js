@@ -33,6 +33,7 @@ function run() {
 	    response.hits.hits.forEach(function (hit) {
 		check(hit._source, hit._id)
 	    })
+	    elasticsearchClient.close()
 	})
     })
 }

@@ -20,11 +20,12 @@ function run() {
 	elasticsearchClient = new elasticsearch.Client({ host: elasticsearchHost + ':' + 9200 })
 	elasticsearchClient.search({index: 'sources-int'}, function (error, response) {
 	    if (error) throw error
-	    response.hits.hits.forEach(function (hit) {
+	    response.hits.hits.map(function (hit) {
 		var source = hit._source
 		var identifier = source.name.replace(/ /g, '-').toLowerCase()
 		retrieve(source, identifier)
 	    })
+	    elasticsearchClient.close()
 	})
     })
 }
@@ -73,7 +74,7 @@ function load(source, identifier) {
 	}
 	return entry
     })
-    data.each(function (entry) {
+    data.map(function (entry) {
 	var document = {
 	    index: 'data',
 	    type: identifier,
