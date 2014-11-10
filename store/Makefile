@@ -106,7 +106,7 @@ stack.delete:
 	@aws s3 rm \
 		s3://datastash/store.tar.gz
 	@aws s3 rb \
-		s3://datastash
+		s3://datastash | true
 
 local: target/elasticsearch target/kibana local.clean local.stop
 	@mkdir -p .local

@@ -81,7 +81,7 @@
                 "DesiredCapacity": "1",
                 "TerminationPolicies": [ "OldestInstance" ],
                 "HealthCheckType": "ELB",
-                "HealthCheckGracePeriod": 180,
+                "HealthCheckGracePeriod": 120,
                 "LoadBalancerNames": [ { "Ref": "LoadBalancer" } ],
                 "Tags": [
                     {
@@ -169,6 +169,13 @@
                         "ToPort": "9200",
                         "SourceSecurityGroupName": "amazon-elb-sg",
                         "SourceSecurityGroupOwnerId": "amazon-elb"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9200",
+                        "ToPort": "9200",
+                        "SourceSecurityGroupName": { "Fn::GetAtt": [ "LoadBalancer", "SourceSecurityGroup.GroupName" ] },
+                        "SourceSecurityGroupOwnerId": { "Fn::GetAtt": [ "LoadBalancer", "SourceSecurityGroup.OwnerAlias" ] }
                     },
                     {
                         "IpProtocol": "tcp",
