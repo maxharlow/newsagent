@@ -58,8 +58,8 @@ update: stack.update
 		--stack-name 'datastash-store' \
 		--query 'Stacks[0].Outputs[?OutputKey==`LoadBalancer`].OutputValue' \
 		--output text))
-	@test $(group-desired-double) -le $(group-max)
-	@test $$(curl -s '$(loadbalancer):9200/_cat/health?h=status') == 'green'
+	@test $(group-desired-double) -le $(group-max) || echo 'Not enough capacity to deploy'
+	@test $$(curl -s '$(loadbalancer):9200/_cat/health?h=status') == 'green' || echo 'Cluster unhealthy'
 	@aws autoscaling set-desired-capacity \
 		--auto-scaling-group-name $(group-name) \
 		--desired-capacity $(group-desired-double)

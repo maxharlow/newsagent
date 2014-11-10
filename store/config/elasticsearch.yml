@@ -19,7 +19,7 @@ discovery:
 	type: ec2
 	ec2.tag.Stack: datastash
 	ec2.tag.App: store
-	zen.minimum_master_nodes: 1
+	zen.minimum_master_nodes: 2
 	zen.ping.multicast.enabled: false
 
 plugin.mandatory: cloud-aws
