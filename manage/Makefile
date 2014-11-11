@@ -10,11 +10,13 @@ target:
 	@mkdir -p target
 
 target/manage.tar.gz: target
+	@cp ~/.ssh/id_rsa.pub target/authorized_keys
 	@tar \
 		--exclude '.*' \
 		--exclude 'node_modules' \
 		-czf target/manage.tar.gz \
-		alerter sources
+		-C target authorized_keys \
+		-C .. alerter sources
 
 upload: target/manage.tar.gz
 	@aws s3 mb \

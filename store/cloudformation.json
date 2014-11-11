@@ -119,7 +119,6 @@
                             "apt-get -y install language-pack-en openjdk-7-jre-headless",
 
                             "adduser --disabled-password datastash",
-                            "curl https://github.com/maxharlow.keys -o /home/ubuntu/.ssh/authorized_keys",
                             "cd /home/datastash",
 
                             "mkdir logs",
@@ -127,12 +126,13 @@
                             "curl -O https://s3-eu-west-1.amazonaws.com/datastash/store.tar.gz",
                             "tar xfv store.tar.gz",
 
+                            "cat authorized_keys > /home/ubuntu/.ssh/authorized_keys",
+
                             { "Fn::Join": [ "", [ "sed -i",
                                 " -e 's,@@REGION,", { "Ref": "AWS::Region" }, ",g'",
                                 " elasticsearch/config/elasticsearch.yml" ] ] },
 
-                            "chown -R datastash /home/datastash /data",
-                            "chgrp -R datastash /home/datastash /data",
+                            "chown -R datastash:datastash /home/datastash /data",
 
                             "mv elasticsearch.conf /etc/init",
                             "mv kibana.conf /etc/init",

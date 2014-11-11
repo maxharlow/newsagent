@@ -29,11 +29,12 @@ target/kibana: target
 	@mv target/kibana-$(kibana-version) target/kibana
 
 target/store.tar.gz: target/elasticsearch target/kibana
+	@cp ~/.ssh/id_rsa.pub target/authorized_keys
 	@tar \
 		--exclude '.*' \
 		-czf target/store.tar.gz \
 		-C config elasticsearch.conf kibana.conf \
-		-C ../target elasticsearch kibana
+		-C ../target authorized_keys elasticsearch kibana
 
 upload: target/store.tar.gz
 	@aws s3 mb \
