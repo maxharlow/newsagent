@@ -49,7 +49,7 @@ Instead of setting things up to run hourly, just run everything once:
 
 ### On AWS
 
-Running on AWS requires you have the [AWS CLI] (https://github.com/aws/aws-cli/) installed and configured with your AWS account details. The Datastash resources will be created using your default profile. To use another profile run `AWS_DEFAULT_PROFILE=other-account-name` before these commands.
+Running on AWS requires you have the [AWS CLI] (https://github.com/aws/aws-cli/) installed and configured with your AWS account details. The Datastash resources will be created using your default profile. To use another profile run `export AWS_DEFAULT_PROFILE=other-account-name` before these commands.
 
 To create the stack:
 
