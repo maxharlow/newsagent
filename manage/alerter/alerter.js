@@ -27,13 +27,17 @@ function run() {
     aws.config = config.aws
     new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function (error, data) {
 	var elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
-	elasticsearchClient = new elasticsearch.Client({ host: elasticsearchHost + ':' + 9200 })
+	var elasticsearchConfig = {
+	    host: elasticsearchHost + ':' + 9200,
+	    keepAlive: false
+	}
+	console.log('Using Elasticsearch host: ' + elasticsearchHost)
+	elasticsearchClient = new elasticsearch.Client(elasticsearchConfig)
 	elasticsearchClient.search({index: 'alerts-int', type: 'alert'}, function (error, response) {
 	    if (error) throw error
 	    response.hits.hits.forEach(function (hit) {
 		check(hit._source, hit._id)
 	    })
-	    elasticsearchClient.close()
 	})
     })
 }

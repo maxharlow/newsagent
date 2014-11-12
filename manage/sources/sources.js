@@ -16,16 +16,19 @@ function run() {
     aws.config = config.aws
     new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function (error, data) {
 	var elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
+	var elasticsearchConfig = {
+	    host: elasticsearchHost + ':' + 9200,
+	    keepAlive: false
+	}
 	console.log('Using Elasticsearch host: ' + elasticsearchHost)
-	elasticsearchClient = new elasticsearch.Client({ host: elasticsearchHost + ':' + 9200 })
+	elasticsearchClient = new elasticsearch.Client(elasticsearchConfig)
 	elasticsearchClient.search({index: 'sources-int'}, function (error, response) {
 	    if (error) throw error
-	    response.hits.hits.map(function (hit) {
+	    response.hits.hits.forEach(function (hit) {
 		var source = hit._source
 		var identifier = source.name.replace(/ /g, '-').toLowerCase()
 		retrieve(source, identifier)
 	    })
-	    elasticsearchClient.close()
 	})
     })
 }
@@ -38,7 +41,7 @@ function retrieve(source, identifier) {
 	gitty.clone(location, source.location, function (error) {
 	    if (error && error.indexOf('already exists') < 0) throw error
 	    gitty(location).pull('origin', 'master', function (error) {
-	    	if (error) throw error
+		if (error) throw error
 		execute(source, identifier)
 	    })
 	})
@@ -74,7 +77,7 @@ function load(source, identifier) {
 	}
 	return entry
     })
-    data.map(function (entry) {
+    data.each(function (entry) {
 	var document = {
 	    index: 'data',
 	    type: identifier,
