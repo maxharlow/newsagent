@@ -4,5 +4,7 @@
     "install": "npm install",
     "run": "node ons-labour",
     "output": "ons-labour.csv",
-    "timestampedBy": "date"
+    "key": "date",
+    "timestamp": "date",
+    "timestampFormat": "yyyy-MM-dd"
 }

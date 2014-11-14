@@ -6,6 +6,7 @@
 	"elasticsearch": "2.4.x",
 	"highland": "2.0.x",
 	"gitty": "3.1.x",
+	"moment": "2.8.x",
 	"csv-parser": "1.4.x"
     },
     "scripts": {

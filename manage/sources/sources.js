@@ -5,6 +5,7 @@ var fs = require('fs')
 var path = require('path')
 var childProcess = require('child_process')
 var gitty = require('gitty')
+var moment = require('moment')
 var csvParser = require('csv-parser')
 var config = require('./config.json')
 
@@ -70,10 +71,11 @@ function load(source, identifier) {
     var location = clonesLocation + '/' + identifier
     var datafile = highland(fs.createReadStream(location + '/' + source.output)).through(csvParser())
     var data = datafile.map(function (entry) {
-	entry['@timestamp'] = entry[source.timestampedBy]
-	delete entry[source.timestampedBy]
+	entry['@timestamp'] = moment(entry[source.timestamp], source.timestampFormat).format()
 	for (var property in entry) {
-	    entry[property] = Number(entry[property]) || entry[property]
+	    var number = Number(entry[property]) // parse out numbers (but not for identifiers which may sometimes be strings)
+	    if (!isNaN(number) && !property.match(/id|reference|classification/i)) entry[property] = number
+	    if (entry[property] === '') entry[property] = null
 	}
 	return entry
     })
@@ -81,7 +83,7 @@ function load(source, identifier) {
 	var document = {
 	    index: 'data',
 	    type: identifier,
-	    id: entry['@timestamp'],
+	    id: entry[source.key],
 	    body: entry
 	}
 	elasticsearchClient.index(document, function (error) {
