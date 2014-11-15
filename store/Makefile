@@ -2,7 +2,7 @@
 # Upload and stack creation require the AWS CLI
 
 elasticsearch-version = 1.4.0
-kibana-version = 4.0.0-BETA1.1
+kibana-version = 4.0.0-BETA2
 
 .PHONY: target upload update stack stack.update stack.delete local local.clean local.start local.stop
 
