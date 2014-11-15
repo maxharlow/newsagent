@@ -58,9 +58,27 @@ function execute(source, identifier) {
 	console.error(installErrors)
 	console.log('Running...')
 	childProcess.exec('cd ' + location + ';' + source.run, function (error, runOut, runErrors) {
-	    if (error) console.log(error)
 	    console.log(runOut)
 	    console.log(runErrors)
+	    if (error) throw error
+	    setup(source, identifier)
+	})
+    })
+}
+
+function setup(source, identifier) {
+    console.log('Setting up...')
+    elasticsearchClient.indices.create({index: 'data'}, function (error) {
+	if (error && error.message.indexOf('already exists') === 0) throw error
+	var mapping = {
+	    index: 'data',
+	    type: identifier,
+	    body: {
+		properties: source.mapping || {}
+	    }
+	}
+	elasticsearchClient.indices.putMapping(mapping, function (error) {
+	    if (error) throw error
 	    load(source, identifier)
 	})
     })
@@ -69,25 +87,17 @@ function execute(source, identifier) {
 function load(source, identifier) {
     console.log('Loading...')
     var location = clonesLocation + '/' + identifier
-    var datafile = highland(fs.createReadStream(location + '/' + source.output)).through(csvParser())
-    var data = datafile.map(function (entry) {
-	entry['@timestamp'] = moment(entry[source.timestamp], source.timestampFormat).format()
-	for (var property in entry) {
-	    var number = Number(entry[property]) // parse out numbers (but not for identifiers which may sometimes be strings)
-	    if (!isNaN(number) && !property.match(/id|reference|classification/i)) entry[property] = number
-	    if (entry[property] === '') entry[property] = null
-	}
-	return entry
-    })
+    var data = highland(fs.createReadStream(location + '/' + source.output)).through(csvParser())
     data.each(function (entry) {
+	entry['@timestamp'] = moment(entry[source.timestamp], source.timestampFormat).format()
 	var document = {
 	    index: 'data',
 	    type: identifier,
 	    id: entry[source.key],
 	    body: entry
 	}
-	elasticsearchClient.index(document, function (error) {
-	    if (error) throw error
+	elasticsearchClient.index(document, function (error, response) {
+	    if (error) console.log('Could not index: ' + error.message + '\n', document)
 	})
     })
 }
