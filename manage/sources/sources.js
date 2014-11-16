@@ -70,14 +70,16 @@ function setup(source, identifier) {
     console.log('Setting up...')
     elasticsearchClient.indices.create({index: 'data'}, function (error) {
 	if (error && error.message.indexOf('already exists') === 0) throw error
-	var mapping = {
+	var mapping = source.mapping || {}
+	mapping['@timestamp'] = { type: 'date', format: 'dateOptionalTime' }
+	var mappingRequest = {
 	    index: 'data',
 	    type: identifier,
 	    body: {
-		properties: source.mapping || {}
+		properties: mapping
 	    }
 	}
-	elasticsearchClient.indices.putMapping(mapping, function (error) {
+	elasticsearchClient.indices.putMapping(mappingRequest, function (error) {
 	    if (error) throw error
 	    load(source, identifier)
 	})
