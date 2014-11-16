@@ -78,7 +78,7 @@
                 "SecurityGroups": [
                     { "Ref": "SecurityGroup" }
                 ],
-                "InstanceType": "t1.micro",
+                "InstanceType": "m3.medium",
                 "IamInstanceProfile": { "Ref": "InstanceProfile" },
                 "UserData": {
                     "Fn::Base64": {
@@ -87,7 +87,9 @@
 
                             "apt-add-repository -y ppa:chris-lea/node.js",
                             "apt-get -y update",
-                            "apt-get -y install language-pack-en build-essential git nodejs",
+                            "apt-get -y install language-pack-en build-essential git nodejs openjdk-7-jre-headless",
+
+                            "curl -LO https://dl.bintray.com/sbt/debian/sbt-0.13.6.deb && dpkg -i sbt-0.13.6.deb",
 
                             "adduser --disabled-password datastash",
                             "cd /home/datastash",
