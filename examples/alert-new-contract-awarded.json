@@ -1,0 +1,12 @@
+{
+    "name": "New contract awarded",
+    "query": {
+	"type": "contracts-awarded",
+	"body": { }
+    },
+    "message": "A contract (ID {{noticeId}}) has been awarded ({{noticeSystemState}}) to {{supplierName}} for '{{contractTitle}}' by {{buyerGroupId}}, worth £{{contractAwardValue}}.",
+    "notification": "email",
+    "data": {
+	"recipient": "$EMAIL"
+    }
+}
