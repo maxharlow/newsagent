@@ -21,6 +21,7 @@ target/elasticsearch: target
 	@./target/elasticsearch/bin/plugin --install mobz/elasticsearch-head
 	@cp config/elasticsearch.yml target/elasticsearch/config/elasticsearch.yml
 	@cp config/elasticsearch-logging.yml target/elasticsearch/config/logging.yml
+	@cp config/default-mapping.json target/elasticsearch/config/default-mapping.json
 
 target/kibana: target
 	@curl -o target/kibana.tar.gz https://download.elasticsearch.org/kibana/kibana/kibana-$(kibana-version).tar.gz
@@ -115,6 +116,7 @@ local: target/elasticsearch target/kibana local.clean local.stop
 	@cp -r target/elasticsearch .local
 	@ln -sf $(shell pwd)/config/elasticsearch.yml .local/elasticsearch/config/elasticsearch.yml
 	@ln -sf $(shell pwd)/config/elasticsearch-logging.yml .local/elasticsearch/config/logging.yml
+	@ln -sf $(shell pwd)/config/default-mapping.json .local/elasticsearch/config/default-mapping.json
 	@rm -rf .local/kibana
 	@cp -r target/kibana .local
 
