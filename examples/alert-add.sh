@@ -4,4 +4,4 @@ read -ep 'Recipient email address: ' EMAIL
 
 DATA=$(sed -e "s/\$EMAIL/$EMAIL/g" $FILE)
 
-curl -iX POST "http://$HOST:9200/alerts-int/alert/" -d "$DATA"
+curl -iX POST "http://$HOST:9200/.alerts/alert/" -d "$DATA"

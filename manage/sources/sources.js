@@ -23,7 +23,7 @@ function run() {
 	}
 	console.log('Using Elasticsearch host: ' + elasticsearchHost)
 	elasticsearchClient = new elasticsearch.Client(elasticsearchConfig)
-	elasticsearchClient.search({index: 'sources-int'}, function (error, response) {
+	elasticsearchClient.search({index: '.sources'}, function (error, response) {
 	    if (error) throw error
 	    response.hits.hits.forEach(function (hit) {
 		var source = hit._source

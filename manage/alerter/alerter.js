@@ -33,7 +33,7 @@ function run() {
 	}
 	console.log('Using Elasticsearch host: ' + elasticsearchHost)
 	elasticsearchClient = new elasticsearch.Client(elasticsearchConfig)
-	elasticsearchClient.search({index: 'alerts-int', type: 'alert'}, function (error, response) {
+	elasticsearchClient.search({index: '.alerts', type: 'alert'}, function (error, response) {
 	    if (error) throw error
 	    response.hits.hits.forEach(function (hit) {
 		check(hit._source, hit._id)
@@ -50,7 +50,7 @@ function check(alert, identifier) {
 	var matches = queryResponse.hits.hits.map(function (hit) {
 	    return hit._source
 	})
-	elasticsearchClient.search({index: 'alerts-int', type: 'shadow', id: identifier}, function (error, shadowResponse) {
+	elasticsearchClient.search({index: '.alerts', type: 'shadow', id: identifier}, function (error, shadowResponse) {
 	    if (error) throw error
 	    var hasShadow = shadowResponse.hits.hits.length.length > 0
 	    var shadow = hasShadow ? shadowResponse.hits.hits[0]._source.results : []
@@ -60,7 +60,7 @@ function check(alert, identifier) {
 		})
 	    })
 	    var document = {
-		index: 'alerts-int',
+		index: '.alerts',
 		type: 'shadow',
 		id: identifier,
 		body: { results: results }
