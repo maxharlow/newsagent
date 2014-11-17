@@ -6,5 +6,5 @@
     "output": "ons-labour.csv",
     "key": "date",
     "timestamp": "date",
-    "timestampFormat": "yyyy-MM-dd"
+    "timestampFormat": "YYYY-MM-DDTHH:mm:ssZ"
 }

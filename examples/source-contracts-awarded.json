@@ -6,7 +6,7 @@
     "output": "awards.csv",
     "key": "noticeId",
     "timestamp": "noticePublishedDate",
-    "timestampFormat": "dd/MM/yyyy",
+    "timestampFormat": "DD/MM/YYYY",
     "mapping": {
 	"noticeDocsNumber": { "type": "integer" },
 	"contractAwardValue": { "type": "double" },
