@@ -6,5 +6,10 @@
     "output": "ons-labour.csv",
     "key": "date",
     "timestamp": "date",
-    "timestampFormat": "YYYY-MM-DDTHH:mm:ssZ"
+    "timestampFormat": "YYYY-MM-DDTHH:mm:ssZ",
+    "mapping": {
+	"claimantCount": { "type": "integer" },
+	"unemploymentRate": { "type": "double" },
+	"workHours": { "type": "double" }
+    }
 }
