@@ -73,6 +73,7 @@ Future plans
 * Currently updates to a source can trigger alerts because they change the output -- possibly delete shadow if pull results in an update
 * Allow setting of how often sources are run -- hourly will be too often or not often enough for some (esp. long running ones)
 * Alerts should be on all records being modified -- including deleted and modified records, not just added
+* RSS alert support
 * Twitter alert support (DMs?)
 
 
