@@ -9,25 +9,25 @@ target:
 	@rm -rf target
 	@mkdir -p target
 
-target/manage.tar.gz: target
+target/alerter.tar.gz: target
 	@cp ~/.ssh/id_rsa.pub target/authorized_keys
 	@tar \
 		--exclude '.*' \
 		--exclude 'node_modules' \
-		-czf target/manage.tar.gz \
+		-czf target/alerter.tar.gz \
 		-C target authorized_keys \
-		-C .. alerter sources
+		-C .. alerter.js package.json config.json
 
-upload: target/manage.tar.gz
+upload: target/alerter.tar.gz
 	@aws s3 mb \
 		s3://datastash | true
 	@aws s3 cp \
 		--acl public-read \
-		target/manage.tar.gz s3://datastash
+		target/alerter.tar.gz s3://datastash
 
 update: stack.update
 	$(eval group-name = $(shell aws cloudformation list-stack-resources \
-		--stack-name 'datastash-manage' \
+		--stack-name 'datastash-alerter' \
 		--query 'StackResourceSummaries[?ResourceType==`AWS::AutoScaling::AutoScalingGroup`].PhysicalResourceId' \
 		--output text))
 	$(eval group-max = $(shell aws autoscaling describe-auto-scaling-groups \
@@ -57,43 +57,41 @@ stack:
 	@read -p 'This will create resources in AWS. Continue? (y/n) ' a && test $$a == 'y' || exit
 	@aws cloudformation create-stack \
 		--capabilities 'CAPABILITY_IAM' \
-		--stack-name 'datastash-manage' \
+		--stack-name 'datastash-alerter' \
 		--template-body "$$(cat cloudformation.json)" > /dev/null
 	@printf 'Creating stack'
-	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-manage' --query 'Stacks[0].StackStatus') =~ 'CREATE_IN_PROGRESS' ]]; \
+	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-alerter' --query 'Stacks[0].StackStatus') =~ 'CREATE_IN_PROGRESS' ]]; \
 		do sleep 5 && printf '.'; done
 	@printf '\n'
 
 stack.update: upload
 	@aws cloudformation update-stack \
 		--capabilities 'CAPABILITY_IAM' \
-		--stack-name 'datastash-manage' \
+		--stack-name 'datastash-alerter' \
 		--template-body "$$(cat cloudformation.json)" &> /dev/null | true
 	@printf 'Updating stack'
-	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-manage' --query 'Stacks[0].StackStatus') =~ 'UPDATE_IN_PROGRESS' ]]; \
+	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-alerter' --query 'Stacks[0].StackStatus') =~ 'UPDATE_IN_PROGRESS' ]]; \
 		do sleep 5 && printf '.'; done
 	@printf '\n'
 
 stack.delete:
 	@aws cloudformation delete-stack \
-		--stack-name 'datastash-manage'
+		--stack-name 'datastash-alerter'
 	@aws s3 rm \
-		s3://datastash/manage.tar.gz
+		s3://datastash/alerter.tar.gz
 	@aws s3 rb \
 		s3://datastash | true
 
 local:
-	@npm --prefix sources install
-	@npm --prefix alerter install
+	@npm install
 
 local.run:
-	@cd sources && node sources
-	@cd alerter && node alerter
+	@node alerter
 
 local.start:
-	@echo 'Adding Crontab...'
-	@(crontab -l 2> /dev/null; echo "@hourly export PATH=$$PATH; cd $$(pwd); ((cd sources && node sources); (cd alerter && node alerter)) >> datastash.log 2>&1") | crontab -
+	@echo 'Adding Alerter Crontab...'
+	@(crontab -l 2> /dev/null; echo "@hourly export PATH=$$PATH; cd $$(pwd); node alerter >> datastash-alerter.log 2>&1") | crontab -
 
 local.stop:
-	@echo 'Removing Crontab...'
-	@crontab -l | grep -v 'datastash' | crontab -
+	@echo 'Removing Alerter Crontab...'
+	@crontab -l | grep -v 'datastash-alerter' | crontab -

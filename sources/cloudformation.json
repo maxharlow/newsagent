@@ -1,7 +1,7 @@
 
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Datastash - Manage",
+    "Description": "Datastash - Sources",
     "Parameters": {
     },
     "Resources": {
@@ -65,7 +65,7 @@
                     },
                     {
                         "Key": "App",
-                        "Value": "manage",
+                        "Value": "sources",
                         "PropagateAtLaunch": "true"
                     }
                 ]
@@ -95,17 +95,16 @@
                             "cd /home/datastash",
                             "export HOME=/home/datastash",
 
-                            "curl -O https://s3-eu-west-1.amazonaws.com/datastash/manage.tar.gz",
-                            "tar xfv manage.tar.gz",
+                            "curl -O https://s3-eu-west-1.amazonaws.com/datastash/sources.tar.gz",
+                            "tar xfv sources.tar.gz",
 
                             "cat authorized_keys > /home/ubuntu/.ssh/authorized_keys",
 
-                            "npm --prefix sources install",
-                            "npm --prefix alerter install",
+                            "npm install",
 
                             "chown -R datastash:datastash /home/datastash",
 
-                            "echo '@hourly ((cd sources && node sources); (cd alerter && node alerter)) >> datastash.log 2>&1' | crontab -u datastash -"
+                            "echo '@hourly node sources >> datastash-sources.log 2>&1' | crontab -u datastash -"
                         ] ]
                     }
                 }
