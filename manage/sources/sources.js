@@ -14,6 +14,7 @@ var clonesLocation = path.resolve('.clones')
 var elasticsearchClient
 
 function run() {
+    console.log(new Date())
     console.log('Beginning sources...')
     aws.config = config.aws
     new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function (error, data) {
