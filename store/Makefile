@@ -4,9 +4,11 @@
 elasticsearch-version = 1.4.0
 kibana-version = 4.0.0-BETA2
 
-.PHONY: target upload update stack stack.update stack.delete local local.clean local.start local.stop
+.PHONY: target upload update local local.clean local.start local.stop aws aws.upload aws.update aws.update.stack aws.destroy 
 
-all: upload stack
+
+all: local local.start
+
 
 target:
 	@rm -rf target
@@ -37,14 +39,58 @@ target/store.tar.gz: target/elasticsearch target/kibana
 		-C config elasticsearch.conf kibana.conf \
 		-C ../target authorized_keys elasticsearch kibana
 
-upload: target/store.tar.gz
+
+local: target/elasticsearch target/kibana local.clean local.stop
+	@mkdir -p .local
+	@rm -rf .local/elasticsearch
+	@cp -r target/elasticsearch .local
+	@ln -sf $(shell pwd)/config/elasticsearch.yml .local/elasticsearch/config/elasticsearch.yml
+	@ln -sf $(shell pwd)/config/elasticsearch-logging.yml .local/elasticsearch/config/logging.yml
+	@ln -sf $(shell pwd)/config/default-mapping.json .local/elasticsearch/config/default-mapping.json
+	@rm -rf .local/kibana
+	@cp -r target/kibana .local
+
+local.clean:
+	@rm -rf .local
+
+local.start:
+	@./.local/elasticsearch/bin/elasticsearch -d \
+		--index.number_of_replicas=0 \
+		--path.conf=.local/elasticsearch/config \
+		--path.data=.local/data \
+		--path.logs=.local/logs \
+		--gateway.expected_nodes=1 \
+		--gateway.recover_after_nodes=1 \
+		--discovery.type=zen &> /dev/null
+	@./.local/kibana/bin/kibana &> /dev/null &
+	@echo 'Elasticsearch starting up at http://localhost:9200/_plugin/head/'
+	@echo 'Kibana starting up at http://localhost:5601/'
+
+local.stop:
+	@pkill -f kibana | true
+	@pkill -f elasticsearch | true
+
+
+aws: aws.upload
+	@read -p 'This will create resources in AWS. Continue? (y/n) ' a && test $$a == 'y' || exit
+	@aws cloudformation create-stack \
+		--capabilities 'CAPABILITY_IAM' \
+		--stack-name 'datastash-store' \
+		--template-body "$$(cat cloudformation.json)" > /dev/null
+	@printf 'Creating stack'
+	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-store' --query 'Stacks[0].StackStatus') =~ 'CREATE_IN_PROGRESS' ]]; \
+		do sleep 5 && printf '.'; done
+	@printf '\n'
+	@printf '(now wait for Elasticsearch to start...)\n'
+
+aws.upload: target/store.tar.gz
 	@aws s3 mb \
 		s3://datastash | true
 	@aws s3 cp \
 		--acl public-read \
 		target/store.tar.gz s3://datastash
 
-update: stack.update
+aws.update: aws.update.stack
 	$(eval group-name = $(shell aws cloudformation list-stack-resources \
 		--stack-name 'datastash-store' \
 		--query 'StackResourceSummaries[?ResourceType==`AWS::AutoScaling::AutoScalingGroup`].PhysicalResourceId' \
@@ -80,19 +126,7 @@ update: stack.update
 		done
 	@printf '\n'
 
-stack:
-	@read -p 'This will create resources in AWS. Continue? (y/n) ' a && test $$a == 'y' || exit
-	@aws cloudformation create-stack \
-		--capabilities 'CAPABILITY_IAM' \
-		--stack-name 'datastash-store' \
-		--template-body "$$(cat cloudformation.json)" > /dev/null
-	@printf 'Creating stack'
-	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-store' --query 'Stacks[0].StackStatus') =~ 'CREATE_IN_PROGRESS' ]]; \
-		do sleep 5 && printf '.'; done
-	@printf '\n'
-	@printf '(now wait for Elasticsearch to start...)\n'
-
-stack.update: upload
+aws.update.stack: aws.upload
 	@aws cloudformation update-stack \
 		--capabilities 'CAPABILITY_IAM' \
 		--stack-name 'datastash-store' \
@@ -102,40 +136,10 @@ stack.update: upload
 		do sleep 5 && printf '.'; done
 	@printf '\n'
 
-stack.delete:
+aws.destroy:
 	@aws cloudformation delete-stack \
 		--stack-name 'datastash-store'
 	@aws s3 rm \
 		s3://datastash/store.tar.gz
 	@aws s3 rb \
 		s3://datastash | true
-
-local: target/elasticsearch target/kibana local.clean local.stop
-	@mkdir -p .local
-	@rm -rf .local/elasticsearch
-	@cp -r target/elasticsearch .local
-	@ln -sf $(shell pwd)/config/elasticsearch.yml .local/elasticsearch/config/elasticsearch.yml
-	@ln -sf $(shell pwd)/config/elasticsearch-logging.yml .local/elasticsearch/config/logging.yml
-	@ln -sf $(shell pwd)/config/default-mapping.json .local/elasticsearch/config/default-mapping.json
-	@rm -rf .local/kibana
-	@cp -r target/kibana .local
-
-local.clean:
-	@rm -rf .local
-
-local.start:
-	@./.local/elasticsearch/bin/elasticsearch -d \
-		--index.number_of_replicas=0 \
-		--path.conf=.local/elasticsearch/config \
-		--path.data=.local/data \
-		--path.logs=.local/logs \
-		--gateway.expected_nodes=1 \
-		--gateway.recover_after_nodes=1 \
-		--discovery.type=zen &> /dev/null
-	@./.local/kibana/bin/kibana &> /dev/null &
-	@echo 'Elasticsearch starting up at http://localhost:9200/_plugin/head/'
-	@echo 'Kibana starting up at http://localhost:5601/'
-
-local.stop:
-	@pkill -f kibana | true
-	@pkill -f elasticsearch | true

@@ -1,15 +1,8 @@
 
 # Call make on sub-projects
 
-all:
-	@make -C store
-	@make -C sources
-	@make -C alerter
+all: local local.start
 
-destroy:
-	@make -C store stack.delete &> /dev/null | true
-	@make -C sources stack.delete &> /dev/null | true
-	@make -C alerter stack.delete &> /dev/null | true
 
 local:
 	@make -C store local
@@ -25,3 +18,13 @@ local.stop:
 	@make -C store local.stop
 	@make -C alerter local.stop
 	@make -C sources local.stop
+
+aws:
+	@make -C store aws
+	@make -C sources aws
+	@make -C alerter aws
+
+aws.destroy:
+	@make -C store aws.destroy
+	@make -C sources aws.destroy
+	@make -C alerter aws.destroy

@@ -1,9 +1,11 @@
 
 # Upload and stack creation require the AWS CLI
 
-.PHONY: target upload update stack stack.update stack.delete local
+.PHONY: target local local.run local.start local.stop aws aws.upload aws.update aws.update.stack aws.destroy
 
-all: upload stack
+
+all: local local.start
+
 
 target:
 	@rm -rf target
@@ -18,14 +20,41 @@ target/sources.tar.gz: target
 		-C target authorized_keys \
 		-C .. sources.js package.json config.json
 
-upload: target/sources.tar.gz
+
+local:
+	@npm install
+
+local.run:
+	@node sources
+
+local.start:
+	@echo 'Adding Sources Crontab...'
+	@(crontab -l 2> /dev/null; echo "@hourly export PATH=$$PATH; cd $$(pwd); node sources >> datastash-sources.log 2>&1") | crontab -
+
+local.stop:
+	@echo 'Removing Sources Crontab...'
+	@crontab -l | grep -v 'datastash-sources' | crontab -
+
+
+aws: aws.upload
+	@read -p 'This will create resources in AWS. Continue? (y/n) ' a && test $$a == 'y' || exit
+	@aws cloudformation create-stack \
+		--capabilities 'CAPABILITY_IAM' \
+		--stack-name 'datastash-sources' \
+		--template-body "$$(cat cloudformation.json)" > /dev/null
+	@printf 'Creating stack'
+	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-sources' --query 'Stacks[0].StackStatus') =~ 'CREATE_IN_PROGRESS' ]]; \
+		do sleep 5 && printf '.'; done
+	@printf '\n'
+
+aws.upload: target/sources.tar.gz
 	@aws s3 mb \
 		s3://datastash | true
 	@aws s3 cp \
 		--acl public-read \
 		target/sources.tar.gz s3://datastash
 
-update: stack.update
+aws.update: aws.update.stack
 	$(eval group-name = $(shell aws cloudformation list-stack-resources \
 		--stack-name 'datastash-sources' \
 		--query 'StackResourceSummaries[?ResourceType==`AWS::AutoScaling::AutoScalingGroup`].PhysicalResourceId' \
@@ -53,18 +82,8 @@ update: stack.update
 		--desired-capacity $(group-desired)
 	@printf '\n'
 
-stack:
-	@read -p 'This will create resources in AWS. Continue? (y/n) ' a && test $$a == 'y' || exit
-	@aws cloudformation create-stack \
-		--capabilities 'CAPABILITY_IAM' \
-		--stack-name 'datastash-sources' \
-		--template-body "$$(cat cloudformation.json)" > /dev/null
-	@printf 'Creating stack'
-	@while [[ $$(aws cloudformation describe-stacks --stack-name 'datastash-sources' --query 'Stacks[0].StackStatus') =~ 'CREATE_IN_PROGRESS' ]]; \
-		do sleep 5 && printf '.'; done
-	@printf '\n'
 
-stack.update: upload
+aws.update.stack: aws.upload
 	@aws cloudformation update-stack \
 		--capabilities 'CAPABILITY_IAM' \
 		--stack-name 'datastash-sources' \
@@ -74,24 +93,10 @@ stack.update: upload
 		do sleep 5 && printf '.'; done
 	@printf '\n'
 
-stack.delete:
+aws.destroy:
 	@aws cloudformation delete-stack \
 		--stack-name 'datastash-sources'
 	@aws s3 rm \
 		s3://datastash/sources.tar.gz
 	@aws s3 rb \
 		s3://datastash | true
-
-local:
-	@npm install
-
-local.run:
-	@node sources
-
-local.start:
-	@echo 'Adding Sources Crontab...'
-	@(crontab -l 2> /dev/null; echo "@hourly export PATH=$$PATH; cd $$(pwd); node sources >> datastash-sources.log 2>&1") | crontab -
-
-local.stop:
-	@echo 'Removing Sources Crontab...'
-	@crontab -l | grep -v 'datastash-sources' | crontab -
