@@ -24,6 +24,7 @@ var send = {
 }
 
 function run() {
+    console.log('Beginning alerts...')
     aws.config = config.aws
     new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function (error, data) {
 	var elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
