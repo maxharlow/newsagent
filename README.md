@@ -79,10 +79,11 @@ Future plans
 Prior art
 ---------
 
-This is not a new idea. Credit to:
+Other people have built similar tools. Credit to:
 
 * [Some unpublished tool] (https://www.youtube.com/watch?v=iP-On8PzEy8) by the [LA Times] (http://www.latimes.com/)
 * [Scraperwiki] (https://scraperwiki.com/)
+* [Logstash] (http://www.elasticsearch.org/overview/logstash/)
 * [Datawire] (https://github.com/arc64/datawi.re) by [Annabel Church] (https://twitter.com/annabelchurch) and [Friedrich Lindenberg] (https://twitter.com/pudo)
 * [Morph] (https://morph.io/) by the [Open Australia Foundation] (https://www.openaustraliafoundation.org.au/)
 * [Datastringer] (https://github.com/BBC-News-Labs/datastringer) by the [BBC News Labs] (https://twitter.com/BBC_News_Labs)
