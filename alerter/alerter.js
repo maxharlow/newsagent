@@ -54,7 +54,7 @@ function check(alert, identifier) {
 	})
 	elasticsearchClient.search({index: '.alerts', type: 'shadow', id: identifier}, function (error, shadowResponse) {
 	    if (error) throw error
-	    var hasShadow = shadowResponse.hits.hits.length.length > 0
+	    var hasShadow = shadowResponse.hits.hits[0]._source.results.length > 0
 	    var shadow = hasShadow ? shadowResponse.hits.hits[0]._source.results : []
 	    var results = matches.filter(function (result) {
 		return shadow.every(function (shadowResult) {
