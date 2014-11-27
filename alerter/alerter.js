@@ -72,7 +72,7 @@ function check(alert, identifier) {
 		if (error) throw error
 	    })
 	    var text = results.reduce(function (previous, result) {
-		return previous + '\n' + mustache.render(alert.message, result)
+		return previous + '\n\n' + mustache.render(alert.message, result)
 	    }, '')
 	    if (hasShadow && text != '') send[alert.notification](text, alert.data)
 	})
