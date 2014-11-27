@@ -49,18 +49,16 @@ function check(alert, identifier) {
     query.size = 100
     elasticsearchClient.search(query, function (error, queryResponse) {
 	if (error) throw error
-	var matches = queryResponse.hits.hits.map(function (hit) {
+	var queryMatches = queryResponse.hits.hits.map(function (hit) {
 	    return hit._source
 	})
 	elasticsearchClient.search({index: '.alerts', type: 'shadow', id: identifier}, function (error, shadowResponse) {
 	    if (error) throw error
-	    var shadowHits = shadowResponse.hits.hits
-	    var hasShadow = shadowHits.length > 0
-	    var shadow = hasShadow ? shadowHits[0]._source.results : []
-	    var results = matches.filter(function (result) {
-		return shadow.every(function (shadowResult) {
-		    result == shadowResult
-		})
+	    var shadowMatches = shadowResponse.hits.hits.map(function (hit) {
+		return hit._source
+	    })
+	    var results = queryMatches.filter(function (queryResult) {
+		return shadowMatches.indexOf(queryResult) !== 0
 	    })
 	    var document = {
 		index: '.alerts',
@@ -74,7 +72,7 @@ function check(alert, identifier) {
 	    var text = results.reduce(function (previous, result) {
 		return previous + '\n\n' + mustache.render(alert.message, result)
 	    }, '')
-	    if (hasShadow && text != '') send[alert.notification](text, alert.data)
+	    if (shadowMatches.length > 0 && text != '') send[alert.notification](text, alert.data)
 	})
     })
 }
