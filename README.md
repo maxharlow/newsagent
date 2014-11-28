@@ -53,11 +53,11 @@ Running on AWS requires you have the [AWS CLI] (https://github.com/aws/aws-cli/)
 
 To create the stack:
 
-    $ make
+    $ make aws
 
 To destroy the stack:
 
-    $ make destroy
+    $ make aws.destroy
 
 
 Usage
