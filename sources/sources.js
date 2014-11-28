@@ -94,14 +94,14 @@ function load(source, identifier) {
     var data = highland(fs.createReadStream(location + '/' + source.output)).through(csvParser())
     var documents = data.map(function (entry) {
 	entry['@timestamp'] = moment(entry[source.timestamp], source.timestampFormat).format()
-	var document = {
+	return {
 	    index: 'data',
 	    type: identifier,
 	    id: entry[source.key],
 	    body: entry
 	}
     })
-    documents.ratelimit(100, 100).map(function (document) {
+    documents.ratelimit(100, 100).each(function (document) {
 	elasticsearchClient.index(document, function (error, response) {
 	    if (error) console.log('Could not index: ' + error.message + '\n', document)
 	})
