@@ -46,13 +46,21 @@ function run() {
 
 function check(alert, identifier) {
     var query = alert.query
-    query.size = 250 // todo: actually deal with pagination
+    query.searchType = 'scan'
+    query.scroll = '10m'
     elasticsearchClient.search(query, function (error, queryResponse) {
 	if (error) throw error
 	var queryMatches = queryResponse.hits.hits.map(function (hit) {
 	    return hit._source
 	})
-	elasticsearchClient.search({index: '.alerts', type: 'shadow', id: identifier, size: 250}, function (error, shadowResponse) { // todo: actually deal with pagination
+	var shadowQuery = {
+	    searchType: 'scan',
+	    scroll: '10m',
+	    index: '.alerts',
+	    type: 'shadow',
+	    id: identifier
+	}
+	elasticsearchClient.search(shadowQuery, function (error, shadowResponse) {
 	    if (error) throw error
 	    var hasShadow = shadowResponse.hits.hits.length > 0
 	    var shadowMatches = hasShadow ? shadowResponse.hits.hits[0]._source.results : [] // entire shadow is one hit
