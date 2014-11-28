@@ -2,7 +2,7 @@
     "name": "New labour market statistics released",
     "query": {
 	"type": "ons-labour-market-statistics",
-	"body": { }
+	"body": { "query": { "match_all": { } } }
     },
     "message": "New labour market statistics released ({{@timestamp}})! The unemployment rate is now {{unemploymentRate}}, and the claimant count is now {{claimantCount}}.",
     "notification": "email",
