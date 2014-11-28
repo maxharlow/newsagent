@@ -46,19 +46,20 @@ function run() {
 
 function check(alert, identifier) {
     var query = alert.query
-    query.size = 100
+    query.size = 250 // todo: actually deal with pagination
     elasticsearchClient.search(query, function (error, queryResponse) {
 	if (error) throw error
 	var queryMatches = queryResponse.hits.hits.map(function (hit) {
 	    return hit._source
 	})
-	elasticsearchClient.search({index: '.alerts', type: 'shadow', id: identifier}, function (error, shadowResponse) {
+	elasticsearchClient.search({index: '.alerts', type: 'shadow', id: identifier, size: 250}, function (error, shadowResponse) { // todo: actually deal with pagination
 	    if (error) throw error
-	    var shadowMatches = shadowResponse.hits.hits.map(function (hit) {
-		return hit._source
-	    })
-	    var results = queryMatches.filter(function (queryResult) {
-		return shadowMatches.indexOf(queryResult) !== 0
+	    var hasShadow = shadowResponse.hits.hits.length > 0
+	    var shadowMatches = hasShadow ? shadowResponse.hits.hits[0]._source.results : [] // entire shadow is one hit
+	    var results = queryMatches.filter(function (queryMatch) {
+		return shadowMatches.reduce(function (a, shadowMatch) {
+		    return a && queryMatch['@timestamp'] !== shadowMatch['@timestamp'] // todo: want to compare entire object, not just timestamp
+		}, true)
 	    })
 	    var document = {
 		index: '.alerts',
@@ -72,7 +73,7 @@ function check(alert, identifier) {
 	    var text = results.reduce(function (previous, result) {
 		return previous + '\n\n' + mustache.render(alert.message, result)
 	    }, '')
-	    if (shadowMatches.length > 0 && text != '') send[alert.notification](text, alert.data)
+	    if (hasShadow && text != '') send[alert.notification](text, alert.data)
 	})
     })
 }
