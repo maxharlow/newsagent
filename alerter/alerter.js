@@ -66,7 +66,7 @@ function check(alert, identifier) {
 	    var shadowMatches = hasShadow ? shadowResponse.hits.hits[0]._source.results : [] // entire shadow is one hit
 	    var results = queryMatches.filter(function (queryMatch) {
 		return shadowMatches.reduce(function (a, shadowMatch) {
-		    return a && queryMatch['@timestamp'] !== shadowMatch['@timestamp'] // todo: want to compare entire object, not just timestamp
+		    return a && JSON.stringify(queryMatch) !== JSON.stringify(shadowMatch)
 		}, true)
 	    })
 	    var document = {
