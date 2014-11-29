@@ -24,8 +24,7 @@ var send = {
 }
 
 function run() {
-    console.log(new Date())
-    console.log('Beginning alerts...')
+    console.log('-- ' + new Date() + ' --')
     aws.config = config.aws
     new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function (error, data) {
 	var elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
@@ -33,7 +32,7 @@ function run() {
 	    host: elasticsearchHost + ':' + 9200,
 	    keepAlive: false
 	}
-	console.log('Using Elasticsearch host: ' + elasticsearchHost)
+	console.log('\nUsing Elasticsearch host: ' + elasticsearchHost + '\n')
 	elasticsearchClient = new elasticsearch.Client(elasticsearchConfig)
 	elasticsearchClient.search({index: '.alerts', type: 'alert'}, function (error, response) {
 	    if (error) throw error
