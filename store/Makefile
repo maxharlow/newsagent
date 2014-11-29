@@ -21,9 +21,9 @@ target/elasticsearch: target
 	@mv target/elasticsearch-$(elasticsearch-version) target/elasticsearch
 	@./target/elasticsearch/bin/plugin --install elasticsearch/elasticsearch-cloud-aws/2.4.0
 	@./target/elasticsearch/bin/plugin --install mobz/elasticsearch-head
-	@cp config/elasticsearch.yml target/elasticsearch/config/elasticsearch.yml
-	@cp config/elasticsearch-logging.yml target/elasticsearch/config/logging.yml
-	@cp config/default-mapping.json target/elasticsearch/config/default-mapping.json
+	@cp elasticsearch.yml target/elasticsearch/config/elasticsearch.yml
+	@cp elasticsearch-logging.yml target/elasticsearch/config/logging.yml
+	@cp default-mapping.json target/elasticsearch/config/default-mapping.json
 
 target/kibana: target
 	@curl -o target/kibana.tar.gz https://download.elasticsearch.org/kibana/kibana/kibana-$(kibana-version).tar.gz
@@ -36,17 +36,17 @@ target/store.tar.gz: target/elasticsearch target/kibana
 	@tar \
 		--exclude '.*' \
 		-czf target/store.tar.gz \
-		-C config elasticsearch.conf kibana.conf \
-		-C ../target authorized_keys elasticsearch kibana
+		-C target authorized_keys elasticsearch kibana \
+		-C .. elasticsearch.conf kibana.conf
 
 
 local: target/elasticsearch target/kibana local.clean local.stop
 	@mkdir -p .local
 	@rm -rf .local/elasticsearch
 	@cp -r target/elasticsearch .local
-	@ln -sf $(shell pwd)/config/elasticsearch.yml .local/elasticsearch/config/elasticsearch.yml
-	@ln -sf $(shell pwd)/config/elasticsearch-logging.yml .local/elasticsearch/config/logging.yml
-	@ln -sf $(shell pwd)/config/default-mapping.json .local/elasticsearch/config/default-mapping.json
+	@ln -sf $(shell pwd)/elasticsearch.yml .local/elasticsearch/config/elasticsearch.yml
+	@ln -sf $(shell pwd)/elasticsearch-logging.yml .local/elasticsearch/config/logging.yml
+	@ln -sf $(shell pwd)/default-mapping.json .local/elasticsearch/config/default-mapping.json
 	@rm -rf .local/kibana
 	@cp -r target/kibana .local
 
