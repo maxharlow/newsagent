@@ -3,7 +3,7 @@
     "location": "https://github.com/maxharlow/scrape-contracts.git",
     "install": "",
     "run": "sbt run",
-    "output": "awards.csv",
+    "output": "contracts-awards.csv",
     "key": "noticeId",
     "timestamp": "noticePublishedDate",
     "timestampFormat": "DD/MM/YYYY",
