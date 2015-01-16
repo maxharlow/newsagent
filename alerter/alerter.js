@@ -60,7 +60,6 @@ function retrieve(alert, identifier, matches, scrollId) {
 	if (queryResponse.hits.total !== updatedMatches.length) retrieve(alert, identifier, updatedMatches, queryResponse._scroll_id)
 	else compare(alert, identifier, updatedMatches)
     }
-
     if (scrollId === undefined) {
 	var query = alert.query
 	query.searchType = 'scan'
