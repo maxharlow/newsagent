@@ -48,10 +48,13 @@ function retrieve(source, identifier) {
 	if (error && error.code !== 'EEXIST' && error.code !== 'ENOENT') throw error
 	gitty.clone(location, source.location, function (error) {
 	    if (error && error.indexOf('already exists') < 0) throw error
-	    gitty(location).pull('origin', 'master', function (error) { // todo: will fail if data file has been updated at origin, and is different locally (stash & drop?)
+	    gitty(location).reset('HEAD', function (error) {
 		if (error) throw error
-		var revision = gitty(location).describeSync().replace('\n', '')
-		execute(source, identifier, revision)
+		gitty(location).pull('origin', 'master', function (error) {
+		    if (error) throw error
+		    var revision = gitty(location).describeSync().replace('\n', '')
+		    execute(source, identifier, revision)
+		})
 	    })
 	})
     })
