@@ -15,16 +15,8 @@ var elasticsearchClient
 
 function run() {
     console.log('-- ' + new Date() + ' --')
-    aws.config = config.aws
-    new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function (error, data) {
-	var elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
-	var elasticsearchConfig = {
-	    host: elasticsearchHost + ':' + 9200,
-	    keepAlive: false
-	}
-	console.log('\nUsing Elasticsearch host: ' + elasticsearchHost + '\n')
-	elasticsearchClient = new elasticsearch.Client(elasticsearchConfig)
-	elasticsearchClient.search({index: '.sources'}, function (error, response) {
+    withStore(function () {
+	elasticsearchClient.search({index: '.sources', type: 'source'}, function (error, response) {
 	    if (error) throw error
 	    response.hits.hits.forEach(function (hit) {
 		var source = hit._source
@@ -35,33 +27,61 @@ function run() {
     })
 }
 
+function withStore(callback) {
+    aws.config = config.aws
+    new aws.ELB().describeLoadBalancers({ LoadBalancerNames: [ 'datastash-store' ] }, function (error, data) {
+	var elasticsearchHost = error ? 'localhost' : data.LoadBalancerDescriptions[0].DNSName
+	var elasticsearchConfig = {
+	    host: elasticsearchHost + ':' + 9200,
+	    keepAlive: false
+	}
+	console.log('\nUsing Elasticsearch host: ' + elasticsearchHost + '\n')
+	elasticsearchClient = new elasticsearch.Client(elasticsearchConfig)
+	callback()
+    })
+}
+
 function retrieve(source, identifier) {
     var location = clonesLocation + '/' + identifier
+    console.log('Retrieving: ' + source.name)
     fs.mkdir(location, function (error) {
 	if (error && error.code !== 'EEXIST' && error.code !== 'ENOENT') throw error
 	gitty.clone(location, source.location, function (error) {
 	    if (error && error.indexOf('already exists') < 0) throw error
-	    gitty(location).pull('origin', 'master', function (error) {
+	    gitty(location).pull('origin', 'master', function (error) { // todo: will fail if data file has been updated at origin, and is different locally (stash & drop?)
 		if (error) throw error
-		console.log('Source: \'' + source.name + '\' (revision ' + gitty(location).describeSync().replace('\n', '') + ')')
-		execute(source, identifier)
+		var revision = gitty(location).describeSync().replace('\n', '')
+		execute(source, identifier, revision)
 	    })
 	})
     })
 }
 
-function execute(source, identifier) {
+function execute(source, identifier, revision) {
+    var detail = {
+	source: source.name,
+	date: new Date().toISOString(),
+	revision: revision
+    }
     var location = clonesLocation + '/' + identifier
     console.log('Installing...')
     childProcess.exec('cd ' + location + ';' + source.install, function (error, installOut, installErrors) {
 	if (error) throw error
-	console.log(installOut)
-	console.error(installErrors)
+	detail.installOut = installOut
+	detail.installErrors = installErrors
 	console.log('Running...')
 	childProcess.exec('cd ' + location + ';' + source.run, function (error, runOut, runErrors) {
-	    console.log(runOut)
-	    console.log(runErrors)
 	    if (error) throw error
+	    detail.runOut = runOut
+	    detail.runErrors = runErrors
+	    var logs = {
+		index: '.sources',
+		type: 'logs',
+		body: detail
+	    }
+	    elasticsearchClient.index(logs, function (error, response) {
+		if (error) throw error
+	    })
 	    setup(source, identifier)
 	})
     })
