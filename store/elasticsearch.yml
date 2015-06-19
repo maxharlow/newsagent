@@ -2,19 +2,19 @@
 cluster.name: datastash
 
 index:
-	number_of_shards: 3
-	number_of_replicas: 0
+        number_of_shards: 3
+        number_of_replicas: 0
 
 path:
-	conf: elasticsearch/config
-	logs: logs
-	data: /data
+        conf: elasticsearch/config
+        logs: logs
+        data: /data
 
 discovery:
-	type: ec2
-	ec2.tag.Stack: datastash
-	ec2.tag.App: store
-	zen.ping.multicast.enabled: false
+        type: ec2
+        ec2.tag.Stack: datastash
+        ec2.tag.App: store
+        zen.ping.multicast.enabled: false
 
 plugin.mandatory: cloud-aws
 

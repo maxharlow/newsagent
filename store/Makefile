@@ -1,8 +1,8 @@
 
 # Upload and stack creation require the AWS CLI
 
-elasticsearch-version = 1.4.0
-kibana-version = 4.0.0-BETA2
+elasticsearch-version = 1.6.0
+kibana-version = 4.1.0
 
 .PHONY: target upload update local local.clean local.start local.stop aws aws.upload aws.update aws.update.stack aws.destroy 
 
@@ -15,21 +15,21 @@ target:
 	@mkdir -p target
 
 target/elasticsearch: target
-	@curl -o target/elasticsearch.tar.gz https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$(elasticsearch-version).tar.gz
+	@curl -o target/elasticsearch.tar.gz https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-$(elasticsearch-version).tar.gz
 	@tar xf target/elasticsearch.tar.gz -C target
 	@rm target/elasticsearch.tar.gz
 	@mv target/elasticsearch-$(elasticsearch-version) target/elasticsearch
-	@./target/elasticsearch/bin/plugin --install elasticsearch/elasticsearch-cloud-aws/2.4.0
+	@./target/elasticsearch/bin/plugin --install elasticsearch/elasticsearch-cloud-aws/2.6.0
 	@./target/elasticsearch/bin/plugin --install mobz/elasticsearch-head
 	@cp elasticsearch.yml target/elasticsearch/config/elasticsearch.yml
 	@cp elasticsearch-logging.yml target/elasticsearch/config/logging.yml
 	@cp default-mapping.json target/elasticsearch/config/default-mapping.json
 
 target/kibana: target
-	@curl -o target/kibana.tar.gz https://download.elasticsearch.org/kibana/kibana/kibana-$(kibana-version).tar.gz
+	@curl -o target/kibana.tar.gz https://download.elastic.co/kibana/kibana/kibana-$(kibana-version)-$(uname | tr '[:upper:]' '[:lower:]')-x64.tar.gz
 	@tar xf target/kibana.tar.gz -C target
 	@rm target/kibana.tar.gz
-	@mv target/kibana-$(kibana-version) target/kibana
+	@mv target/kibana-$(kibana-version)-$(uname | tr '[:upper:]' '[:lower:]')-x64 target/kibana
 
 target/store.tar.gz: target/elasticsearch target/kibana
 	@cp ~/.ssh/id_rsa.pub target/authorized_keys
