@@ -13,7 +13,7 @@ const DeepEqual = require('deep-equal')
 const Nodemailer = require('nodemailer')
 const Config = require('./config.json')
 
-async function start() {
+async function setup() {
     const args = Process.argv.slice(2)
     const filename = args[0]
     const dateStarted = new Date()
@@ -21,39 +21,40 @@ async function start() {
         const data = await Promisify(FS.readFile)(filename)
         const recipe = JSON.parse(data.toString())
         await Git.Clone(recipe.location, 'source')
-        const log = await sequentially(shell(), recipe.setup)
-        await Schedule.scheduleJob(recipe.schedule, () => execute(recipe))
+        const messages = await sequentially(shell(), recipe.setup)
+        await Schedule.scheduleJob(recipe.schedule, () => run(recipe))
         const dateFinished = new Date()
-        const summary = {
+        const log = {
             type: 'success',
             date: dateStarted.toISOString(),
             duration: dateFinished - dateStarted,
-            log
+            messages // todo ends up undefined
         }
-        console.log(summary) // todo do something with this
+        store('setup-log', log)
     }
     catch (e) {
-        const summary = {
+        const log = {
             type: 'failure',
             date: dateStarted.toISOString(),
             message: e.message
         }
-        console.log(summary) // todo do something with this
+        store('setup-log', log)
     }
 }
 
-async function execute(recipe) {
+async function run(recipe) {
     const dateStarted = new Date()
     try {
         const repo = await repository(recipe.updatable)
         const revision = await repositoryRevision(repo)
-        const runLog = await sequentially(shell('source'), recipe.run)
-        await store(recipe.result)
+        const runMessages = await sequentially(shell('source'), recipe.run)
+        const data = await csv('source/' + recipe.result)
+        await store('data', data)
         const stored = await comparison()
         const diff = await difference(stored.current, stored.previous)
-        const alertLog = await alert(diff, recipe.alerts, recipe.name)
+        const alertMessages = await alert(diff, recipe.alerts, recipe.name)
         const dateFinished = new Date()
-        const summary = {
+        const log = {
             type: 'success',
             date: dateStarted.toISOString(),
             duration: dateFinished - dateStarted,
@@ -62,18 +63,18 @@ async function execute(recipe) {
             comparisonDate: stored.previousDate,
             recordsAdded: diff.added.length,
             recordsRemoved: diff.removed.length,
-            runLog,
-            alertLog
+            runMessages,
+            alertMessages
         }
-        console.log(summary) // todo do something with this
+        store('run-log', log)
     }
     catch (e) {
-        const summary = {
+        const log = {
             type: 'failure',
             date: dateStarted.toISOString(),
             message: e.message
         }
-        console.log(summary) // todo should go somewhere
+        store('run-log', log)
     }
 }
 
@@ -91,25 +92,24 @@ async function repositoryRevision(repo) {
     return commit.id().toString().substr(0, 8)
 }
 
-async function store(result) {
+async function csv(location) {
+    const data = await Promisify(FS.readFile)(location)
+    return Promisify(NeatCSV)(data)
+}
+
+async function store(type, data) {
     const db = new PouchDB('data')
-    const csv = await Promisify(FS.readFile)('source/' + result)
-    const data = await Promisify(NeatCSV)(csv)
-    const document = {
-        _id: new Date().toISOString(),
-        data: data
-    }
-    return db.put(document)
+    return db.put({ _id: type + '/' + new Date().toISOString(), data })
 }
 
 async function comparison() {
     const db = new PouchDB('data')
-    const response = await db.allDocs({ include_docs: true, descending: true, limit: 2 })
+    const response = await db.allDocs({ startkey: 'data/\uffff', endkey: 'data/', include_docs: true, descending: true, limit: 2 })
     return {
         current: response.rows[0].doc.data,
-        currentDate: response.rows[0].id,
+        currentDate: response.rows[0].id.split('/')[1],
         previous: response.rows[1] ? response.rows[1].doc.data : undefined,
-        previousDate: response.rows[1] ? response.rows[1].id : undefined
+        previousDate: response.rows[1] ? response.rows[1].id.split('/')[1] : undefined
     }
 }
 
@@ -132,8 +132,8 @@ function format(diff, name) {
     function table(data) {
         if (data.length === 0) return '(None.)'
         return '<table>'
-            + '<thead><tr>' + Object.keys(data[0]).map(key => '<td>' + key + '</td>').join('') + '</tr></thead>'
-            + data.map(d => '<tr>' + Object.keys(d).map(key => '<td><strong>' + d[key] + '</strong></td>').join('') + '</tr>').join('')
+            + '<thead><tr>' + Object.keys(data[0]).map(key => '<td><strong>' + key + '</strong></td>').join('') + '</tr></thead>'
+            + data.map(d => '<tr>' + Object.keys(d).map(key => '<td>' + d[key] + '</td>').join('') + '</tr>').join('')
             + '</table>'
     }
     return `<h1>${name}</h1>` + '<h2>Data added</h2>' + table(diff.added) + '<h2>Data removed</h2>' + table(diff.removed)
@@ -177,4 +177,4 @@ function shell(location) {
     }
 }
 
-start()
+setup()
