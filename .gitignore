@@ -1,7 +1,6 @@
 .*
 !.gitignore
 
-target
 node_modules
 
 config.json
