@@ -1,0 +1,15 @@
+{
+    "name": "",
+    "description": "",
+    "location": "",
+    "updatable": true,
+    "setup": [],
+    "schedule": "0 0 * * *",
+    "run": [],
+    "result": "",
+    "alerts": [
+	{
+            "recipient": ""
+	}
+    ]
+}
