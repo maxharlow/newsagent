@@ -25,16 +25,16 @@ async function setup() {
         await Schedule.scheduleJob(recipe.schedule, () => run(recipe))
         const dateFinished = new Date()
         const log = {
-            type: 'success',
+            state: 'success',
             date: dateStarted.toISOString(),
             duration: dateFinished - dateStarted,
-            messages // todo ends up undefined
+            messages
         }
         store('setup-log', log)
     }
     catch (e) {
         const log = {
-            type: 'failure',
+            state: 'failure',
             date: dateStarted.toISOString(),
             message: e.message
         }
@@ -47,15 +47,15 @@ async function run(recipe) {
     try {
         const repo = await repository(recipe.updatable)
         const revision = await repositoryRevision(repo)
-        const runMessages = await sequentially(shell('source'), recipe.run)
+        const messages = await sequentially(shell('source'), recipe.run)
         const data = await csv('source/' + recipe.result)
         await store('data', data)
         const stored = await comparison()
         const diff = await difference(stored.current, stored.previous)
-        const alertMessages = await alert(diff, recipe.alerts, recipe.name)
+        const sent = await alert(diff, recipe.alerts, recipe.name)
         const dateFinished = new Date()
         const log = {
-            type: 'success',
+            state: 'success',
             date: dateStarted.toISOString(),
             duration: dateFinished - dateStarted,
             revision,
@@ -63,14 +63,14 @@ async function run(recipe) {
             comparisonDate: stored.previousDate,
             recordsAdded: diff.added.length,
             recordsRemoved: diff.removed.length,
-            runMessages,
-            alertMessages
+            messages,
+            sent
         }
         store('run-log', log)
     }
     catch (e) {
         const log = {
-            type: 'failure',
+            state: 'failure',
             date: dateStarted.toISOString(),
             message: e.message
         }
@@ -164,14 +164,8 @@ function shell(location) {
             process.stdout.on('data', data => log.push({ type: 'stdout', value: data }))
             process.stderr.on('data', data => log.push({ type: 'stderr', value: data }))
             process.on('exit', code => {
-                if (code === 0) {
-                    log.push({ type: 'command-success' })
-                    resolve(log)
-                }
-                else {
-                    log.push({ type: 'command-failure', value: code })
-                    reject(log)
-                }
+                if (code === 0) resolve(log)
+                else reject(new Error(command + ' exited with code ' + code))
             })
         })      
     }
