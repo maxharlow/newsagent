@@ -50,7 +50,7 @@ async function run(recipe) {
         const messages = await sequentially(shell('source'), recipe.run)
         const data = await csv('source/' + recipe.result)
         await store('data', data)
-        const stored = await comparison()
+        const stored = await retrieve()
         const diff = await difference(stored.current, stored.previous)
         const sent = await alert(diff, recipe.alerts, recipe.name)
         const dateFinished = new Date()
@@ -59,8 +59,8 @@ async function run(recipe) {
             date: dateStarted.toISOString(),
             duration: dateFinished - dateStarted,
             revision,
-            storeDate: stored.currentDate,
-            comparisonDate: stored.previousDate,
+            currentDocDate: stored.currentDate,
+            previousDocDate: stored.previousDate,
             recordsAdded: diff.added.length,
             recordsRemoved: diff.removed.length,
             messages,
@@ -102,7 +102,7 @@ async function store(type, data) {
     return db.put({ _id: type + '/' + new Date().toISOString(), data })
 }
 
-async function comparison() {
+async function retrieve() {
     const db = new PouchDB('data')
     const response = await db.allDocs({ startkey: 'data/\uffff', endkey: 'data/', include_docs: true, descending: true, limit: 2 })
     return {
@@ -132,9 +132,9 @@ function format(diff, name) {
     function table(data) {
         if (data.length === 0) return '(None.)'
         return '<table>'
-            + '<thead><tr>' + Object.keys(data[0]).map(key => '<td><strong>' + key + '</strong></td>').join('') + '</tr></thead>'
-            + data.map(d => '<tr>' + Object.keys(d).map(key => '<td>' + d[key] + '</td>').join('') + '</tr>').join('')
-            + '</table>'
+             + '<thead><tr>' + Object.keys(data[0]).map(key => '<td><strong>' + key + '</strong></td>').join('') + '</tr></thead>'
+             + data.map(d => '<tr>' + Object.keys(d).map(key => '<td>' + d[key] + '</td>').join('') + '</tr>').join('')
+             + '</table>'
     }
     return `<h1>${name}</h1>` + '<h2>Data added</h2>' + table(diff.added) + '<h2>Data removed</h2>' + table(diff.removed)
 }
