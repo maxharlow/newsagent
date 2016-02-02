@@ -14,13 +14,14 @@ import Nodemailer from 'nodemailer'
 import Config from './config.json'
 
 export async function setup(filename) {
+    const id = Path.parse(filename).name
     const dateStarted = new Date()
     try {
         const data = await Promisify(FS.readFile)(filename)
         const recipe = JSON.parse(data.toString())
         await Git.Clone(recipe.location, 'source')
         const messages = await sequentially(shell(), recipe.setup)
-        const job = Schedule.scheduleJob(recipe.schedule, () => run(recipe))
+        const job = Schedule.scheduleJob(recipe.schedule, () => run(id, recipe))
         if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
         const dateFinished = new Date()
         const log = {
@@ -29,7 +30,7 @@ export async function setup(filename) {
             duration: dateFinished - dateStarted,
             messages
         }
-        store('setup-log', log)
+        store(id + '/setup-log', log)
     }
     catch (e) {
         const log = {
@@ -38,19 +39,19 @@ export async function setup(filename) {
             message: e.message
         }
         console.log(e.stack)
-        store('setup-log', log)
+        store(id + '/setup-log', log)
     }
 }
 
-async function run(recipe) {
+async function run(id, recipe) {
     const dateStarted = new Date()
     try {
         const repo = await repository(recipe.updatable)
         const revision = await repositoryRevision(repo)
         const messages = await sequentially(shell('source'), recipe.run)
         const data = await csv('source/' + recipe.result)
-        await store('data', data)
-        const stored = await retrieve()
+        await store(id + '/data', data)
+        const stored = await retrieve(id + '/data')
         const diff = await difference(stored.current, stored.previous)
         const sent = await alert(diff, recipe.alerts, recipe.name)
         const dateFinished = new Date()
@@ -66,7 +67,7 @@ async function run(recipe) {
             messages,
             sent
         }
-        store('run-log', log)
+        store(id + '/run-log', log)
     }
     catch (e) {
         const log = {
@@ -74,7 +75,7 @@ async function run(recipe) {
             date: dateStarted.toISOString(),
             message: e.message
         }
-        store('run-log', log)
+        store(id + '/run-log', log)
     }
 }
 
@@ -102,9 +103,9 @@ async function store(type, data) {
     return db.put({ _id: type + '/' + new Date().toISOString(), data })
 }
 
-async function retrieve() {
+async function retrieve(type) {
     const db = new PouchDB(Config.pouchLocation)
-    const response = await db.allDocs({ startkey: 'data/\uffff', endkey: 'data/', include_docs: true, descending: true, limit: 2 })
+    const response = await db.allDocs({ startkey: type + '/\uffff', endkey: type + '/', include_docs: true, descending: true, limit: 2 })
     return {
         current: response.rows[0].doc.data,
         currentDate: response.rows[0].id.split('/')[1],
