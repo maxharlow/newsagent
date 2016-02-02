@@ -30,7 +30,7 @@ export async function setup(filename) {
             duration: dateFinished - dateStarted,
             messages
         }
-        store(id + '/setup-log', log)
+        store(id + '/setup', log)
     }
     catch (e) {
         const log = {
@@ -39,7 +39,7 @@ export async function setup(filename) {
             message: e.message
         }
         console.log(e.stack)
-        store(id + '/setup-log', log)
+        store(id + '/setup', log)
     }
 }
 
@@ -67,7 +67,7 @@ async function run(id, recipe) {
             messages,
             sent
         }
-        store(id + '/run-log', log)
+        store(id + '/run', log)
     }
     catch (e) {
         const log = {
@@ -75,7 +75,7 @@ async function run(id, recipe) {
             date: dateStarted.toISOString(),
             message: e.message
         }
-        store(id + '/run-log', log)
+        store(id + '/run', log)
     }
 }
 
