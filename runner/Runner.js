@@ -51,7 +51,7 @@ async function run(id, recipe) {
         const messages = await sequentially(shell('source'), recipe.run)
         const data = await csv('source/' + recipe.result)
         await store('data', id, data)
-        const stored = await retrieve('data', id)
+        const stored = await retrieveAll('data', id)
         const diff = await difference(stored.current, stored.previous)
         const sent = await alert(diff, recipe.alerts, recipe.name)
         const dateFinished = new Date()
@@ -103,9 +103,9 @@ async function store(type, id, data) {
     return db.put({ _id: type + '/' + id + '/' + new Date().toISOString(), data })
 }
 
-async function retrieve(type, id) {
+async function retrieveAll(type, id) {
     const db = new PouchDB(Config.pouchLocation)
-    const response = await db.allDocs({ startkey: type + '/' + id + '\uffff', endkey: type + '/' + id, include_docs: true, descending: true, limit: 2 })
+    const response = await db.allDocs({ startkey: type + '/' + id + '/\uffff', endkey: type + '/' + id + '/', include_docs: true, descending: true, limit: 2 })
     return {
         current: response.rows[0].doc.data,
         currentDate: response.rows[0].id.split('/')[1],
