@@ -30,7 +30,7 @@ export async function setup(filename) {
             duration: dateFinished - dateStarted,
             messages
         }
-        store(id + '/setup', log)
+        store('setup', id, log)
     }
     catch (e) {
         const log = {
@@ -39,7 +39,7 @@ export async function setup(filename) {
             message: e.message
         }
         console.log(e.stack)
-        store(id + '/setup', log)
+        store('setup', id, log)
     }
 }
 
@@ -50,8 +50,8 @@ async function run(id, recipe) {
         const revision = await repositoryRevision(repo)
         const messages = await sequentially(shell('source'), recipe.run)
         const data = await csv('source/' + recipe.result)
-        await store(id + '/data', data)
-        const stored = await retrieve(id + '/data')
+        await store('data', id, data)
+        const stored = await retrieve('data', id)
         const diff = await difference(stored.current, stored.previous)
         const sent = await alert(diff, recipe.alerts, recipe.name)
         const dateFinished = new Date()
@@ -67,7 +67,7 @@ async function run(id, recipe) {
             messages,
             sent
         }
-        store(id + '/run', log)
+        store('run', id, log)
     }
     catch (e) {
         const log = {
@@ -75,7 +75,7 @@ async function run(id, recipe) {
             date: dateStarted.toISOString(),
             message: e.message
         }
-        store(id + '/run', log)
+        store('run', id, log)
     }
 }
 
@@ -98,14 +98,14 @@ async function csv(location) {
     return Promisify(NeatCSV)(data)
 }
 
-async function store(type, data) {
+async function store(type, id, data) {
     const db = new PouchDB(Config.pouchLocation)
-    return db.put({ _id: type + '/' + new Date().toISOString(), data })
+    return db.put({ _id: type + '/' + id + '/' + new Date().toISOString(), data })
 }
 
-async function retrieve(type) {
+async function retrieve(type, id) {
     const db = new PouchDB(Config.pouchLocation)
-    const response = await db.allDocs({ startkey: type + '/\uffff', endkey: type + '/', include_docs: true, descending: true, limit: 2 })
+    const response = await db.allDocs({ startkey: type + '/' + id + '\uffff', endkey: type + '/' + id, include_docs: true, descending: true, limit: 2 })
     return {
         current: response.rows[0].doc.data,
         currentDate: response.rows[0].id.split('/')[1],
