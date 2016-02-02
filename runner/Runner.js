@@ -1,28 +1,27 @@
 'use strict'
 
-const Promisify = require('promisify-node')
-const FS = require('fs')
-const Path = require('path')
-const Process = require('process')
-const ChildProcess = require('child_process')
-const Git = require('nodegit')
-const Schedule = require('node-schedule')
-const NeatCSV = require('neat-csv')
-const PouchDB = require('pouchdb')
-const DeepEqual = require('deep-equal')
-const Nodemailer = require('nodemailer')
-const Config = require('./config.json')
+import Promisify from 'promisify-node'
+import FS from 'fs'
+import Path from 'path'
+import Process from 'process'
+import ChildProcess from 'child_process'
+import Git from 'nodegit'
+import Schedule from 'node-schedule'
+import NeatCSV from 'neat-csv'
+import PouchDB from 'pouchdb'
+import DeepEqual from 'deep-equal'
+import Nodemailer from 'nodemailer'
+import Config from './config.json'
 
-async function setup() {
-    const args = Process.argv.slice(2)
-    const filename = args[0]
+export async function setup(filename) {
     const dateStarted = new Date()
     try {
         const data = await Promisify(FS.readFile)(filename)
         const recipe = JSON.parse(data.toString())
         await Git.Clone(recipe.location, 'source')
         const messages = await sequentially(shell(), recipe.setup)
-        await Schedule.scheduleJob(recipe.schedule, () => run(recipe))
+        const job = Schedule.scheduleJob(recipe.schedule, () => run(recipe))
+        if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
         const dateFinished = new Date()
         const log = {
             state: 'success',
@@ -38,6 +37,7 @@ async function setup() {
             date: dateStarted.toISOString(),
             message: e.message
         }
+        console.log(e.stack)
         store('setup-log', log)
     }
 }
@@ -98,12 +98,12 @@ async function csv(location) {
 }
 
 async function store(type, data) {
-    const db = new PouchDB('data')
+    const db = new PouchDB(Config.pouchLocation)
     return db.put({ _id: type + '/' + new Date().toISOString(), data })
 }
 
 async function retrieve() {
-    const db = new PouchDB('data')
+    const db = new PouchDB(Config.pouchLocation)
     const response = await db.allDocs({ startkey: 'data/\uffff', endkey: 'data/', include_docs: true, descending: true, limit: 2 })
     return {
         current: response.rows[0].doc.data,
@@ -170,5 +170,3 @@ function shell(location) {
         })      
     }
 }
-
-setup()

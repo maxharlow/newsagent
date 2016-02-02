@@ -1,4 +1,5 @@
 {
+    "pouchLocation": "data",
     "email": {
         "service": "",
         "auth": {
