@@ -12,8 +12,5 @@
         "pouchdb": "5.2.x",
         "deep-equal": "1.0.x",
         "nodemailer": "2.0.x"
-    },
-    "scripts": {
-        "start": "node Start"
     }
 }
