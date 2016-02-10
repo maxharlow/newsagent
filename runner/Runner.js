@@ -33,12 +33,12 @@ export async function setup(filename) {
         store('setup', id, log)
     }
     catch (e) {
+        console.log(e.stack)
         const log = {
             state: 'failure',
             date: dateStarted.toISOString(),
             message: e.message
         }
-        console.log(e.stack)
         store('setup', id, log)
     }
 }

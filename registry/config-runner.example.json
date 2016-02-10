@@ -1,0 +1,10 @@
+{
+    "pouchLocation": "data",
+    "email": {
+        "service": "",
+        "auth": {
+            "user": "",
+            "pass": ""
+        }
+    }
+}
