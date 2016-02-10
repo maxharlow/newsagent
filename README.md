@@ -9,13 +9,12 @@ Datastash lets you give it a list of instructions which it runs periodically. Fo
 Similar tools
 -------------
 
-* [Some unpublished tool] (https://www.youtube.com/watch?v=iP-On8PzEy8) by the [LA Times] (http://www.latimes.com/)
+* [Some unnamed tool built by the LA Times] (https://www.youtube.com/watch?v=iP-On8PzEy8)
 * [Scraperwiki] (https://scraperwiki.com/)
-* [Logstash] (http://www.elasticsearch.org/overview/logstash/)
+* [Logstash] (https://www.elastic.co/products/logstash)
 * [Huginn] (https://github.com/cantino/huginn)
-* [Datawire] (https://github.com/arc64/datawi.re) by [Annabel Church] (https://twitter.com/annabelchurch) and [Friedrich Lindenberg] (https://twitter.com/pudo)
-* [Morph] (https://morph.io/) by the [Open Australia Foundation] (https://www.openaustraliafoundation.org.au/)
-* [Datastringer] (https://github.com/BBC-News-Labs/datastringer) by the [BBC News Labs] (https://twitter.com/BBC_News_Labs)
+* [Datawire] (https://github.com/arc64/datawi.re)
+* [Morph] (https://morph.io/)
+* [Datastringer] (https://github.com/BBC-News-Labs/datastringer)
 * [Yahoo Pipes] (https://en.wikipedia.org/wiki/Yahoo!_Pipes)
 * [Change Detection] (https://www.changedetection.com/)
-* probably others
