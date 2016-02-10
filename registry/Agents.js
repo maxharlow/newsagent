@@ -5,6 +5,7 @@ import Path from 'path'
 import Promisify from 'promisify-node'
 import TarStream from 'tar-stream'
 import Glob from 'glob'
+import JsonSchema from 'jsonschema'
 import JsonStream from 'jsonstream'
 import * as Database from './Database'
 import * as Docker from './Docker'
@@ -94,4 +95,24 @@ export async function destroy(id) {
     const image = client.getImage(id)
     await image.remove()
     return Database.remove('agent', id)
+}
+
+export function validate(recipe) {
+    const schema = {
+        type: 'object',
+        properties: {
+            name: { type: 'string' },
+            description: { type: 'string' },
+            location: { type: 'string' },
+            updatable: { type: 'boolean' },
+            setup: { type: 'array', items: { type: 'string' } },
+            schedule: { type: 'string' },
+            run: { type: 'array', minimum: 1, items: { type: 'string' } },
+            result: { type: 'string' },
+            alerts: { type: 'array', items: { type: 'object', properties: { recipient: { type: 'string' } }, required: [ 'recipient' ] } }
+        },
+        required: [ 'name', 'description', 'location', 'updatable', 'setup', 'schedule', 'run', 'result', 'alerts' ]
+    }
+    const validation = new JsonSchema.Validator().validate(recipe, schema)
+    return validation.errors.map(e => e.stack)
 }
