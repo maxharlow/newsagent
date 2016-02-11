@@ -29,5 +29,11 @@ export async function client(id) {
         if (docker) return docker.client
         else throw new Error('client not found')
     }
-    else return dockers[0].client // todo select the one with least load
+    else {
+        const clientsContainersPromised = dockers.map(docker => {
+            return docker.client.listContainers().then(containers => ({ client: docker.client, containers }))
+        })
+        const clientsContainers = await Promise.all(dockersContainersPromised)
+        return clientsContainers.sort((a, b) => a.containers.length >= b.containers.length)[0].client
+    }
 }
