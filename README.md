@@ -10,21 +10,21 @@ Running
 
 Firstly you'll need to clone this repository. You will also need to install [Docker] (https://www.docker.com/products/docker-engine) and [Docker Machine] (https://www.docker.com/products/docker-machine).
 
-Next we need to create two configuration files based on existing example files. The first is for the Runner component which is responsible for running each agent periodically and sending emails when differences are detected. To do this first copy the example:
+Next we need to create two configuration files based on existing example files. The first is for the Runner component which is responsible for running each agent periodically and sending emails when differences are detected. To do this first copy the example file:
 
     $ cp runner/config.example.json runner/config.json
 
 Then edit `runner/config.json` and set the `email` service -- this should be in [Nodemailer format] (https://github.com/nodemailer/nodemailer-wellknown/blob/master/README.md). You can use Gmail or other services but the easiest choice is to get a free account at an email delivery service such as [Mandrill] (https://www.mandrill.com/).
 
-The second configuration file is for Registry, which creates and manages all the Runners. Copy the example for this:
+The second configuration file is for Registry, which creates and manages all the Runners. Copy the example file for this:
 
     $ cp registry/config.example.json registry/config.json
 
-In this case nothing needs to be added for most users.
+Though this case nothing needs to be added.
 
 Deploying Datastash then depends on where you want to run it.
 
-If you are running locally, you will need to create a new local virtual machine (unless you use Linux):
+If you are running locally, you will need to create a new local virtual machine (unless you use Linux, in which case this is not necessary):
 
     $ docker-machine create -d virtualbox datastash-local
     $ eval "$(docker-machine env datastash-local)"
@@ -34,7 +34,7 @@ If you want to run on AWS, you will need to run [something like this] (https://d
 
     $ docker-machine create -d amazonec2 \
         --amazonec2-region 'eu-west-1' \
-        --amazonec2-instance-type m3.medium' \
+        --amazonec2-instance-type 'm3.medium' \
         datastash-aws
     $ eval "$(docker-machine env datastash-aws)"
 
@@ -49,7 +49,7 @@ Usage
 
 A new agent can then be added, for example:
 
-    $ curl -vX POST datastash-location:8000/agents -H 'Content-Type: application/json' -d@- <<EOF
+    $ curl -vX POST <DATASTASH LOCATION>:8000/agents -H 'Content-Type: application/json' -d @- <<EOF
     {
         "name": "MP declares a new financial interest",
         "description": "Scrape the Register of Member's Financial Interests, and alert if anything new is found",
@@ -72,11 +72,11 @@ A new agent can then be added, for example:
 
 Get all existing agents:
 
-    $ curl -vX GET datastash-location:8000/agents
+    $ curl -vX GET <DATASTASH LOCATION>:8000/agents
 
 Remove an agent:
 
-    $ curl -vX DELETE datastash-location:8000/agents/agent-name
+    $ curl -vX DELETE <DATASTASH LOCATION>:8000/agents/<AGENT NAME>
 
 
 Similar tools
