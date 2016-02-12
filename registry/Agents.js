@@ -49,13 +49,11 @@ async function buildContext(client, id, recipe) {
           + '\n' + 'RUN npm install'
           + '\n' + `CMD node Start ${id}.json`
     const tar = Promisify(TarStream.pack())
-    const files = await Promisify(Glob)('../runner/*(package.json|**.js)')
+    const files = await Promisify(Glob)('../runner/*(package.json|config.json|**.js)')
     const entries = files.map(filename => {
         return Promisify(FS.readFile)(filename).then(contents => tar.entry({ name: Path.basename(filename) }, contents))
     })
     await Promise.all(entries)
-    const config = await Promisify(FS.readFile)('config-runner.json')
-    await tar.entry({ name: 'config.json' }, config.toString())
     await tar.entry({ name: id + '.json' }, JSON.stringify(recipe))
     await tar.entry({ name: 'Dockerfile' }, dockerfile)
     tar.finalize()

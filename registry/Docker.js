@@ -33,7 +33,7 @@ export async function client(id) {
         const clientsContainersPromised = dockers.map(docker => {
             return docker.client.listContainers().then(containers => ({ client: docker.client, containers }))
         })
-        const clientsContainers = await Promise.all(dockersContainersPromised)
+        const clientsContainers = await Promise.all(clientsContainersPromised)
         return clientsContainers.sort((a, b) => a.containers.length >= b.containers.length)[0].client
     }
 }
