@@ -9,14 +9,12 @@ var dockers
 
 async function load() {
     const clients = Config.dockerHosts.map(host => {
-        const options = {
-            host: host.host,
-            port: host.port,
+        const options = !host.certPath ? {} : {
             ca: FS.readFileSync(Path.join(host.certPath, 'ca.pem')),
             cert: FS.readFileSync(Path.join(host.certPath, 'cert.pem')),
             key: FS.readFileSync(Path.join(host.certPath, 'key.pem'))
         }
-        return new Dockerode(options)
+        return new Dockerode(Object.assign(options, host))
     })
     const infos = await Promise.all(clients.map(client => client.info()))
     return infos.map((info, i) => ({ id: info.ID, client: clients[i] }))
