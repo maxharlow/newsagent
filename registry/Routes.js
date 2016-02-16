@@ -9,6 +9,10 @@ import Config from './config.json'
 export function listen() {
     const app = Express()
     app.use(BodyParser.json())
+    app.use((_, response, next) => {
+        response.header('Access-Control-Allow-Origin', '*')
+        next()
+    })
     app.get('/agents', (request, response, next) => {
         Database.retrieveAll('agent')
             .then(agents => response.status(200).send(agents))
