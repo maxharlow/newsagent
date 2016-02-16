@@ -43,11 +43,19 @@ You can then build and deploy Datastash to your machine:
     $ docker build -t datastash .
     $ docker run --privileged --name datastash -dp 8000:8000 datastash
 
+To stop Datastash:
+
+    $ docker stop datastash
+    $ docker rm datastash
+
+The built image can then be removed:
+
+    $ docker rmi datastash
 
 Usage
 -----
 
-A new agent can then be added, for example:
+To add a new agent, for example:
 
     $ curl -vX POST <DATASTASH LOCATION>:8000/agents -H 'Content-Type: application/json' -d @- <<EOF
     {
