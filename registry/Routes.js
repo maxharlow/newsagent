@@ -19,12 +19,12 @@ export function listen() {
             .catch(e => response.status(500).send({ error: e.message }))
     })
     app.post('/agents', (request, response, next) => {
-        const validationErrors = Agents.validate(request.body)
-        if (validationErrors.length > 0) response.status(400).send({ error: 'recipe not valid', detail: validationErrors })
-        else {
-            Agents.create(request.body)
-            response.status(202).send()
-        }
+        Agents.create(request.body)
+            .then(agent => response.status(202).send(agent))
+            .catch(e => {
+                if (e.message instanceof Array) response.status(400).send({ error: 'recipe not valid', detail: e.message })
+                else response.status(500).send({ error: e.message })
+            })
     })
     app.get('/agents/:id', (request, response, next) => {
         Database.retrieve('agent', request.params.id)
@@ -46,7 +46,7 @@ export function listen() {
         Database.retrieve('build', request.params.id)
             .then(build => response.status(200).send(build))
             .catch(e => {
-                if (e.message === 'missing') response.status(404).send({ error: 'agent not found' })
+                if (e.message === 'missing') response.status(404).send({ error: 'agent build not found' })
                 else response.status(500).send({ error: e.message })
             })
     })

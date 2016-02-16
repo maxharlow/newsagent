@@ -12,10 +12,37 @@ import * as Docker from './Docker'
 import Config from './config.json'
 
 export async function create(recipe) {
+    const validation = validate(recipe)
+    if (validation.length > 0) throw new Error(validation)
     const id = recipe.name.replace(/ /g, '-').toLowerCase()
     const stored = await Database.add('agent', id, { state: 'starting', recipe })
     const client = await Docker.client()
     const clientInfo = await client.info()
+    build(client, clientInfo, stored, recipe) // runs in background
+    return { id: stored.id }
+}
+
+function validate(recipe) {
+    const schema = {
+        type: 'object',
+        properties: {
+            name: { type: 'string' },
+            description: { type: 'string' },
+            location: { type: 'string' },
+            updatable: { type: 'boolean' },
+            setup: { type: 'array', items: { type: 'string' } },
+            schedule: { type: 'string' },
+            run: { type: 'array', minimum: 1, items: { type: 'string' } },
+            result: { type: 'string' },
+            alerts: { type: 'array', items: { type: 'object', properties: { recipient: { type: 'string' } }, required: [ 'recipient' ] } }
+        },
+        required: [ 'name', 'description', 'location', 'updatable', 'setup', 'schedule', 'run', 'result', 'alerts' ]
+    }
+    const validation = new JsonSchema.Validator().validate(recipe, schema)
+    return validation.errors.map(e => e.stack)
+}
+
+async function build(client, clientInfo, stored, recipe) {
     try {
         const context = await buildContext(client, stored.id, recipe)
         const image = await buildImage(client, stored.id, context) // todo use an in-memory queue? otherwise could explode
@@ -93,24 +120,4 @@ export async function destroy(id) {
     const image = client.getImage(id)
     await image.remove()
     return Database.remove('agent', id)
-}
-
-export function validate(recipe) {
-    const schema = {
-        type: 'object',
-        properties: {
-            name: { type: 'string' },
-            description: { type: 'string' },
-            location: { type: 'string' },
-            updatable: { type: 'boolean' },
-            setup: { type: 'array', items: { type: 'string' } },
-            schedule: { type: 'string' },
-            run: { type: 'array', minimum: 1, items: { type: 'string' } },
-            result: { type: 'string' },
-            alerts: { type: 'array', items: { type: 'object', properties: { recipient: { type: 'string' } }, required: [ 'recipient' ] } }
-        },
-        required: [ 'name', 'description', 'location', 'updatable', 'setup', 'schedule', 'run', 'result', 'alerts' ]
-    }
-    const validation = new JsonSchema.Validator().validate(recipe, schema)
-    return validation.errors.map(e => e.stack)
 }
