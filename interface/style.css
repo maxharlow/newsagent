@@ -1,0 +1,258 @@
+body {
+    margin: 0;
+    color: #322f32;
+    font: 12px Helvetica, sans-serif;
+}
+
+a {
+    color: inherit;
+}
+
+button,
+.button {
+    margin: 0;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 15px;
+    background: #a60000;
+    color: white;
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:enabled:active {
+    background: #770000;
+}
+
+header {
+    background: #322f32;
+}
+
+nav {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 5px 0;
+    color: white;
+}
+
+nav a {
+    text-decoration: none;
+    display: inline-block;
+}
+
+nav h1 {
+    float: left;
+    margin: 0;
+    color: #edebed;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+nav h1 a {
+    padding: 5px 10px;
+}
+
+nav ul {
+    display: block;
+    margin: 0 10px;
+    padding: 0;
+    list-style-type: none;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: right;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+nav li a {
+    padding: 5px 8px;
+}
+
+.page {
+    max-width: 980px;
+    min-height: 500px;
+    margin: 20px auto;
+    padding: 0 10px;
+    background: white;
+}
+
+.page h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.page hr {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #bbb;
+}
+
+.loading {
+    width: 75px;
+    height: 75px;
+    margin: 20% auto;
+    border: 12px solid #322f32;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: rotate 0.8s infinite linear;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+code {
+    display: block;
+    overflow: scroll;
+    white-space: pre;
+    background: #333;
+    border-radius: 2px;
+    padding: 5px;
+    color: #e8e8e8;
+}
+
+code ol {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+code li:before {
+    content: '$';
+    margin: 0 8px 0 5px;
+    color: #999;
+}
+
+table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+table tr {
+    background: #dfdfdf;
+    margin: 10px 0;
+    border-radius: 3px;
+}
+
+table td {
+    padding: 0;
+}
+
+table a {
+    display: block;
+    text-decoration: none;
+}
+
+.page.agents table td.state {
+    text-align: right;
+    font-weight: bold;
+}
+
+.page.agents table td.state a {
+    padding: 10px;
+    line-height: 35px;
+}
+
+.page.agents table h5 {
+    margin: 0;
+    padding: 10px 0 0 10px;
+    font-size: 16px;
+}
+
+.page.agents table p {
+    margin: 0;
+    padding: 0 0 10px 10px;
+    font-size: 14px;
+}
+
+.page.agent {
+    max-width: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+.page.agent .header {
+    background: #dfdfdf;
+    padding: 40px 10px;
+}
+
+.page.agent .header * {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.page.agent .header p {
+    font-size: 14px;
+}
+
+.page.agent .body {
+    padding: 0 10px;
+}
+
+.page.agent .body .section {
+    max-width: 960px;
+    margin: 10px auto;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.page.agent .body .section h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+}
+
+.page.agent .body .section h4 {
+    margin: 10px 0 2px 0;
+    font-size: 14px;
+}
+
+.page.agent .body .section p {
+    margin: 0;
+}
+
+.page.agent .body .section span.note {
+    font-size: 11px;
+}
+
+.page.agent .body .section ul.alerts {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.page.agent .body .section ul.alerts li {
+    background: #dfdfdf;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.page.agent .body .section ul.alerts li + .page.agent .body .section ul.alerts li {
+    margin: 5px 0;
+}
+
+.page.agent .body .section.state {
+    color: white;
+    font-weight: bold;
+}
+
+.page.agent .body .section.state.creating {
+    background: #3d8b30;
+    border-color: #002a00;
+}
+
+.page.agent .body .section.state.failed {
+    background: #bc544f;
+    border-color: #48211d;
+}
+
+.page.agent .body .section .buildlog {
+    max-height: 500px;
+}
