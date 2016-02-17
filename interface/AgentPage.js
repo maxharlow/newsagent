@@ -1,6 +1,7 @@
 import React from 'react'
 import AgentPageRecipe from 'AgentPageRecipe.js'
 import AgentPageBuildLog from 'AgentPageBuildLog.js'
+import AgentPageDeletion from 'AgentPageDeletion.js'
 import HTTP from 'HTTP.js'
 
 export default class AgentPage extends React.Component {
@@ -24,11 +25,8 @@ export default class AgentPage extends React.Component {
                   : undefined
             const recipe = React.createElement(AgentPageRecipe, this.state.recipe)
             const buildLog = this.state.state !== 'started' ? undefined : React.createElement(AgentPageBuildLog, { id: this.props.id })
-            const buttonBarElements = [
-                React.DOM.button({ disabled: this.state.state !== 'started' }, 'Delete')
-            ]
-            const buttonBar = React.DOM.div({ className: 'section' }, ...buttonBarElements)
-            const body = React.DOM.div({ className: 'body' }, state, recipe, buildLog, buttonBar)
+            const deletion = React.createElement(AgentPageDeletion, { state: this.state.state })
+            const body = React.DOM.div({ className: 'body' }, state, recipe, buildLog, deletion)
             return React.DOM.div({ className: 'agent page' }, header, body)
         }
         else return React.DOM.div({ className: 'loading' }, '')
