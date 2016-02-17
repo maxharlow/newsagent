@@ -6,6 +6,7 @@ export default class AgentPageRecipe extends React.Component {
     render() {
         const elements = [
             React.DOM.h3({}, 'Recipe'),
+            React.DOM.hr({}),
             React.DOM.p({}, 'Runs at ' + PrettyCron.toString(this.props.schedule).toLowerCase() + '. Next run is ' + PrettyCron.getNext(this.props.schedule).toLowerCase() + '.'),
             React.DOM.h4({}, 'Location'),
             React.DOM.code({}, this.props.location),
@@ -21,7 +22,7 @@ export default class AgentPageRecipe extends React.Component {
             React.DOM.h4({}, 'Alerts'),
             React.DOM.ul({ className: 'alerts' }, ...this.props.alerts.map(alert => React.DOM.li({}, alert.recipient)))
         ]
-        return React.DOM.div({ className: 'section' }, ...elements)
+        return React.DOM.div({ className: 'section recipe' }, ...elements)
     }
     
 }

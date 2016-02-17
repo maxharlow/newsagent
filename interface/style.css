@@ -205,7 +205,7 @@ table a {
 }
 
 .page.agent .body .section h3 {
-    margin: 0 0 10px 0;
+    margin: 0;
     font-size: 18px;
 }
 
@@ -222,19 +222,19 @@ table a {
     font-size: 11px;
 }
 
-.page.agent .body .section ul.alerts {
+.page.agent .body .section.recipe ul.alerts {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 
-.page.agent .body .section ul.alerts li {
+.page.agent .body .section.recipe ul.alerts li {
     background: #dfdfdf;
     border-radius: 3px;
     padding: 5px;
 }
 
-.page.agent .body .section ul.alerts li + .page.agent .body .section ul.alerts li {
+.page.agent .body .section.recipe ul.alerts li + .page.agent .body .section.recipe ul.alerts li {
     margin: 5px 0;
 }
 
@@ -253,6 +253,17 @@ table a {
     border-color: #48211d;
 }
 
-.page.agent .body .section .buildlog {
+.page.agent .body .section.buildlog {
+    position: relative;
+}
+
+.page.agent .body .section.buildlog code {
     max-height: 500px;
+    margin-top: 10px;
+}
+
+.page.agent .body .section.buildlog button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }

@@ -3,27 +3,41 @@ import HTTP from 'HTTP.js'
 
 export default class AgentPageBuildLog extends React.Component {
 
-    componentWillMount() {
+    constructor() {
+        super()
+        this.state = { loading: false }
+        this.load = this.load.bind(this)
+    }
+
+    load() {
+        this.setState({ loading: true })
         const registry = 'http://localhost:8000' // todo extract to config
         HTTP.get(registry + '/agents/' + this.props.id + '/build', (e, response) => {
-            if (!e) this.setState(response)
+            if (!e) this.setState({ log: response, loading: false })
         })
     }
 
     componentDidUpdate() {
-        this.refs['buildlog'].scrollTop = this.refs['buildlog'].scrollHeight
+        if (this.refs['buildlog']) this.refs['buildlog'].scrollTop = this.refs['buildlog'].scrollHeight
     }
 
     render() {
-        if (this.state) {
-            const text = Object.keys(this.state).map(i => {
-                if (this.state[i].text) return this.state[i].text
-                else return React.DOM.span({ className: 'error' }, this.state[i].error)
+        if (this.state.log) {
+            const text = Object.keys(this.state.log).map(i => {
+                if (this.state.log[i].text) return this.state.log[i].text
+                else return React.DOM.span({ className: 'error' }, this.state.log[i].error)
             })
-            const textBlock = React.DOM.code({ className: 'buildlog', ref: 'buildlog' }, ...text)
-            return React.DOM.div({ className: 'section' }, React.DOM.h3({}, 'Build log'), textBlock)
+            const textBlock = React.DOM.code({ ref: 'buildlog' }, ...text)
+            return React.DOM.div({ className: 'section buildlog' }, React.DOM.h3({}, 'Build log'), textBlock)
         }
-        else return React.DOM.div({ className: 'section' }, React.DOM.h3({}, 'Build log'), React.DOM.div({ className: 'loading' }, ''))
+        else if (this.state.loading) {
+            const loading = React.DOM.div({ className: 'loading' })
+            return React.DOM.div({ className: 'section buildlog' }, React.DOM.h3({}, 'Build log'), loading)
+        }
+        else {
+            const loadButton = React.DOM.button({ className: 'minor', onClick: this.load }, 'Load build log...')
+            return React.DOM.div({ className: 'section buildlog' }, React.DOM.h3({}, 'Build log'), loadButton)
+        }
     }
 
 }
