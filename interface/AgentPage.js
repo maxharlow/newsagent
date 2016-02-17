@@ -25,7 +25,7 @@ export default class AgentPage extends React.Component {
                   : undefined
             const recipe = React.createElement(AgentPageRecipe, this.state.recipe)
             const buildLog = this.state.state !== 'started' ? undefined : React.createElement(AgentPageBuildLog, { id: this.props.id })
-            const deletion = React.createElement(AgentPageDeletion, { state: this.state.state })
+            const deletion = React.createElement(AgentPageDeletion, { id: this.props.id, state: this.state.state })
             const body = React.DOM.div({ className: 'body' }, state, recipe, buildLog, deletion)
             return React.DOM.div({ className: 'agent page' }, header, body)
         }
