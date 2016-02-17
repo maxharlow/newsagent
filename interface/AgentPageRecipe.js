@@ -20,7 +20,9 @@ export default class AgentPageRecipe extends React.Component {
             React.DOM.h4({}, 'Result'),
             React.DOM.code({}, this.props.result),
             React.DOM.h4({}, 'Alerts'),
-            React.DOM.ul({ className: 'alerts' }, ...this.props.alerts.map(alert => React.DOM.li({}, alert.recipient)))
+            this.props.alerts.length > 0
+                ? React.DOM.ul({ className: 'alerts' }, ...this.props.alerts.map(alert => React.DOM.li({}, alert.recipient)))
+                : React.DOM.span({ className: 'note' }, 'This agent has no alerts.'),
         ]
         return React.DOM.div({ className: 'section recipe' }, ...elements)
     }
