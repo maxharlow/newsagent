@@ -7,6 +7,7 @@ import TarStream from 'tar-stream'
 import Glob from 'glob'
 import JsonSchema from 'jsonschema'
 import JsonStream from 'jsonstream'
+import StripAnsi from 'strip-ansi'
 import * as Database from './Database'
 import * as Docker from './Docker'
 import Config from './config.json'
@@ -92,7 +93,8 @@ async function buildImage(client, id, tar) {
     return new Promise((resolve, reject) => {
         var log = []
         const handler = event => {
-            log.push(event)
+	    if (event.stream) log.push({ text: StripAnsi(event.stream) })
+	    else log.push(event)
             if (event.stream && event.stream.startsWith('Successfully built')) {
                 parser.removeAllListeners()
                 resolve({ id: event.stream.match(/built (.*)\n/)[1], log })
