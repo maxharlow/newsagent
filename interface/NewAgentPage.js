@@ -1,4 +1,5 @@
 import React from 'react'
+import CronEntry from 'CronEntry.js'
 import CommandEntry from 'CommandEntry.js'
 import HTTP from 'HTTP.js'
 
@@ -13,7 +14,7 @@ export default class AgentsPage extends React.Component {
             description: '',
             location: '',
             updatable: true,
-            schedule: '0 1 * * *',
+            schedule: '',
             setup: [],
             run: [],
             result: '',
@@ -49,7 +50,7 @@ export default class AgentsPage extends React.Component {
             React.DOM.p({}, 'A link to the Git repository.'),
             React.DOM.hr({}),
             React.DOM.h4({}, 'Schedule'),
-            React.DOM.input({ value: this.state.recipe.schedule, onChange: this.set('schedule') }),
+            React.createElement(CronEntry, { onChange: this.set('schedule') }),
             React.DOM.hr({}),
             React.DOM.h4({}, 'Setup'),
             React.createElement(CommandEntry, { onChange: this.set('setup') }),

@@ -137,6 +137,11 @@ nav li a {
     border-top: 1px solid #bbb;
 }
 
+
+.page span.note {
+    font-size: 11px;
+}
+
 .loading {
     width: 75px;
     height: 75px;
@@ -286,10 +291,6 @@ table a {
     margin: 2px 0;
     border-radius: 3px;
     padding: 5px;
-}
-
-.page.agent .body .section span.note {
-    font-size: 11px;
 }
 
 .page.agent .body .section.recipe ul.alerts {
