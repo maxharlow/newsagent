@@ -4,6 +4,7 @@ import Page from 'page'
 import Menu from 'Menu.js'
 import AgentsPage from 'AgentsPage.js'
 import AgentPage from 'AgentPage.js'
+import NewAgentPage from 'NewAgentPage.js'
 
 export default class Routes {
 
@@ -24,11 +25,11 @@ export default class Routes {
             main.classList.remove('loading')
             ReactDOM.render(React.DOM.div({}, menu, page), main)
         })
-        // Page('/new-agent', context => {
-        //     const page = React.createElement(NewAgentPage, {})
-        //     main.classList.remove('loading')
-        //     ReactDOM.render(React.DOM.div({}, menu, page), main)
-        // })
+        Page('/new-agent', context => {
+            const page = React.createElement(NewAgentPage, {})
+            main.classList.remove('loading')
+            ReactDOM.render(React.DOM.div({}, menu, page), main)
+        })
         Page()
     }
 

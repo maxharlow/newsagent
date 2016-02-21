@@ -1,7 +1,7 @@
 body {
     margin: 0;
     color: #322f32;
-    font: 12px Helvetica, sans-serif;
+    font: 13px Helvetica, sans-serif;
 }
 
 a {
@@ -23,6 +23,22 @@ button,
 
 button:enabled:active {
     background: #770000;
+}
+
+input {
+    width: calc(100% - 16px);
+    background: #eee;
+    margin: 0;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    padding: 8px;
+    font-size: 13px;
+}
+
+input:focus {
+    outline: none;
+    background: white;
+    border-color: #51a7e8;
 }
 
 header {
@@ -105,7 +121,7 @@ nav li a {
 .page {
     max-width: 980px;
     min-height: 500px;
-    margin: 20px auto;
+    margin: 20px auto 50px auto;
     padding: 0 10px;
     background: white;
 }
@@ -116,7 +132,7 @@ nav li a {
 }
 
 .page hr {
-    margin: 10px 0;
+    margin: 15px 0;
     border: none;
     border-top: 1px solid #bbb;
 }
@@ -157,6 +173,20 @@ code li:before {
     content: '$';
     margin: 0 8px 0 5px;
     color: #999;
+}
+
+code li input {
+    width: calc(100% - 23px);
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+}
+
+code li input:focus {
+    background: none;
 }
 
 table {
@@ -240,11 +270,22 @@ table a {
 
 .page.agent .body .section h4 {
     margin: 10px 0 2px 0;
-    font-size: 14px;
+    font-size: 13px;
+}
+
+.page.agent .body .section hr {
+    margin: 10px 0;
 }
 
 .page.agent .body .section p {
     margin: 0;
+}
+
+.page.agent .body .section.recipe p.field {
+    background: #dfdfdf;
+    margin: 2px 0;
+    border-radius: 3px;
+    padding: 5px;
 }
 
 .page.agent .body .section span.note {
@@ -305,4 +346,22 @@ table a {
     position: absolute;
     top: 10px;
     right: 10px;
+}
+
+.page.new-agent {
+    max-width: 700px;
+    padding: 0 10px;
+}
+
+.page.new-agent h4 {
+    margin: 10px 0 5px 0;
+    font-size: 13px;
+}
+
+.page.new-agent p {
+    margin: 15px 0;
+}
+
+.page.new-agent code {
+    padding: 9px 9px 9px 6px;
 }
