@@ -19,19 +19,22 @@ export default class CommandEntry extends React.Component {
                 const focus = { number: number + 1, selectionStart: this.refs[number + 1].value.length, selectionEnd: this.refs[number + 1].value.length  }
                 this.setState({ focus })
             }
-            else if (event.key === 'Enter' && this.state.commands[number] && this.state.commands[number] !== '' && (number === this.state.commands.length - 1 || this.state.commands[number + 1] !== '')) { // enter and command not blank
+            else if (event.key === 'Enter'
+                     && this.state.commands[number]
+                     && this.state.commands[number] !== ''
+                     && (number === this.state.commands.length - 1 || this.state.commands[number + 1] !== '')) { // enter and command not blank
                 const focus = { number: number + 1, selectionStart: 0, selectionEnd: 0 }
                 var commands = Array.from(this.state.commands)
                 const textBefore = this.refs[number].value.slice(0, this.refs[number].selectionEnd)
                 const textAfter = this.refs[number].value.slice(this.refs[number].selectionEnd)
                 commands[number] = textBefore
                 commands.splice(number + 1, 0, textAfter)
-                this.setState({ commands, focus })
+                this.setState({ focus, commands })
             }
             else {
                 const focus = { number, selectionStart: this.refs[number].selectionStart, selectionEnd: this.refs[number].selectionEnd }
                 const commands = Object.assign(this.state.commands, { [number]: this.refs[number].value })
-                this.setState({ commands, focus })
+                this.setState({ focus, commands })
             }
             this.props.onChange({ target: { value: this.state.commands.filter(command => command !== '') } })
         }
