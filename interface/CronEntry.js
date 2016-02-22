@@ -12,18 +12,14 @@ export default class CronEntry extends React.Component {
         ]
         this.state = this.presets.find(preset => preset.name === 'Daily')
         this.update = this.update.bind(this)
-        this.updateCustom = this.updateCustom.bind(this)
     }
 
     update(event) {
-        const value = this.presets.find(preset => preset.name === event.target.name).value
+        const value = event.target.name === 'Custom'
+              ? event.target.value
+              : this.presets.find(preset => preset.name === event.target.name).value
         this.setState({ name: event.target.name, value })
         this.props.onChange({ target: { value } })
-    }
-
-    updateCustom(event) {
-        this.setState({ name: 'Custom', value: event.target.value })
-        this.props.onChange({ target: { value: event.target.value } })
     }
 
     render() {
@@ -32,16 +28,16 @@ export default class CronEntry extends React.Component {
             const text = React.DOM.span({}, preset.name)
             return React.DOM.label({}, input, text)
         })
-        const customRadio = React.DOM.input({ type: 'radio', value: this.state.value, checked: this.state.name === 'Custom', onChange: this.updateCustom })
-        const customInput = React.DOM.input({ ref: 'custom', value: this.state.value, disabled: this.state.name !== 'Custom', onChange: this.updateCustom })
+        const customRadio = React.DOM.input({ type: 'radio', name: 'Custom', value: this.state.value, checked: this.state.name === 'Custom', onChange: this.update })
+        const customInput = React.DOM.input({ ref: 'custom', name: 'Custom', value: this.state.value, disabled: this.state.name !== 'Custom', onChange: this.update })
         const customText = React.DOM.span({}, 'Custom...', customInput)
         const custom = React.DOM.label({}, customRadio, customText)
         const description = React.DOM.p({}, 'Runs at ' + PrettyCron.toString(this.state.value).toLowerCase() + '.')
         return React.DOM.div({ className: 'cron' }, ...presets, custom, description)
     }
 
-    componentDidUpdate() {
-        if (this.state.name = 'Custom') this.refs.custom.focus()
+    componentDidUpdate(_, prevState) {
+        if (this.state.name === 'Custom' && this.state !== prevState) this.refs.custom.focus()
     }
 
 }
