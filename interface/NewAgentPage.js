@@ -49,7 +49,6 @@ export default class AgentsPage extends React.Component {
             React.DOM.input({ onChange: this.set('location') }),
             React.DOM.p({}, 'A link to the Git repository.'),
             React.DOM.hr({}),
-            React.DOM.h4({}, 'Schedule'),
             React.createElement(CronEntry, { onChange: this.set('schedule') }),
             React.DOM.hr({}),
             React.DOM.h4({}, 'Setup'),
