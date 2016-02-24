@@ -24,7 +24,10 @@ export default class AgentsPage extends React.Component {
     }
 
     set(field) {
-        return event => this.setState({ recipe: Object.assign(this.state.recipe, { [field]: event.target.value }) })
+        return event => {
+            const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
+            this.setState({ recipe: Object.assign(this.state.recipe, { [field]: value }) })
+        }
     }
 
     create() {
@@ -47,6 +50,7 @@ export default class AgentsPage extends React.Component {
             React.DOM.hr({}),
             React.DOM.h4({}, 'Location'),
             React.DOM.input({ onChange: this.set('location') }),
+            React.DOM.input({ type: 'checkbox', defaultChecked: this.state.recipe.updatable, onChange: this.set('updatable') }),
             React.DOM.p({}, 'A link to the Git repository.'),
             React.DOM.hr({}),
             React.createElement(CronEntry, { onChange: this.set('schedule') }),
