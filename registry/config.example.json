@@ -1,6 +1,6 @@
 {
     "port": 8000,
-    "pouchLocation": "datastash-registry-db",
+    "pouchLocation": "data",
     "dockerHosts": [
         {
             "socketPath": "/var/run/docker.sock"
