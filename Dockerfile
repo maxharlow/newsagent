@@ -1,5 +1,6 @@
 FROM node:5
 
+VOLUME /data
 VOLUME /var/lib/docker
 
 RUN curl -sSL https://get.docker.com/ | sh
