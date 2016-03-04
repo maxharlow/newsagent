@@ -1,6 +1,7 @@
 import React from 'react'
 import CronEntry from 'CronEntry.js'
 import CommandEntry from 'CommandEntry.js'
+import AlertEntry from 'AlertEntry.js'
 import HTTP from 'HTTP.js'
 
 export default class AgentsPage extends React.Component {
@@ -33,7 +34,7 @@ export default class AgentsPage extends React.Component {
     create() {
         this.setState({ loading: true })
         const registry = 'http://localhost:8000' // todo extract to config
-        HTTP.post(registry + '/agents', this.state, (e, response) => {
+        HTTP.post(registry + '/agents', this.state.recipe, (e, response) => {
             if (!e) window.location = '/agents/' + response.id
         })
     }
@@ -67,7 +68,7 @@ export default class AgentsPage extends React.Component {
             React.DOM.p({}, 'The name of the CSV file that gets created.'),
             React.DOM.hr({}),
             React.DOM.h4({}, 'Alerts'),
-            React.DOM.p({}, '(TODO...)'),
+            React.createElement(AlertEntry, { onChange: this.set('alerts') }),
             React.DOM.hr({}),
             React.DOM.button({ onClick: this.create }, 'Create agent')
         ]

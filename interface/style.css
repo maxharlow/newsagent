@@ -26,7 +26,7 @@ button:enabled:active {
 }
 
 input {
-    width: calc(100% - 16px);
+    width: calc(100% - 18px);
     background: #eee;
     margin: 0;
     border: 1px solid #bbb;
@@ -401,4 +401,85 @@ table a {
 
 .page.new-agent code {
     padding: 9px 9px 9px 6px;
+}
+
+.page.new-agent .alerts ol {
+    margin: 0;
+    padding: 0;
+}
+
+.page.new-agent .alerts ol li {
+    width: 100%;
+    margin: 10px 0;
+    list-style-type: none;
+}
+
+.page.new-agent .alerts ol li span {
+    display: inline-block;
+    padding: 8px;
+    color: white;
+}
+
+.page.new-agent .alerts ol li span.event {
+    position: relative;
+    width: calc(35% - 35px);
+    background: #bbb;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+}
+
+.page.new-agent .alerts ol li span.action {
+    width: calc(20% - 35px);
+    background: #bbb;
+    margin: 0 5px;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+}
+
+.page.new-agent .alerts ol li span.recipient {
+    position: relative;
+    width: calc(45% - 35px);
+    background: #bbb;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+}
+
+.page.new-agent .alerts ol li button {
+    vertical-align: top;
+    margin-left: 5px;
+    border-radius: 50%;
+    padding: 5px 12px;
+    font-size: 20px;
+}
+
+.page.new-agent .alerts .adder .event {
+    display: inline-block;
+    width: calc(35% - 35px);
+    background: #eee;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    padding: 8px;
+    color: #666;
+}
+
+.page.new-agent .alerts .adder .action {
+    display: inline-block;
+    width: calc(20% - 35px);
+    background: #eee;
+    border: 1px solid #bbb;
+    margin: 0 5px;
+    border-radius: 3px;
+    padding: 8px;
+    color: #666;
+}
+
+.page.new-agent .alerts .adder .recipient {
+    width: calc(45% - 35px);
+}
+
+.page.new-agent .alerts .adder button {
+    vertical-align: top;
+    margin-left: 5px;
+    padding: 5px 12px;
+    font-size: 20px;
 }
