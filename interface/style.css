@@ -458,7 +458,7 @@ table a {
     background: #eee;
     border: 1px solid #bbb;
     border-radius: 3px;
-    padding: 8px;
+    padding: 9px 8px 8px 8px;
     color: #666;
 }
 
@@ -469,7 +469,7 @@ table a {
     border: 1px solid #bbb;
     margin: 0 5px;
     border-radius: 3px;
-    padding: 8px;
+    padding: 9px 8px 8px 8px;
     color: #666;
 }
 
