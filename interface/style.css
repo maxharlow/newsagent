@@ -417,30 +417,26 @@ table a {
 .page.new-agent .alerts ol li span {
     display: inline-block;
     padding: 8px;
-    color: white;
 }
 
 .page.new-agent .alerts ol li span.event {
     position: relative;
     width: calc(35% - 35px);
-    background: #bbb;
-    border: 1px solid #bbb;
+    border: 1px solid #ddd;
     border-radius: 3px;
 }
 
 .page.new-agent .alerts ol li span.action {
     width: calc(20% - 35px);
-    background: #bbb;
     margin: 0 5px;
-    border: 1px solid #bbb;
+    border: 1px solid #ddd;
     border-radius: 3px;
 }
 
 .page.new-agent .alerts ol li span.recipient {
     position: relative;
     width: calc(45% - 35px);
-    background: #bbb;
-    border: 1px solid #bbb;
+    border: 1px solid #ddd;
     border-radius: 3px;
 }
 
