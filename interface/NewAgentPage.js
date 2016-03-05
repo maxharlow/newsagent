@@ -51,7 +51,7 @@ export default class AgentsPage extends React.Component {
             React.DOM.hr({}),
             React.DOM.h4({}, 'Git repository'),
             React.DOM.input({ onChange: this.set('location') }),
-            React.DOM.input({ type: 'checkbox', defaultChecked: this.state.recipe.updatable, onChange: this.set('updatable') }),
+            React.DOM.label({ className: 'toggle' }, React.DOM.h4({}, 'Update to the latest version before running?'), React.DOM.input({ type: 'checkbox', defaultChecked: this.state.recipe.updatable, onChange: this.set('updatable') })),
             React.DOM.hr({}),
             React.DOM.h4({}, 'How often should this agent run?'),
             React.createElement(CronEntry, { onChange: this.set('schedule') }),

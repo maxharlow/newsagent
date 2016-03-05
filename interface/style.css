@@ -363,6 +363,15 @@ table a {
     margin: 15px 0;
 }
 
+.page.new-agent .toggle h4 {
+    display: inline-block;
+}
+
+.page.new-agent .toggle input {
+    width: auto;
+    margin-left: 10px;
+}
+
 .page.new-agent .cron label + label {
     margin-left: 10px;
 }
