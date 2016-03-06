@@ -1,4 +1,5 @@
 import React from 'react'
+import Page from 'page'
 import CronEntry from 'CronEntry.js'
 import CommandEntry from 'CommandEntry.js'
 import AlertEntry from 'AlertEntry.js'
@@ -35,7 +36,7 @@ export default class AgentsPage extends React.Component {
         this.setState({ loading: true })
         const registry = 'http://localhost:8000' // todo extract to config
         HTTP.post(registry + '/agents', this.state.recipe, (e, response) => {
-            if (!e) window.location = '/agents/' + response.id
+            if (!e) Page('/agents/' + response.id)
         })
     }
 
