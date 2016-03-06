@@ -62,7 +62,7 @@ async function build(client, clientInfo, stored, recipe) {
         Database.update('agent', stored.id, agent, stored.rev)
     }
     catch (e) {
-        console.log(e.stack)
+        console.log(e.stack ? e.stack : e)
         const agent = {
             state: 'failed',
             recipe,
