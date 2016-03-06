@@ -3,14 +3,14 @@ import PrettyCron from 'prettycron'
 
 export default class CronEntry extends React.Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.presets = [
             { name: 'Hourly', value: '0 * * * *' },
             { name: 'Daily',  value: '0 1 * * *' },
             { name: 'Weekly', value: '0 1 * * 1' }
         ]
-        this.state = this.presets.find(preset => preset.name === 'Daily')
+        this.state = this.presets.find(preset => preset.value === this.props.defaultValue)
         this.update = this.update.bind(this)
     }
 
