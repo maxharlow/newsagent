@@ -11,6 +11,7 @@ export function listen() {
     app.use(BodyParser.json())
     app.use((_, response, next) => {
         response.header('Access-Control-Allow-Origin', '*')
+        response.header('Access-Control-Allow-Headers', 'Content-Type')
         response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE')
         next()
     })
