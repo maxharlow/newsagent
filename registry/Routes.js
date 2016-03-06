@@ -23,7 +23,7 @@ export function listen() {
         Agents.create(request.body)
             .then(agent => response.status(202).send(agent))
             .catch(e => {
-                if (e.message instanceof Array) response.status(400).send({ error: 'recipe not valid', detail: e.message })
+                if (e.validation) response.status(400).send({ error: e.message, detail: e.validation })
                 else response.status(500).send({ error: e.message })
             })
     })

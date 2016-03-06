@@ -14,7 +14,11 @@ import Config from './config.json'
 
 export async function create(recipe) {
     const validation = validate(recipe)
-    if (validation.length > 0) throw new Error(validation)
+    if (validation.length > 0) {
+        const e = new Error('recipe not valid')
+        e.validation = validation
+        throw e
+    }
     const id = recipe.name.replace(/ /g, '-').toLowerCase()
     const stored = await Database.add('agent', id, { state: 'starting', recipe })
     const client = await Docker.client()
