@@ -7,12 +7,15 @@ export default class HTTP {
             if (callback && request.status < 400) callback(null, JSON.parse(request.responseText))
             else if (callback) callback(new Error(request.response), null)
         })
-        if (data) request.send(JSON.stringify(data, null, 4) + '\n')
-	else request.send()
+        if (data) {
+            request.setRequestHeader('Content-Type', 'application/json')
+            request.send(JSON.stringify(data))
+        }
+        else request.send()
     }
 
     static get(location, callback) {
-	this.request('GET', location, undefined, callback)
+        this.request('GET', location, undefined, callback)
     }
 
     static post(location, data, callback) {
