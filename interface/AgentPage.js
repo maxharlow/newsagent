@@ -20,7 +20,7 @@ export default class AgentPage extends React.Component {
                 React.DOM.p({}, this.state.recipe.description)
             ]
             const header = React.DOM.div({ className: 'header' }, ...headerElements)
-            const state = this.state.state === 'starting' ? React.DOM.div({ className: 'section state creating' }, 'This agent is still being built.')
+            const state = this.state.state === 'starting' ? React.DOM.div({ className: 'section state creating' }, 'This agent is being built.')
                   : this.state.state === 'failed' ? React.DOM.div({ className: 'section state failed' }, 'This agent failed to start.')
                   : undefined
             const recipe = React.createElement(AgentPageRecipe, this.state.recipe)
