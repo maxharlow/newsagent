@@ -142,7 +142,7 @@ function format(diff, name) {
 
 async function sendEmail(recipient, name, text) {
     const message = {
-        from: 'Datastash <datastash@example.com>',
+        from: 'Datastash <' + Config.email.from + '>',
         to: recipient,
         subject: 'Datastash Alert – ' + name,
         html: text
@@ -168,6 +168,6 @@ function shell(location) {
                 if (code === 0) resolve(log)
                 else reject(new Error(command + ' exited with code ' + code))
             })
-        })      
+        })
     }
 }

@@ -1,6 +1,7 @@
 {
     "pouchLocation": "data",
     "email": {
+        "from": "datastash@example.com",
         "service": "",
         "auth": {
             "user": "",

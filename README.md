@@ -14,7 +14,7 @@ Next we need to create two configuration files based on existing example files. 
 
     $ cp runner/config.example.json runner/config.json
 
-Then edit `runner/config.json` and set the `email` service -- this should be in [Nodemailer format] (https://github.com/nodemailer/nodemailer-wellknown/blob/master/README.md). You can use Gmail or other services but the easiest choice is to get a free account at an email delivery service such as [Mandrill] (https://www.mandrill.com/).
+Then edit `runner/config.json` and set the `email` service -- this should be in [Nodemailer format] (https://github.com/nodemailer/nodemailer-wellknown/blob/master/README.md). You can use Gmail or other services but the easiest choice is to get a free account at an email delivery service such as [Mailgun] (http://www.mailgun.com/).
 
 The second configuration file is for Registry, which creates and manages all the Runners. Copy the example file for this:
 
