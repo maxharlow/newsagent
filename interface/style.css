@@ -142,6 +142,15 @@ nav li a {
     font-size: 11px;
 }
 
+.error {
+    width: calc(100% - 42px);
+    background: #bc544f;
+    border: 1px solid #48211d;
+    border-radius: 3px;
+    padding: 20px;
+    color: white;
+}
+
 .loading {
     width: 75px;
     height: 75px;
@@ -487,4 +496,8 @@ table a {
     margin-left: 5px;
     padding: 1px 8px 2px 8px;
     font-size: 20px;
+}
+
+.page.new-agent .error p {
+    margin: 10px 0 0 0;
 }

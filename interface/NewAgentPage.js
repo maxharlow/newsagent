@@ -36,11 +36,18 @@ export default class AgentsPage extends React.Component {
         this.setState({ loading: true })
         const registry = 'http://localhost:8000' // todo extract to config
         HTTP.post(registry + '/agents', this.state.recipe, (e, response) => {
-            if (!e) Page('/agents/' + response.id)
+            if (e) this.setState({ error: JSON.parse(e.message).error })
+            else Page('/agents/' + response.id)
         })
     }
 
     render() {
+        if (this.state.error) {
+            const title = React.DOM.h2({}, 'Something went wrong')
+            const info = React.DOM.p({}, 'An error occured whilst creating this agent.')
+            const message = React.DOM.p({}, this.state.error)
+            return React.DOM.div({ className: 'new-agent page' }, React.DOM.div({ className: 'error' }, title, info, message))
+        }
         if (this.state.loading) return React.DOM.div({ className: 'new-agent page' }, React.DOM.div({ className: 'loading' }))
         const elements = [
             React.DOM.h2({}, 'Create a new agent'),
