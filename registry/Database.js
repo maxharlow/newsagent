@@ -14,8 +14,8 @@ export async function add(type, id, data) {
         if (e.name === 'conflict') {
             const match = id.match(/(.*-)(\d+)$/)
             const newID = match ? match[1] + (Number(match[2]) + 1) : id + '-1'
-            return add(data, type, newID)
-        }       
+            return add(type, newID, data)
+        }
     }
 }
 

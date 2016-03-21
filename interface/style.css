@@ -25,6 +25,11 @@ button:enabled:active {
     background: #770000;
 }
 
+button:disabled {
+    background: #bbb;
+    cursor: not-allowed
+}
+
 input {
     width: calc(100% - 18px);
     background: #eee;

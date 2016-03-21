@@ -15,7 +15,7 @@ export default class AgentPageDeletion extends React.Component {
         HTTP.delete(registry + '/agents/' + this.props.id)
         location.href = '/'
     }
-    
+
     render() {
         const dialog = !this.state.confirming ? undefined : React.createElement(Dialog, {
             text: 'Are you sure you want to delete this agent?',
@@ -26,5 +26,5 @@ export default class AgentPageDeletion extends React.Component {
         const button = React.DOM.button({ disabled: this.props.state !== 'started', onClick: () => this.setState({ confirming: true }) }, 'Delete')
         return React.DOM.div({ className: 'section deletion' }, React.DOM.h3({}, 'Delete this agent'), button, dialog)
     }
-    
+
 }
