@@ -98,4 +98,5 @@ Similar tools
 * [Morph] (https://morph.io/)
 * [Datastringer] (https://github.com/BBC-News-Labs/datastringer)
 * [Yahoo Pipes] (https://en.wikipedia.org/wiki/Yahoo!_Pipes)
+* [Stakeout] (https://github.com/veltman/stakeout)
 * [Change Detection] (https://www.changedetection.com/)
