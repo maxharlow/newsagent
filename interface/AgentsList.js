@@ -5,17 +5,28 @@ export default class AgentsList extends React.Component {
 
     constructor() {
         super()
+        this.update = this.update.bind(this)
         this.state = { agents: [] }
     }
 
-    componentWillMount() {
+    update() {
+        this.setState({ loading: true })
         const registry = 'http://localhost:8000' // todo extract to config
         HTTP.get(registry + '/agents', (e, response) => {
-            if (!e) this.setState({ agents: response })
+            if (!e) this.setState({ agents: response, loading: false })
         })
     }
 
+    componentWillMount() {
+        this.update()
+    }
+
+    componentWillReceiveProps() {
+        this.update()
+    }
+
     render() {
+        if (this.state.loading) return React.DOM.div({ className: 'loading' })
         if (this.state.agents.length > 0) {
             const body = this.state.agents.map(agent => {
                 const columnName = React.DOM.a({ href: '/agents/' + agent.id }, React.DOM.h5({}, agent.recipe.name), React.DOM.p({}, agent.recipe.description))
