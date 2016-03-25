@@ -28,7 +28,7 @@ If you are running locally, you will need to create a new local virtual machine 
 
     $ docker-machine create -d virtualbox datastash-local
     $ eval "$(docker-machine env datastash-local)"
-    $ VBoxManage controlvm datastash-local natpf1 'local,tcp,,8000,,8000'
+    $ VBoxManage controlvm datastash-local natpf1 'local,tcp,,4001,,4001'
 
 If you want to run on AWS, you will need to run [something like this] (https://docs.docker.com/machine/drivers/aws/):
 
@@ -41,7 +41,7 @@ If you want to run on AWS, you will need to run [something like this] (https://d
 You can then build and deploy Datastash to your machine:
 
     $ docker build -t datastash .
-    $ docker run --privileged --name datastash -dp 8000:8000 datastash
+    $ docker run --privileged --name datastash -dp 4001:4001 datastash
 
 To stop Datastash:
 
@@ -57,7 +57,7 @@ Usage
 
 To add a new agent, for example:
 
-    $ curl -vX POST <DATASTASH LOCATION>:8000/agents -H 'Content-Type: application/json' -d @- <<EOF
+    $ curl -vX POST <DATASTASH LOCATION>:4001/agents -H 'Content-Type: application/json' -d @- <<EOF
     {
         "name": "MP declares a new financial interest",
         "description": "Scrape the Register of Member's Financial Interests, and alert if anything new is found",
@@ -80,11 +80,11 @@ To add a new agent, for example:
 
 Get all existing agents:
 
-    $ curl -vX GET <DATASTASH LOCATION>:8000/agents
+    $ curl -vX GET <DATASTASH LOCATION>:4001/agents
 
 Remove an agent:
 
-    $ curl -vX DELETE <DATASTASH LOCATION>:8000/agents/<AGENT NAME>
+    $ curl -vX DELETE <DATASTASH LOCATION>:4001/agents/<AGENT NAME>
 
 
 Similar tools

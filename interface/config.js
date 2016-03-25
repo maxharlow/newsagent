@@ -1,3 +1,3 @@
 export default {
-    "registry": "http://localhost:8000"
+    "registry": "http://localhost:4001"
 }

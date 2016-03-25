@@ -15,7 +15,7 @@ COPY runner/config.json    /runner/
 
 RUN cd registry && npm install
 
-EXPOSE 8000
+EXPOSE 4001
 
 CMD service docker start \
     && (cd registry && node Start)
