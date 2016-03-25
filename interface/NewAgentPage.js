@@ -4,6 +4,7 @@ import CronEntry from 'CronEntry.js'
 import CommandEntry from 'CommandEntry.js'
 import AlertEntry from 'AlertEntry.js'
 import HTTP from 'HTTP.js'
+import Config from 'Config.js'
 
 export default class AgentsPage extends React.Component {
 
@@ -34,8 +35,7 @@ export default class AgentsPage extends React.Component {
 
     create() {
         this.setState({ loading: true })
-        const registry = 'http://localhost:8000' // todo extract to config
-        HTTP.post(registry + '/agents', this.state.recipe, (e, response) => {
+        HTTP.post(Config.registry + '/agents', this.state.recipe, (e, response) => {
             if (e) this.setState({ error: JSON.parse(e.message).error })
             else Page('/agents/' + response.id)
         })

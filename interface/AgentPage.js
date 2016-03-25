@@ -3,12 +3,12 @@ import AgentPageRecipe from 'AgentPageRecipe.js'
 import AgentPageBuildLog from 'AgentPageBuildLog.js'
 import AgentPageDeletion from 'AgentPageDeletion.js'
 import HTTP from 'HTTP.js'
+import Config from 'Config.js'
 
 export default class AgentPage extends React.Component {
 
     componentWillMount() {
-        const registry = 'http://localhost:8000' // todo extract to config
-        HTTP.get(registry + '/agents/' + this.props.id, (e, response) => {
+        HTTP.get(Config.registry + '/agents/' + this.props.id, (e, response) => {
             if (!e) this.setState(response)
         })
     }

@@ -1,6 +1,7 @@
 import React from 'react'
 import Dialog from 'Dialog.js'
 import HTTP from 'HTTP.js'
+import Config from 'Config.js'
 
 export default class AgentPageDeletion extends React.Component {
 
@@ -11,8 +12,7 @@ export default class AgentPageDeletion extends React.Component {
     }
 
     deletion() {
-        const registry = 'http://localhost:8000' // todo extract to config
-        HTTP.delete(registry + '/agents/' + this.props.id)
+        HTTP.delete(Config.registry + '/agents/' + this.props.id)
         location.href = '/'
     }
 

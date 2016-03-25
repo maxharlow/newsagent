@@ -1,5 +1,6 @@
 import React from 'react'
 import HTTP from 'HTTP.js'
+import Config from 'Config.js'
 
 export default class AgentPageBuildLog extends React.Component {
 
@@ -11,8 +12,7 @@ export default class AgentPageBuildLog extends React.Component {
 
     load() {
         this.setState({ loading: true })
-        const registry = 'http://localhost:8000' // todo extract to config
-        HTTP.get(registry + '/agents/' + this.props.id + '/build', (e, response) => {
+        HTTP.get(Config.registry + '/agents/' + this.props.id + '/build', (e, response) => {
             if (!e) this.setState({ log: response, loading: false })
         })
     }

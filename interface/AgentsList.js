@@ -1,5 +1,6 @@
 import React from 'react'
 import HTTP from 'HTTP.js'
+import Config from 'Config.js'
 
 export default class AgentsList extends React.Component {
 
@@ -11,8 +12,7 @@ export default class AgentsList extends React.Component {
 
     update() {
         this.setState({ loading: true })
-        const registry = 'http://localhost:8000' // todo extract to config
-        HTTP.get(registry + '/agents', (e, response) => {
+        HTTP.get(Config.registry + '/agents', (e, response) => {
             if (!e) this.setState({ agents: response, loading: false })
         })
     }
