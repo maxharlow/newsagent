@@ -3,7 +3,7 @@ import AgentPageRecipe from 'AgentPageRecipe.js'
 import AgentPageBuildLog from 'AgentPageBuildLog.js'
 import AgentPageDeletion from 'AgentPageDeletion.js'
 import HTTP from 'HTTP.js'
-import Config from 'Config.js'
+import Config from 'config.js'
 
 export default class AgentPage extends React.Component {
 
