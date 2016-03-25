@@ -215,11 +215,10 @@ table {
 
 table tr {
     background: #dfdfdf;
-    margin: 10px 0;
-    border-radius: 3px;
 }
 
 table td {
+    border-bottom: 10px solid white;
     padding: 0;
 }
 
