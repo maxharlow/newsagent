@@ -28,7 +28,8 @@ If you are running locally, you will need to create a new local virtual machine 
 
     $ docker-machine create -d virtualbox datastash-local
     $ eval "$(docker-machine env datastash-local)"
-    $ VBoxManage controlvm datastash-local natpf1 'local,tcp,,4001,,4001'
+    $ VBoxManage controlvm datastash-local natpf1 'registry,tcp,,4001,,4001'
+    $ VBoxManage controlvm datastash-local natpf1 'interface,tcp,,4000,,4000'
 
 If you want to run on AWS, you will need to run [something like this] (https://docs.docker.com/machine/drivers/aws/):
 
@@ -41,7 +42,9 @@ If you want to run on AWS, you will need to run [something like this] (https://d
 You can then build and deploy Datastash to your machine:
 
     $ docker build -t datastash .
-    $ docker run --privileged --name datastash -dp 4001:4001 datastash
+    $ docker run --privileged --name datastash -dp 4000-4001:4000-4001 datastash
+
+The Datastash interface will then be available on port 4000, and the Registry API on port 4001.
 
 To stop Datastash:
 
@@ -52,8 +55,11 @@ The built image can then be removed:
 
     $ docker rmi datastash
 
-Usage
------
+
+API
+---
+
+The API, also known as the Registry, is available by default on port 4001.
 
 To add a new agent, for example:
 
@@ -91,12 +97,12 @@ Similar tools
 -------------
 
 * [Some unnamed tool built by the LA Times] (https://www.youtube.com/watch?v=iP-On8PzEy8)
+* [Morph] (https://morph.io/)
 * [Scraperwiki] (https://scraperwiki.com/)
 * [Logstash] (https://www.elastic.co/products/logstash)
 * [Huginn] (https://github.com/cantino/huginn)
 * [Datawire] (https://github.com/arc64/datawi.re)
-* [Morph] (https://morph.io/)
 * [Datastringer] (https://github.com/BBC-News-Labs/datastringer)
-* [Yahoo Pipes] (https://en.wikipedia.org/wiki/Yahoo!_Pipes)
 * [Stakeout] (https://github.com/veltman/stakeout)
+* [Yahoo Pipes] (https://en.wikipedia.org/wiki/Yahoo!_Pipes)
 * [Change Detection] (https://www.changedetection.com/)
