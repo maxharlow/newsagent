@@ -1,10 +1,10 @@
 import React from 'react'
 import Page from 'page'
-import CronEntry from 'CronEntry.js'
-import CommandEntry from 'CommandEntry.js'
-import AlertEntry from 'AlertEntry.js'
-import HTTP from 'HTTP.js'
-import Config from 'config.js'
+import CronEntry from '/CronEntry.js'
+import CommandEntry from '/CommandEntry.js'
+import AlertEntry from '/AlertEntry.js'
+import HTTP from '/HTTP.js'
+import Config from '/config.js'
 
 export default class AgentsPage extends React.Component {
 

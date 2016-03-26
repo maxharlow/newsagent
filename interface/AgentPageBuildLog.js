@@ -1,6 +1,6 @@
 import React from 'react'
-import HTTP from 'HTTP.js'
-import Config from 'config.js'
+import HTTP from '/HTTP.js'
+import Config from '/config.js'
 
 export default class AgentPageBuildLog extends React.Component {
 

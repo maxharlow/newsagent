@@ -1,5 +1,5 @@
 import React from 'react'
-import AgentsList from 'AgentsList.js'
+import AgentsList from '/AgentsList.js'
 
 export default class AgentsPage extends React.Component {
 

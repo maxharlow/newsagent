@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Page from 'page'
-import Menu from 'Menu.js'
-import AgentsPage from 'AgentsPage.js'
-import AgentPage from 'AgentPage.js'
-import NewAgentPage from 'NewAgentPage.js'
+import Menu from '/Menu.js'
+import AgentsPage from '/AgentsPage.js'
+import AgentPage from '/AgentPage.js'
+import NewAgentPage from '/NewAgentPage.js'
 
 export default class Routes {
 
