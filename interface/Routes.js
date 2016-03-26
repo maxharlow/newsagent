@@ -30,6 +30,10 @@ export default class Routes {
             main.classList.remove('loading')
             ReactDOM.render(React.DOM.div({}, menu, page), main)
         })
+        Page('*', context => {
+            main.classList.remove('loading')
+            ReactDOM.render(React.DOM.div({}, menu, 'Not found'), main)
+        })
         Page()
     }
 
