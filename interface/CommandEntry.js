@@ -54,8 +54,18 @@ export default class CommandEntry extends React.Component {
     componentDidUpdate() {
         if (this.state.focus !== undefined) {
             const element = this.refs[this.state.focus.number]
-            element.selectionStart = this.state.focus.selectionStart
-            element.selectionEnd = this.state.focus.selectionEnd
+            if (element.setSelectionRange) {
+                element.focus()
+                element.setSelectionRange(this.state.focus.selectionStart, this.state.focus.selectionEnd)
+            }
+            else if (element.createTextRange) {
+                const range = element.createTextRange()
+                range.collapse(true)
+                range.moveEnd('character', this.state.focus.selectionStart)
+                range.moveStart('character', this.state.focus.selectionEnd)
+                range.select()
+            }
+
         }
     }
 
