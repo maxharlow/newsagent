@@ -55,6 +55,11 @@ The built image can then be removed:
 
     $ docker rmi datastash
 
+To remove the local machine:
+
+    $ docker-machine stop datastash-local
+    $ docker-machine rm datastash-local
+
 
 API
 ---
