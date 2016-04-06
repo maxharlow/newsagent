@@ -99,7 +99,7 @@ async function buildImage(client, id, tar) {
     const logUpdate = () => {
         Database.update('build', id, log, logRevision).then(update => logRevision = update.rev)
     }
-    const logUpdater = setInterval(logUpdate, 60 * 1000) // in milliseconds
+    const logUpdater = setInterval(logUpdate, 1 * 1000) // in milliseconds
     return new Promise((resolve, reject) => {
         const handler = event => {
 	        if (event.stream) log.push({ text: StripAnsi(event.stream) })

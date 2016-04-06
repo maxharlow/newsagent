@@ -24,7 +24,7 @@ export default class AgentPage extends React.Component {
                   : this.state.state === 'failed' ? React.DOM.div({ className: 'section state failed' }, 'This agent failed to start.')
                   : undefined
             const recipe = React.createElement(AgentPageRecipe, this.state.recipe)
-            const buildLog = this.state.state !== 'started' ? undefined : React.createElement(AgentPageBuildLog, { id: this.props.id })
+            const buildLog = React.createElement(AgentPageBuildLog, { id: this.props.id, state: this.state.state })
             const deletion = React.createElement(AgentPageDeletion, { id: this.props.id, state: this.state.state })
             const body = React.DOM.div({ className: 'body' }, state, recipe, buildLog, deletion)
             return React.DOM.div({ className: 'agent page' }, header, body)

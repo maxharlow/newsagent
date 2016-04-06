@@ -4,16 +4,18 @@ import Config from '/config.js'
 
 export default class AgentPageBuildLog extends React.Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = { loading: false }
         this.load = this.load.bind(this)
+        if (props.state === 'starting') this.load()
     }
 
     load() {
         this.setState({ loading: true })
         HTTP.get(Config.registry + '/agents/' + this.props.id + '/build', (e, response) => {
             if (!e) this.setState({ log: response, loading: false })
+            if (this.props.state === 'starting') setTimeout(this.load, 1 * 1000) // in seconds
         })
     }
 
