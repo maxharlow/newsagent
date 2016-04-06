@@ -301,19 +301,19 @@ table a {
     padding: 5px;
 }
 
-.page.agent .body .section.recipe ul.alerts {
+.page.agent .body .section.recipe ul.triggers {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 
-.page.agent .body .section.recipe ul.alerts li {
+.page.agent .body .section.recipe ul.triggers li {
     background: #dfdfdf;
     border-radius: 3px;
     padding: 5px;
 }
 
-.page.agent .body .section.recipe ul.alerts li + .page.agent .body .section.recipe ul.alerts li {
+.page.agent .body .section.recipe ul.triggers li + .page.agent .body .section.recipe ul.triggers li {
     margin: 5px 0;
 }
 
@@ -411,44 +411,44 @@ table a {
     padding: 9px 9px 9px 6px;
 }
 
-.page.new-agent .alerts ol {
+.page.new-agent .triggers ol {
     margin: 0;
     padding: 0;
 }
 
-.page.new-agent .alerts ol li {
+.page.new-agent .triggers ol li {
     width: 100%;
     margin: 10px 0;
     list-style-type: none;
 }
 
-.page.new-agent .alerts ol li span {
+.page.new-agent .triggers ol li span {
     display: inline-block;
     padding: 8px;
 }
 
-.page.new-agent .alerts ol li span.event {
+.page.new-agent .triggers ol li span.event {
     position: relative;
     width: calc(35% - 33px);
     border: 1px solid #ddd;
     border-radius: 3px;
 }
 
-.page.new-agent .alerts ol li span.action {
+.page.new-agent .triggers ol li span.action {
     width: calc(20% - 31px);
     margin: 0 5px;
     border: 1px solid #ddd;
     border-radius: 3px;
 }
 
-.page.new-agent .alerts ol li span.recipient {
+.page.new-agent .triggers ol li span.recipient {
     position: relative;
     width: calc(45% - 33px);
     border: 1px solid #ddd;
     border-radius: 3px;
 }
 
-.page.new-agent .alerts ol li button {
+.page.new-agent .triggers ol li button {
     vertical-align: -1px;
     margin-left: 5px;
     border-radius: 50%;
@@ -456,7 +456,7 @@ table a {
     font-size: 20px;
 }
 
-.page.new-agent .alerts .adder .event {
+.page.new-agent .triggers .adder .event {
     display: inline-block;
     width: calc(35% - 33px);
     background: #eee;
@@ -466,7 +466,7 @@ table a {
     color: #666;
 }
 
-.page.new-agent .alerts .adder .action {
+.page.new-agent .triggers .adder .action {
     display: inline-block;
     width: calc(20% - 31px);
     background: #eee;
@@ -477,11 +477,11 @@ table a {
     color: #666;
 }
 
-.page.new-agent .alerts .adder .recipient {
+.page.new-agent .triggers .adder .recipient {
     width: calc(45% - 33px);
 }
 
-.page.new-agent .alerts .adder button {
+.page.new-agent .triggers .adder button {
     vertical-align: -1px;
     margin-left: 5px;
     padding: 1px 8px 2px 8px;

@@ -52,7 +52,7 @@ async function run(id, recipe) {
         await store('data', id, data)
         const stored = await retrieveAll('data', id)
         const diff = await difference(stored.current, stored.previous)
-        const sent = await alert(diff, recipe.alerts, recipe.name)
+        const sent = await trigger(diff, recipe.triggers, recipe.name)
         const dateFinished = new Date()
         const log = {
             state: 'success',
@@ -108,9 +108,9 @@ function difference(current, previous) {
     }
 }
 
-function alert(diff, alerts, name) {
-    const responses = alerts.map(alert => {
-        return (diff.added.length > 0 || diff.removed.length > 0) ? sendEmail(alert.recipient, name, format(diff, name)) : null
+function trigger(diff, triggers, name) {
+    const responses = triggers.map(trigger => {
+        return (diff.added.length > 0 || diff.removed.length > 0) ? sendEmail(trigger.recipient, name, format(diff, name)) : null
     })
     return Promise.all(responses.filter(Boolean))
 }
@@ -130,7 +130,7 @@ async function sendEmail(recipient, name, text) {
     const message = {
         from: 'Datastash <' + Config.email.from + '>',
         to: recipient,
-        subject: 'Datastash Alert – ' + name,
+        subject: '[ALERT] ' + name,
         html: text
     }
     const sent = await Nodemailer.createTransport(Config.email).sendMail(message)

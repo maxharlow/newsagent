@@ -1,10 +1,10 @@
 import React from 'react'
 
-export default class AlertEntry extends React.Component {
+export default class TriggerEntry extends React.Component {
 
     constructor() {
         super()
-        this.state = { current: '', alerts: [] }
+        this.state = { current: '', triggers: [] }
         this.update = this.update.bind(this)
         this.add = this.add.bind(this)
         this.remove = this.remove.bind(this)
@@ -17,26 +17,26 @@ export default class AlertEntry extends React.Component {
 
     add() {
         if (this.state.current === '') return
-        const alert = { recipient: this.state.current }
-        const alerts = this.state.alerts.concat(alert)
-        this.setState({ current: '', alerts })
-        this.props.onChange({ target: { value: alerts } })
+        const trigger = { recipient: this.state.current }
+        const triggers = this.state.triggers.concat(trigger)
+        this.setState({ current: '', triggers })
+        this.props.onChange({ target: { value: triggers } })
     }
 
     remove(number) {
         return event => {
-            const alerts = this.state.alerts.filter((_, i) => i !== number)
-            this.setState({ alerts })
-            this.props.onChange({ target: { value: alerts } })
+            const triggers = this.state.triggers.filter((_, i) => i !== number)
+            this.setState({ triggers })
+            this.props.onChange({ target: { value: triggers } })
         }
     }
 
     render() {
-        const currentElements = this.state.alerts.map((alert, i) => {
+        const currentElements = this.state.triggers.map((trigger, i) => {
             const parts = [
                 React.DOM.span({ className: 'event' }, 'If the data changes'),
                 React.DOM.span({ className: 'action' }, 'email'),
-                React.DOM.span({ className: 'recipient' }, alert.recipient),
+                React.DOM.span({ className: 'recipient' }, trigger.recipient),
                 React.DOM.button({ onClick: this.remove(i) }, '×')
             ]
             return React.DOM.li({}, ...parts)
@@ -49,7 +49,7 @@ export default class AlertEntry extends React.Component {
             React.DOM.button({ onClick: this.add }, '+')
         ]
         const adder = React.DOM.div({ className: 'adder' }, ...adderElements)
-        return React.DOM.div({ className: 'alerts' }, current, adder)
+        return React.DOM.div({ className: 'triggers' }, current, adder)
     }
 
 }

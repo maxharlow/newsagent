@@ -2,7 +2,7 @@ import React from 'react'
 import Page from 'page'
 import CronEntry from '/CronEntry.js'
 import CommandEntry from '/CommandEntry.js'
-import AlertEntry from '/AlertEntry.js'
+import TriggerEntry from '/TriggerEntry.js'
 import HTTP from '/HTTP.js'
 import Config from '/config.js'
 
@@ -21,7 +21,7 @@ export default class AgentsPage extends React.Component {
             setup: [],
             run: [],
             result: '',
-            alerts: []
+            triggers: []
         }
         this.state = { loading: false, recipe }
     }
@@ -71,7 +71,7 @@ export default class AgentsPage extends React.Component {
             React.DOM.input({ onChange: this.set('result') }),
             React.DOM.hr({}),
             React.DOM.h4({}, 'Who should be alerted?'),
-            React.createElement(AlertEntry, { onChange: this.set('alerts') }),
+            React.createElement(TriggerEntry, { onChange: this.set('triggers') }),
             React.DOM.hr({}),
             React.DOM.button({ onClick: this.create }, 'Create agent')
         ]

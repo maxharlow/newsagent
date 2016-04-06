@@ -72,16 +72,16 @@ To add a new agent, for example:
     {
         "name": "MP declares a new financial interest",
         "description": "Scrape the Register of Member's Financial Interests, and alert if anything new is found",
-        "location": "https://github.com/maxharlow/scrape-members-financial-interests.git",
-        "updatable": true,
-        "setup": [],
+        "setup": [
+            "git clone https://github.com/maxharlow/scrape-members-financial-interests.git .",
+            "npm install"
+        ],
         "schedule": "0 1 * * *",
         "run": [
-            "npm install",
             "node members-financial-interests"
         ],
         "result": "members-financial-interests.csv",
-        "alerts": [
+        "triggers": [
             {
                 "recipient": "you@example.com"
             }

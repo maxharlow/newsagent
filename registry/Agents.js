@@ -37,9 +37,9 @@ function validate(recipe) {
             schedule: { type: 'string' },
             run: { type: 'array', minimum: 1, items: { type: 'string' } },
             result: { type: 'string' },
-            alerts: { type: 'array', items: { type: 'object', properties: { recipient: { type: 'string' } }, required: [ 'recipient' ] } }
+            triggers: { type: 'array', items: { type: 'object', properties: { recipient: { type: 'string' } }, required: [ 'recipient' ] } }
         },
-        required: [ 'name', 'description', 'location', 'updatable', 'setup', 'schedule', 'run', 'result', 'alerts' ]
+        required: [ 'name', 'description', 'location', 'updatable', 'setup', 'schedule', 'run', 'result', 'triggers' ]
     }
     const validation = new JsonSchema.Validator().validate(recipe, schema)
     return validation.errors.map(e => e.stack)
