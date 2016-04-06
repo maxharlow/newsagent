@@ -6,9 +6,9 @@ import Path from 'path'
 import ChildProcess from 'child_process'
 import Schedule from 'node-schedule'
 import NeatCSV from 'neat-csv'
-import PouchDB from 'pouchdb'
 import DeepEqual from 'deep-equal'
 import Nodemailer from 'nodemailer'
+import Database from '/Database.js'
 import Config from './config.json'
 
 export async function setup(filename) {
@@ -29,7 +29,7 @@ export async function setup(filename) {
             messages
         }
         console.log(log)
-        store('setup', id, log)
+        Database.store('setup', id, log)
     }
     catch (e) {
         console.log(e.stack)
@@ -39,7 +39,7 @@ export async function setup(filename) {
             message: e.message
         }
         console.log(log)
-        store('setup', id, log)
+        Database.store('setup', id, log)
     }
 }
 
@@ -48,8 +48,8 @@ async function run(id, recipe) {
     try {
         const messages = await sequentially(shell('source'), recipe.run)
         const data = await csv('source/' + recipe.result)
-        await store('data', id, data)
-        const stored = await retrieveAll('data', id)
+        await Database.store('data', id, data)
+        const stored = await Database.retrieveAll('data', id)
         const diff = await difference(stored.current, stored.previous)
         const sent = await trigger(diff, recipe.triggers, recipe.name)
         const dateFinished = new Date()
@@ -65,7 +65,7 @@ async function run(id, recipe) {
             sent
         }
         console.log(log)
-        store('run', id, log)
+        Database.store('run', id, log)
     }
     catch (e) {
         const log = {
@@ -74,29 +74,13 @@ async function run(id, recipe) {
             message: e.message
         }
         console.log(log)
-        store('run', id, log)
+        Database.store('run', id, log)
     }
 }
 
 async function csv(location) {
     const data = await Promisify(FS.readFile)(location)
     return Promisify(NeatCSV)(data)
-}
-
-async function store(type, id, data) {
-    const db = new PouchDB(Config.pouchLocation)
-    return db.put({ _id: type + '/' + id + '/' + new Date().toISOString(), data })
-}
-
-async function retrieveAll(type, id) {
-    const db = new PouchDB(Config.pouchLocation)
-    const response = await db.allDocs({ startkey: type + '/' + id + '/\uffff', endkey: type + '/' + id + '/', include_docs: true, descending: true, limit: 2 })
-    return {
-        current: response.rows[0].doc.data,
-        currentDate: response.rows[0].id.split('/')[1],
-        previous: response.rows[1] ? response.rows[1].doc.data : undefined,
-        previousDate: response.rows[1] ? response.rows[1].id.split('/')[1] : undefined
-    }
 }
 
 function difference(current, previous) {
