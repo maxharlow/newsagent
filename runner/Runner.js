@@ -3,7 +3,6 @@
 import Promisify from 'promisify-node'
 import FS from 'fs'
 import Path from 'path'
-import Process from 'process'
 import ChildProcess from 'child_process'
 import Schedule from 'node-schedule'
 import NeatCSV from 'neat-csv'
@@ -142,7 +141,7 @@ function sequentially(fn, array) {
 }
 
 function shell(location) {
-    const path = Path.resolve(location || Process.cwd())
+    const path = Path.resolve(location)
     var log = []
     return command => {
         log.push({ type: 'command', value: command })
