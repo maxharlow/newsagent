@@ -8,7 +8,7 @@ import Schedule from 'node-schedule'
 import NeatCSV from 'neat-csv'
 import DeepEqual from 'deep-equal'
 import Nodemailer from 'nodemailer'
-import Database from '/Database.js'
+import * as Database from './Database'
 import Config from './config.json'
 
 export async function setup(filename) {
@@ -28,8 +28,8 @@ export async function setup(filename) {
             duration: dateFinished - dateStarted,
             messages
         }
+        Database.add('log', 'setup', log)
         console.log(log)
-        Database.store('setup', id, log)
     }
     catch (e) {
         console.log(e.stack)
@@ -38,8 +38,8 @@ export async function setup(filename) {
             date: dateStarted.toISOString(),
             message: e.message
         }
+        Database.add('log', 'setup', log)
         console.log(log)
-        Database.store('setup', id, log)
     }
 }
 
@@ -48,7 +48,7 @@ async function run(id, recipe) {
     try {
         const messages = await sequentially(shell('source'), recipe.run)
         const data = await csv('source/' + recipe.result)
-        await Database.store('data', id, data)
+        await Database.addWithTimestamp('data', id, data)
         const stored = await Database.retrieveAll('data', id)
         const diff = await difference(stored.current, stored.previous)
         const sent = await trigger(diff, recipe.triggers, recipe.name)
@@ -64,8 +64,8 @@ async function run(id, recipe) {
             messages,
             sent
         }
+        Database.add('log', 'run', log)
         console.log(log)
-        Database.store('run', id, log)
     }
     catch (e) {
         const log = {
@@ -73,8 +73,8 @@ async function run(id, recipe) {
             date: dateStarted.toISOString(),
             message: e.message
         }
+        Database.add('log', 'run', log)
         console.log(log)
-        Database.store('run', id, log)
     }
 }
 

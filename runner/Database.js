@@ -5,8 +5,17 @@ import Config from './config.json'
 
 const db = new PouchDB(Config.pouchLocation)
 
-export async function store(type, id, data) {
+export async function add(type, id, data) {
+    return db.put({ _id: type + '/' + id, data })
+}
+
+export async function addWithTimestamp(type, id, data) {
     return db.put({ _id: type + '/' + id + '/' + new Date().toISOString(), data })
+}
+
+export async function retrieve(type, id) {
+    const item = await db.get(type + '/' + id)
+    return item.data
 }
 
 export async function retrieveAll(type, id) {

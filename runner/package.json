@@ -6,6 +6,7 @@
         "babel-plugin-transform-async-to-generator": "6.5.x",
         "babel-plugin-transform-es2015-modules-commonjs": "6.5.x",
         "promisify-node": "0.3.x",
+        "express": "4.13.x",
         "node-schedule": "0.6.x",
         "neat-csv": "1.1.x",
         "pouchdb": "5.2.x",
