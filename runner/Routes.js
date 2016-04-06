@@ -14,5 +14,13 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
+    app.get('/runs', (request, response) => {
+        Database.retrieveAll('log/run')
+            .then(runs => response.status(200).send(runs))
+            .catch(e => {
+                console.log(e.stack)
+                response.status(500).send({ error: e.message })
+            })
+    })
     app.listen(Config.port)
 }

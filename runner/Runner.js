@@ -64,7 +64,7 @@ async function run(id, recipe) {
             messages,
             sent
         }
-        Database.add('log', 'run', log)
+        Database.addWithTimestamp('log', 'run', log)
         console.log(log)
     }
     catch (e) {
@@ -73,7 +73,7 @@ async function run(id, recipe) {
             date: dateStarted.toISOString(),
             message: e.message
         }
-        Database.add('log', 'run', log)
+        Database.addWithTimestamp('log', 'run', log)
         console.log(log)
     }
 }
