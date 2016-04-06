@@ -50,8 +50,7 @@ function validate(recipe) {
 async function build(client, clientInfo, stored, recipe) {
     try {
         const context = await buildContext(client, stored.id, recipe)
-        const image = await buildImage(client, stored.id, context) // todo use an in-memory queue? otherwise could explode
-        Database.add('build', stored.id, image.log)
+        const image = await buildImage(client, stored.id, context)
         const container = await client.createContainer({ name: stored.id, Image: image.id })
         await container.start()
         const agent = {
@@ -94,17 +93,27 @@ async function buildContext(client, id, recipe) {
 
 async function buildImage(client, id, tar) {
     const stream = await client.buildImage(tar, { t: id })
+    var   log = []
+    const logCreation = await Database.add('build', id, log)
+    var   logRevision = logCreation.rev
+    const logUpdate = () => {
+        Database.update('build', id, log, logRevision).then(update => logRevision = update.rev)
+    }
+    const logUpdater = setInterval(logUpdate, 60 * 1000) // in milliseconds
     return new Promise((resolve, reject) => {
-        var log = []
         const handler = event => {
-	    if (event.stream) log.push({ text: StripAnsi(event.stream) })
-	    else log.push(event)
+	        if (event.stream) log.push({ text: StripAnsi(event.stream) })
+	        else log.push(event)
             if (event.stream && event.stream.startsWith('Successfully built')) {
                 parser.removeAllListeners()
+                clearInterval(logUpdater)
+                logUpdate()
                 resolve({ id: event.stream.match(/built (.*)\n/)[1], log })
             }
             else if (event.error) {
                 parser.removeAllListeners()
+                clearInterval(logUpdater)
+                logUpdate()
                 reject(event.error)
             }
         }
