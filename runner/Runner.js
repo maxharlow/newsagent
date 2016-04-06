@@ -5,7 +5,6 @@ import FS from 'fs'
 import Path from 'path'
 import Process from 'process'
 import ChildProcess from 'child_process'
-import Git from 'nodegit'
 import Schedule from 'node-schedule'
 import NeatCSV from 'neat-csv'
 import PouchDB from 'pouchdb'
@@ -19,8 +18,8 @@ export async function setup(filename) {
     try {
         const data = await Promisify(FS.readFile)(filename)
         const recipe = JSON.parse(data.toString())
-        await Git.Clone(recipe.location, 'source')
-        const messages = await sequentially(shell(), recipe.setup)
+        await Promisify(FS.mkdir)('source')
+        const messages = await sequentially(shell('source'), recipe.setup)
         const job = Schedule.scheduleJob(recipe.schedule, () => run(id, recipe))
         if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
         const dateFinished = new Date()
@@ -30,6 +29,7 @@ export async function setup(filename) {
             duration: dateFinished - dateStarted,
             messages
         }
+        console.log(log)
         store('setup', id, log)
     }
     catch (e) {
@@ -39,6 +39,7 @@ export async function setup(filename) {
             date: dateStarted.toISOString(),
             message: e.message
         }
+        console.log(log)
         store('setup', id, log)
     }
 }
@@ -46,8 +47,6 @@ export async function setup(filename) {
 async function run(id, recipe) {
     const dateStarted = new Date()
     try {
-        const repo = await repository(recipe.updatable)
-        const revision = await repositoryRevision(repo)
         const messages = await sequentially(shell('source'), recipe.run)
         const data = await csv('source/' + recipe.result)
         await store('data', id, data)
@@ -59,7 +58,6 @@ async function run(id, recipe) {
             state: 'success',
             date: dateStarted.toISOString(),
             duration: dateFinished - dateStarted,
-            revision,
             currentDocDate: stored.currentDate,
             previousDocDate: stored.previousDate,
             recordsAdded: diff.added.length,
@@ -67,6 +65,7 @@ async function run(id, recipe) {
             messages,
             sent
         }
+        console.log(log)
         store('run', id, log)
     }
     catch (e) {
@@ -75,22 +74,9 @@ async function run(id, recipe) {
             date: dateStarted.toISOString(),
             message: e.message
         }
+        console.log(log)
         store('run', id, log)
     }
-}
-
-async function repository(update) {
-    const repo = await Git.Repository.open(Path.resolve('source'))
-    if (update) {
-        await repo.fetchAll()
-        await repo.mergeBranches('master', 'origin/master')
-    }
-    return repo
-}
-
-async function repositoryRevision(repo) {
-    const commit = await repo.getBranchCommit('master')
-    return commit.id().toString().substr(0, 8)
 }
 
 async function csv(location) {

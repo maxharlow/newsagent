@@ -33,8 +33,6 @@ function validate(recipe) {
         properties: {
             name: { type: 'string' },
             description: { type: 'string' },
-            location: { type: 'string' },
-            updatable: { type: 'boolean' },
             setup: { type: 'array', items: { type: 'string' } },
             schedule: { type: 'string' },
             run: { type: 'array', minimum: 1, items: { type: 'string' } },

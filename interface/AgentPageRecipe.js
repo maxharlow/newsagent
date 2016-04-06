@@ -8,9 +8,6 @@ export default class AgentPageRecipe extends React.Component {
             React.DOM.h3({}, 'Recipe'),
             React.DOM.hr({}),
             React.DOM.p({}, 'Runs at ' + PrettyCron.toString(this.props.schedule).toLowerCase() + '. Next run is ' + PrettyCron.getNext(this.props.schedule).toLowerCase() + '.'),
-            React.DOM.h4({}, 'Location'),
-            React.DOM.p({ className: 'field' }, React.DOM.a({ href: this.props.location }, this.props.location)),
-            React.DOM.span({ className: 'note' }, this.props.updatable ? 'Updates are ON.' : 'Updates are OFF.'),
             React.DOM.h4({}, 'Setup'),
             this.props.setup.length > 0
                 ? React.DOM.code({}, React.DOM.ol({}, ...this.props.setup.map(step => React.DOM.li({}, step))))
@@ -26,5 +23,5 @@ export default class AgentPageRecipe extends React.Component {
         ]
         return React.DOM.div({ className: 'section recipe' }, ...elements)
     }
-    
+
 }

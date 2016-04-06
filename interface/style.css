@@ -142,11 +142,6 @@ nav li a {
     border-top: 1px solid #bbb;
 }
 
-
-.page span.note {
-    font-size: 11px;
-}
-
 .error {
     width: calc(100% - 42px);
     background: #bc544f;
@@ -374,15 +369,6 @@ table a {
 
 .page.new-agent p {
     margin: 15px 0;
-}
-
-.page.new-agent .toggle h4 {
-    display: inline-block;
-}
-
-.page.new-agent .toggle input {
-    width: auto;
-    margin-left: 10px;
 }
 
 .page.new-agent .cron label + label {
