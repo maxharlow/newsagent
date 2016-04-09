@@ -18,9 +18,10 @@ export async function retrieve(type, id) {
     return item.data
 }
 
-export async function retrieveAll(type) {
-    const documents = await db.allDocs({ startkey: type + '/\uffff', endkey: type + '/', include_docs: true, descending: true })
+export async function retrieveAll(type, id) {
+    const key = id === undefined ? type : type + '/' + id
+    const documents = await db.allDocs({ startkey: key + '/\uffff', endkey: key + '/', include_docs: true, descending: true })
     return documents.rows.map(row => {
-        return Object.assign({ id: row.id.replace(type + '/', '') }, row.doc.data)
+        return Object.assign({ id: row.id.replace(key + '/', '') }, row.doc.data)
     })
 }

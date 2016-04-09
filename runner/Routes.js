@@ -15,7 +15,7 @@ export function listen() {
             })
     })
     app.get('/runs', (request, response) => {
-        Database.retrieveAll('log/run')
+        Database.retrieveAll('log', 'run')
             .then(runs => response.status(200).send(runs))
             .catch(e => {
                 console.log(e.stack)
