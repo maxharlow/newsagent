@@ -337,7 +337,7 @@ table a {
 }
 
 .page.agent .body .section.buildlog code {
-    max-height: 500px;
+    height: 500px;
     margin-top: 10px;
 }
 
