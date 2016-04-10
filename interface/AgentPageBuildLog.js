@@ -4,23 +4,26 @@ import Config from '/config.js'
 
 export default class AgentPageBuildLog extends React.Component {
 
-    constructor(props) {
-        super(props)
+    constructor() {
+        super()
         this.state = { loading: false }
         this.load = this.load.bind(this)
-        if (props.state === 'starting') this.load()
+    }
+
+    componentDidMount() {
+        if (this.props.state === 'starting') this.load()
     }
 
     load() {
         this.setState({ loading: true })
         HTTP.get(Config.registry + '/agents/' + this.props.id + '/build', (e, response) => {
+            const scrollHeight = this.refs['buildlog'] ? this.refs['buildlog'].scrollHeight : -1
+            const scrollTop = this.refs['buildlog'] ? this.refs['buildlog'].scrollTop + this.refs['buildlog'].clientHeight : -1
+            const atBottom = scrollHeight === scrollTop
             if (!e) this.setState({ log: response, loading: false })
+            if (atBottom) this.refs['buildlog'].scrollTop = this.refs['buildlog'].scrollHeight
             if (this.props.state === 'starting') setTimeout(this.load, 1 * 1000) // in seconds
         })
-    }
-
-    componentDidUpdate() {
-        if (this.refs['buildlog']) this.refs['buildlog'].scrollTop = this.refs['buildlog'].scrollHeight
     }
 
     render() {
