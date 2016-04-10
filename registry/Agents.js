@@ -108,18 +108,18 @@ async function buildImage(client, id, tar) {
                 logUpdate()
                 resolve({ id: event.stream.match(/built (.*)\n/)[1], log })
             }
-            else if (event.error) {
+            else {
                 parser.removeAllListeners()
                 clearInterval(logUpdater)
                 logUpdate()
-                reject(event.error)
+                event.error ? reject(event.error) : reject()
             }
         }
         const parser = JsonStream.parse()
         parser.on('data', handler)
         parser.on('error', error => handler({ error, log }))
         stream.pipe(parser)
-        setTimeout(() => handler({ error: 'Timed out' }), 30 * 60 * 1000) // in milliseconds
+        setTimeout(() => handler(), 30 * 60 * 1000) // in milliseconds
     })
 }
 
