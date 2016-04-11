@@ -6,7 +6,6 @@ import Promisify from 'promisify-node'
 import TarStream from 'tar-stream'
 import Glob from 'glob'
 import JsonSchema from 'jsonschema'
-import JsonStream from 'jsonstream'
 import StripAnsi from 'strip-ansi'
 import * as Database from './Database'
 import * as Docker from './Docker'
@@ -99,27 +98,24 @@ async function buildImage(client, id, tar) {
     }
     const logUpdater = setInterval(logUpdate, 1 * 1000) // in milliseconds
     return new Promise((resolve, reject) => {
-        const handler = event => {
-	        if (event.stream) log.push({ text: StripAnsi(event.stream) })
-	        else log.push(event)
+        const handler = buffer => {
+            const event = JSON.parse(buffer)
+            if (event.stream) log.push({ text: StripAnsi(event.stream) })
+            else log.push(event)
             if (event.stream && event.stream.startsWith('Successfully built')) {
-                parser.removeAllListeners()
                 clearInterval(logUpdater)
                 logUpdate()
                 resolve({ id: event.stream.match(/built (.*)\n/)[1], log })
             }
             else {
-                parser.removeAllListeners()
                 clearInterval(logUpdater)
                 logUpdate()
                 event.error ? reject(event.error) : reject()
             }
         }
-        const parser = JsonStream.parse()
-        parser.on('data', handler)
-        parser.on('error', error => handler({ error, log }))
-        stream.pipe(parser)
-        setTimeout(() => handler(), 30 * 60 * 1000) // in milliseconds
+        stream.on('data', handler)
+        stream.on('error', error => handler({ error, log }))
+        setTimeout(() => handler({ error: '[finished]' }), 30 * 60 * 1000) // in milliseconds
     })
 }
 
