@@ -15,12 +15,12 @@ export function listen() {
         response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE')
         next()
     })
-    app.get('/agents', (request, response, next) => {
+    app.get('/agents', (request, response) => {
         Database.retrieveAll('agent')
             .then(agents => response.status(200).send(agents))
             .catch(e => response.status(500).send({ error: e.message }))
     })
-    app.post('/agents', (request, response, next) => {
+    app.post('/agents', (request, response) => {
         Agents.create(request.body)
             .then(agent => response.status(202).send(agent))
             .catch(e => {
@@ -28,7 +28,7 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
-    app.get('/agents/:id', (request, response, next) => {
+    app.get('/agents/:id', (request, response) => {
         Database.retrieve('agent', request.params.id)
             .then(agent => response.status(200).send(agent))
             .catch(e => {
@@ -36,7 +36,7 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
-    app.delete('/agents/:id', (request, response, next) => {
+    app.delete('/agents/:id', (request, response) => {
         Agents.destroy(request.params.id)
             .then(() => response.status(204).send())
             .catch(e => {
@@ -44,7 +44,7 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
-    app.get('/agents/:id/build', (request, response, next) => {
+    app.get('/agents/:id/build', (request, response) => {
         Database.retrieve('build', request.params.id)
             .then(build => response.status(200).send(build))
             .catch(e => {
