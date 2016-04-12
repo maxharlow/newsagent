@@ -117,7 +117,7 @@ async function buildImage(client, id, tar) {
         parser.on('data', handler)
         parser.on('error', error => handler({ error, log }))
         stream.pipe(parser)
-        setTimeout(() => handler({ error: '[finished]' }), 30 * 60 * 1000) // in milliseconds
+        setTimeout(() => handler(), 30 * 60 * 1000) // in milliseconds
     })
 }
 
