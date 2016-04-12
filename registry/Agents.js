@@ -6,6 +6,7 @@ import Promisify from 'promisify-node'
 import TarStream from 'tar-stream'
 import Glob from 'glob'
 import JsonSchema from 'jsonschema'
+import JsonStream from 'json-stream'
 import StripAnsi from 'strip-ansi'
 import * as Database from './Database'
 import * as Docker from './Docker'
@@ -98,8 +99,7 @@ async function buildImage(client, id, tar) {
     }
     const logUpdater = setInterval(logUpdate, 1 * 1000) // in milliseconds
     return new Promise((resolve, reject) => {
-        const handler = buffer => {
-            const event = JSON.parse(buffer)
+        const handler = event => {
             if (event.stream) log.push({ text: StripAnsi(event.stream) })
             else log.push(event)
             if (event.stream && event.stream.startsWith('Successfully built')) {
@@ -113,8 +113,10 @@ async function buildImage(client, id, tar) {
                 event.error ? reject(event.error) : reject()
             }
         }
-        stream.on('data', handler)
-        stream.on('error', error => handler({ error, log }))
+        const parser = new JsonStream() // deals with (large) json objects split over multiple events
+        parser.on('data', handler)
+        parser.on('error', error => handler({ error, log }))
+        stream.pipe(parser)
         setTimeout(() => handler({ error: '[finished]' }), 30 * 60 * 1000) // in milliseconds
     })
 }
