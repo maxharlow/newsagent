@@ -107,7 +107,7 @@ async function buildImage(client, id, tar) {
                 logUpdate()
                 resolve({ id: event.stream.match(/built (.*)\n/)[1], log })
             }
-            else {
+            else if (event.error || event.timeout) {
                 clearInterval(logUpdater)
                 logUpdate()
                 event.error ? reject(event.error) : reject()
@@ -117,7 +117,7 @@ async function buildImage(client, id, tar) {
         parser.on('data', handler)
         parser.on('error', error => handler({ error, log }))
         stream.pipe(parser)
-        setTimeout(() => handler(), 30 * 60 * 1000) // in milliseconds
+        setTimeout(() => handler({ timeout: true }), 30 * 60 * 1000) // in milliseconds
     })
 }
 
