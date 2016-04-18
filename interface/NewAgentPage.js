@@ -23,7 +23,7 @@ export default class AgentsPage extends React.Component {
             result: '',
             triggers: []
         }
-        this.state = { loading: false, recipe }
+        this.state = { loading: false, validation: {}, recipe }
     }
 
     set(field) {
@@ -34,6 +34,13 @@ export default class AgentsPage extends React.Component {
     }
 
     create() {
+        const validation = {
+            name: this.state.recipe.name === '',
+            run: this.state.recipe.run.length === 0 || this.state.recipe.run[0] === '',
+            result: this.state.recipe.result === ''
+        }
+        const isInvalid = Object.keys(validation).some(key => validation[key] === true)
+        if (isInvalid) return this.setState({ validation })
         this.setState({ loading: true })
         HTTP.post(Config.registry + '/agents', this.state.recipe, (e, response) => {
             if (e) this.setState({ error: JSON.parse(e.message).error })
@@ -52,6 +59,7 @@ export default class AgentsPage extends React.Component {
         const elements = [
             React.DOM.h2({}, 'Create a new agent'),
             React.DOM.hr({}),
+            this.state.validation['name'] ? React.DOM.span({ className: 'validation' }, 'You must give this agent a name') : null,
             React.DOM.h4({}, 'Agent name'),
             React.DOM.input({ onChange: this.set('name') }),
             React.DOM.h4({}, 'Description'),
@@ -64,9 +72,11 @@ export default class AgentsPage extends React.Component {
             React.createElement(CommandEntry, { onChange: this.set('setup') }),
             React.DOM.p({}, 'These commands will only be executed once, when the agent is being built.'),
             React.DOM.hr({}),
+            this.state.validation['run'] ? React.DOM.span({ className: 'validation' }, 'At least one command needs to be entered') : null,
             React.DOM.h4({}, 'Run commands'),
             React.createElement(CommandEntry, { onChange: this.set('run') }),
             React.DOM.p({}, 'These commands will be executed every time the agent runs.'),
+            this.state.validation['result'] ? React.DOM.span({ className: 'validation' }, 'You must give the name of the file that gets created by this agent') : null,
             React.DOM.h4({}, 'What file gets created?'),
             React.DOM.input({ onChange: this.set('result') }),
             React.DOM.hr({}),

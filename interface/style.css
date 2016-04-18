@@ -379,6 +379,13 @@ table a {
     margin: 15px 0;
 }
 
+.page.new-agent .validation {
+    float: right;
+    padding-bottom: 5px;
+    color: #a60000;
+    font-size: 10px;
+}
+
 .page.new-agent .cron label + label {
     margin-left: 10px;
 }
