@@ -222,6 +222,14 @@ table a {
     text-decoration: none;
 }
 
+.page.agents .filter {
+    width: 30%;
+}
+
+.page.agents table {
+    margin-top: 15px;
+}
+
 .page.agents table td.state {
     text-align: right;
     font-weight: bold;
