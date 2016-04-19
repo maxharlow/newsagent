@@ -1,7 +1,7 @@
 body {
     margin: 0;
     color: #322f32;
-    font: 13px Helvetica, sans-serif;
+    font: 12px Helvetica, sans-serif;
 }
 
 a {
@@ -37,7 +37,7 @@ input {
     border: 1px solid #bbb;
     border-radius: 3px;
     padding: 8px;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 input:focus {
@@ -80,7 +80,7 @@ nav ul {
     margin: 0 10px;
     padding: 0;
     list-style-type: none;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     text-align: right;
 }
@@ -213,8 +213,7 @@ table tr {
 }
 
 table td {
-    border-bottom: 10px solid white;
-    padding: 0;
+    border-bottom: 4px solid white;
 }
 
 table a {
@@ -223,11 +222,18 @@ table a {
 }
 
 .page.agents .filter {
-    width: 30%;
+    float: right;
+    width: 33%;
+    padding: 4px;
+    background: white;
 }
 
 .page.agents table {
     margin-top: 15px;
+}
+
+.page.agents table td a {
+    padding: 5px;
 }
 
 .page.agents table td.state {
@@ -235,21 +241,20 @@ table a {
     font-weight: bold;
 }
 
-.page.agents table td.state a {
-    padding: 10px;
-    line-height: 35px;
-}
-
 .page.agents table h5 {
     margin: 0;
-    padding: 10px 0 0 10px;
-    font-size: 16px;
+    padding: 0;
+    font-size: 14px;
 }
 
 .page.agents table p {
     margin: 0;
-    padding: 0 0 10px 10px;
-    font-size: 14px;
+    padding: 0;
+    font-size: 12px;
+}
+
+.page.agents table span {
+    font-size: 10px;
 }
 
 .page.agent {
@@ -291,7 +296,7 @@ table a {
 
 .page.agent .body .section h4 {
     margin: 10px 0 2px 0;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .page.agent .body .section hr {
@@ -372,7 +377,7 @@ table a {
 
 .page.new-agent h4 {
     margin: 10px 0 5px 0;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .page.new-agent p {
