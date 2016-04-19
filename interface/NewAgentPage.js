@@ -15,8 +15,6 @@ export default class AgentsPage extends React.Component {
         const recipe = {
             name: '',
             description: '',
-            location: '',
-            updatable: true,
             schedule: '0 1 * * *',
             setup: [],
             run: [],
