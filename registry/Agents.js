@@ -31,12 +31,12 @@ function validate(recipe) {
     const schema = {
         type: 'object',
         properties: {
-            name: { type: 'string' },
+            name: { type: 'string', minLength: 1 },
             description: { type: 'string' },
             setup: { type: 'array', items: { type: 'string' } },
             schedule: { type: 'string' },
             run: { type: 'array', minimum: 1, items: { type: 'string' } },
-            result: { type: 'string' },
+            result: { type: 'string', minLength: 1 },
             triggers: { type: 'array', items: { type: 'object', properties: { recipient: { type: 'string' } }, required: [ 'recipient' ] } }
         },
         required: [ 'name', 'description', 'setup', 'schedule', 'run', 'result', 'triggers' ]
