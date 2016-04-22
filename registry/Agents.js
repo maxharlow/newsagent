@@ -92,10 +92,10 @@ async function buildContext(client, id, recipe) {
 async function buildImage(client, id, tar) {
     const stream = await client.buildImage(tar, { t: id })
     var   log = []
-    const logCreation = await Database.add('build', id, log)
+    const logCreation = await Database.add('build', id, { log })
     var   logRevision = logCreation.rev
     const logUpdate = () => {
-        Database.update('build', id, log, logRevision).then(update => logRevision = update.rev)
+        Database.update('build', id, { log }, logRevision).then(update => logRevision = update.rev)
     }
     const logUpdater = setInterval(logUpdate, 1 * 1000) // in milliseconds
     return new Promise((resolve, reject) => {
