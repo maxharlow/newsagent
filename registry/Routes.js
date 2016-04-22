@@ -46,7 +46,7 @@ export function listen() {
     })
     app.get('/agents/:id/build', (request, response) => {
         Database.retrieve('build', request.params.id)
-            .then(build => response.status(200).send(build))
+            .then(build => response.status(200).send({ id: build.id, log: build.log.slice(request.query.since || 0) }))
             .catch(e => {
                 if (e.message === 'missing') response.status(404).send({ error: 'agent build not found' })
                 else response.status(500).send({ error: e.message })
