@@ -2,6 +2,7 @@
 
 import FS from 'fs'
 import Path from 'path'
+import Stream from 'stream'
 import Promisify from 'promisify-node'
 import TarStream from 'tar-stream'
 import Glob from 'glob'
@@ -75,6 +76,7 @@ async function buildContext(client, id, recipe) {
           + '\n' + 'COPY config.json /'
           + '\n' + 'COPY *.js /'
           + '\n' + `COPY ${id}.json /`
+          + '\n' + 'EXPOSE 3000'
           + '\n' + 'RUN npm install'
           + '\n' + `CMD node Start ${id}.json`
     const tar = Promisify(TarStream.pack())
@@ -119,6 +121,30 @@ async function buildImage(client, id, tar) {
         stream.pipe(parser)
         setTimeout(() => handler({ timeout: true }), 30 * 60 * 1000) // in milliseconds
     })
+}
+
+async function fromContainer(id, path) {
+    const agent = await Database.retrieve('agent', id)
+    const client = await Docker.client(agent.client)
+    const container = await client.getContainer(id)
+    const exec = await container.exec({ Cmd: ['curl', 'localhost:3000' + path], AttachStdin: true, AttachStdout: true })
+    const stream = await exec.start()
+    return new Promise((resolve, reject) => {
+        const parser = new Stream.PassThrough()
+        var response = ''
+        parser.on('data', data => response += data)
+        parser.on('error', reject)
+        container.modem.demuxStream(stream, parser, parser)
+        stream.on('end', () => resolve(response))
+    })
+}
+
+export async function getBuild(id) {
+    return fromContainer(id, '/setup')
+}
+
+export async function getRuns(id) {
+    return fromContainer(id, '/runs')
 }
 
 export async function destroy(id) {
