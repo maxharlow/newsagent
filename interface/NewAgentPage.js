@@ -1,6 +1,6 @@
 import React from 'react'
 import AgentInput from '/AgentInput.js'
-import CronEntry from '/CronEntry.js'
+
 export default class NewAgentPage extends React.Component {
 
     render() {
@@ -11,10 +11,3 @@ export default class NewAgentPage extends React.Component {
     }
 
 }
-
-
-
-
-
-
-
