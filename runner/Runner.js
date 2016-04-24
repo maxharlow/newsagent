@@ -23,25 +23,10 @@ export async function setup(filename) {
             const job = Schedule.scheduleJob(recipe.schedule, () => run(id, recipe))
             if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
         }
-        const dateFinished = new Date()
-        const log = {
-            state: 'success',
-            date: dateStarted.toISOString(),
-            duration: dateFinished - dateStarted,
-            messages
-        }
-        Database.add('log', 'setup', log)
-        console.log(log)
+        console.log(messages)
     }
     catch (e) {
         console.log(e.stack)
-        const log = {
-            state: 'failure',
-            date: dateStarted.toISOString(),
-            message: e.message
-        }
-        Database.add('log', 'setup', log)
-        console.log(log)
     }
 }
 
