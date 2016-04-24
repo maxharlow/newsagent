@@ -115,7 +115,7 @@ function shell(location) {
     const path = Path.resolve(location)
     var log = []
     return command => {
-        log.push({ type: 'command', value: command })
+        log.push({ type: 'stdin', value: command + '\n' })
         return new Promise((resolve, reject) => {
             const process = ChildProcess.exec(command, { cwd: path })
             process.stdout.on('data', data => log.push({ type: 'stdout', value: data }))
