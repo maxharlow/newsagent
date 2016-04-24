@@ -398,7 +398,7 @@ table a {
 .page.new-agent .cron label > span {
     display: inline-block;
     vertical-align: top;
-    width: calc(25% - 8px);
+    width: calc(20% - 8px);
     height: 40px;
     background: #eee;
     border-radius: 3px;

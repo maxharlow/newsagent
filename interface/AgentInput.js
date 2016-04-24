@@ -61,7 +61,7 @@ export default class AgentInput extends React.Component {
             React.DOM.h4({}, 'Description'),
             React.DOM.input({ onChange: this.set('description') }),
             React.DOM.hr({}),
-            React.DOM.h4({}, 'How often should this agent run?'),
+            React.DOM.h4({}, 'When should this agent run?'),
             React.createElement(CronEntry, { defaultValue: this.state.recipe.schedule, onChange: this.set('schedule') }),
             React.DOM.hr({}),
             React.DOM.h4({}, 'Setup commands'),

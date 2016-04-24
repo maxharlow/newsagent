@@ -6,6 +6,7 @@ export default class CronEntry extends React.Component {
     constructor(props) {
         super(props)
         this.presets = [
+            { name: 'Never', value: ''},
             { name: 'Hourly', value: '0 * * * *' },
             { name: 'Daily',  value: '0 1 * * *' },
             { name: 'Weekly', value: '0 1 * * 1' }
@@ -32,7 +33,7 @@ export default class CronEntry extends React.Component {
         const customInput = React.DOM.input({ ref: 'custom', name: 'Custom', value: this.state.value, disabled: this.state.name !== 'Custom', onChange: this.update })
         const customText = React.DOM.span({}, 'Custom...', customInput)
         const custom = React.DOM.label({}, customRadio, customText)
-        const description = React.DOM.p({}, 'Runs at ' + PrettyCron.toString(this.state.value).toLowerCase() + '.')
+        const description = React.DOM.p({}, 'Run at ' + PrettyCron.toString(this.state.value).toLowerCase() + '.')
         return React.DOM.div({ className: 'cron' }, ...presets, custom, description)
     }
 

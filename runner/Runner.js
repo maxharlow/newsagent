@@ -19,8 +19,10 @@ export async function setup(filename) {
         const recipe = JSON.parse(data.toString())
         await Promisify(FS.mkdir)('source')
         const messages = await sequentially(shell('source'), recipe.setup)
-        const job = Schedule.scheduleJob(recipe.schedule, () => run(id, recipe))
-        if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
+        if (recipe.schedule) {
+            const job = Schedule.scheduleJob(recipe.schedule, () => run(id, recipe))
+            if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
+        }
         const dateFinished = new Date()
         const log = {
             state: 'success',
