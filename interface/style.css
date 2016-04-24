@@ -330,6 +330,33 @@ table a {
     margin: 5px 0;
 }
 
+.page.agent .body .section.runs ol {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.page.agent .body .section.runs ol li {
+    padding: 5px;
+}
+
+.page.agent .body .section.runs ol li:nth-child(odd) {
+    background: #dfdfdf;
+}
+
+.page.agent .body .section.runs ol li span {
+    display: inline-block;
+    width: 25%;
+}
+
+.page.agent .body .section.runs ol li span.state.success {
+    color: #3d8b30;
+}
+
+.page.agent .body .section.runs ol li span.state.failure {
+    color: #bc544f;
+}
+
 .page.agent .body .section.state {
     color: white;
     font-weight: bold;
