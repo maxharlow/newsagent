@@ -338,23 +338,41 @@ table a {
 
 .page.agent .body .section.runs ol li {
     padding: 5px;
-}
-
-.page.agent .body .section.runs ol li:nth-child(odd) {
+    margin: 10px 0;
     background: #dfdfdf;
 }
 
-.page.agent .body .section.runs ol li span {
+.page.agent .body .section.runs ol li > span {
     display: inline-block;
     width: 25%;
 }
 
-.page.agent .body .section.runs ol li span.state.success {
+.page.agent .body .section.runs ol li > span.state.success {
     color: #3d8b30;
 }
 
-.page.agent .body .section.runs ol li span.state.failure {
+.page.agent .body .section.runs ol li > span.state.failure {
     color: #bc544f;
+}
+
+.page.agent .body .section.runs ol li .messages {
+    max-height: 150px;
+    margin-top: 5px;
+}
+
+.page.agent .body .section.runs ol li .messages .stdin:before {
+    content: '$';
+    margin: 0 8px 0 5px;
+    color: #999;
+}
+
+.page.agent .body .section.runs ol li .messages .failure {
+    color: #999;
+}
+
+.page.agent .body .section.runs ol li .messages .stdout,
+.page.agent .body .section.runs ol li .messages .stderr {
+    margin-left: 20px;
 }
 
 .page.agent .body .section.state {

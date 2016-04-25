@@ -23,13 +23,18 @@ export default class AgentPageRuns extends React.Component {
     }
 
     render() {
-        if (this.state.runs) {
+        if (this.state.runs && this.state.runs.length > 0) {
             const items = Object.keys(this.state.runs).map(i => {
+                const run = this.state.runs[i]
+                const messages = run.messages.map(message => {
+                    return React.DOM.span({ className: message.type }, message.value)
+                })
                 const fields = [
-                    React.DOM.span({ className: 'date', title: this.state.runs[i].date }, Moment(this.state.runs[i].date).fromNow()),
-                    React.DOM.span({ className: 'state ' + this.state.runs[i].state }, this.state.runs[i].state),
-                    React.DOM.span({ className: 'duration', title: this.state.runs[i].duration + 'ms' }, 'took ' + Moment.duration(this.state.runs[i].duration).humanize()),
-                    React.DOM.span({ className: 'records' }, 'added ' + this.state.runs[i].recordsAdded + ', removed ' + this.state.runs[i].recordsRemoved)
+                    React.DOM.span({ className: 'date', title: run.date }, Moment(run.date).fromNow()),
+                    React.DOM.span({ className: 'state ' + run.state }, run.state),
+                    React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize()),
+                    React.DOM.span({ className: 'records' }, 'added ' + run.recordsAdded + ', removed ' + run.recordsRemoved),
+                    React.DOM.code({ className: 'messages' }, messages)
                 ]
                 return React.DOM.li({}, ...fields)
             })
