@@ -17,13 +17,12 @@ export async function setup(filename) {
     try {
         const data = await Promisify(FS.readFile)(filename)
         const recipe = JSON.parse(data.toString())
-        await Promisify(FS.mkdir)('source')
-        const messages = await sequentially(shell('source'), recipe.setup)
+        await Promisify(FS.mkdir)(Config.sourceLocation)
+        const messages = await sequentially(shell(Config.sourceLocation), recipe.setup)
         if (recipe.schedule) {
             const job = Schedule.scheduleJob(recipe.schedule, () => run(id, recipe))
             if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
         }
-        console.log(messages)
     }
     catch (e) {
         console.log(e.stack)
@@ -33,17 +32,17 @@ export async function setup(filename) {
 async function run(id, recipe) {
     const dateStarted = new Date()
     try {
-        const messages = await sequentially(shell('source'), recipe.run)
-        const data = await csv('source/' + recipe.result)
+        const messages = await sequentially(shell(Config.sourceLocation), recipe.run)
+        const isFailure = messages.some(message => message.type === 'failure') // carry on regardless
+        const data = await csv(Config.sourceLocation + '/' + recipe.result)
         await Database.addWithTimestamp('data', id, data)
         const stored = await Database.retrieveAll('data', id)
         const diff = await difference(stored.current, stored.previous)
         const sent = await trigger(diff, recipe.triggers, recipe.name)
-        const dateFinished = new Date()
         const log = {
-            state: 'success',
+            state: isFailure ? 'failure' : 'success',
             date: dateStarted.toISOString(),
-            duration: dateFinished - dateStarted,
+            duration: new Date() - dateStarted,
             currentDocDate: stored.currentDate,
             previousDocDate: stored.previousDate,
             recordsAdded: diff.added.length,
@@ -56,9 +55,10 @@ async function run(id, recipe) {
     }
     catch (e) {
         const log = {
-            state: 'failure',
+            state: 'system-error',
             date: dateStarted.toISOString(),
-            message: e.message
+            duration: new Date() - dateStarted,
+            message: e.stack
         }
         Database.addWithTimestamp('log', 'run', log)
         console.log(log)
@@ -108,7 +108,9 @@ async function sendEmail(recipient, name, text) {
 }
 
 function sequentially(fn, array) {
-    return array.reduce((last, command) => last.then(() => fn(command)), Promise.accept())
+    return fn(array[0])
+        .then(data => array.length > 1 ? sequentially(fn, array.splice(1)) : data)
+        .catch(data => data)
 }
 
 function shell(location) {
@@ -121,8 +123,11 @@ function shell(location) {
             process.stdout.on('data', data => log.push({ type: 'stdout', value: data }))
             process.stderr.on('data', data => log.push({ type: 'stderr', value: data }))
             process.on('exit', code => {
-                if (code === 0) resolve(log)
-                else reject(new Error(command + ' exited with code ' + code))
+                if (code !== 0) {
+                    log.push({ type: 'failure', value: '[' + command + ' exited with code ' + code + ']\n' })
+                    reject(log)
+                }
+                else resolve(log)
             })
         })
     }

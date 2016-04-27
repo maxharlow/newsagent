@@ -1,6 +1,7 @@
 {
     "port": 3000,
-    "pouchLocation": "data",
+    "pouchLocation": "/data",
+    "sourceLocation": "/source",
     "email": {
         "from": "datastash@example.com",
         "service": "",
