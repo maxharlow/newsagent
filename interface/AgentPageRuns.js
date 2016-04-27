@@ -26,17 +26,28 @@ export default class AgentPageRuns extends React.Component {
         if (this.state.runs && this.state.runs.length > 0) {
             const items = Object.keys(this.state.runs).map(i => {
                 const run = this.state.runs[i]
-                const messages = run.messages.map(message => {
-                    return React.DOM.span({ className: message.type }, message.value)
-                })
-                const fields = [
-                    React.DOM.span({ className: 'date', title: run.date }, Moment(run.date).fromNow()),
-                    React.DOM.span({ className: 'state ' + run.state }, run.state),
-                    React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize()),
-                    React.DOM.span({ className: 'records' }, 'added ' + run.recordsAdded + ', removed ' + run.recordsRemoved),
-                    React.DOM.code({ className: 'messages' }, messages)
-                ]
-                return React.DOM.li({}, ...fields)
+                if (run.state === 'system-error') {
+                    const fields = [
+                        React.DOM.span({ className: 'date', title: run.date }, Moment(run.date).fromNow()),
+                        React.DOM.span({ className: 'state ' + run.state }, run.state),
+                        React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize()),
+                        React.DOM.code({ className: 'messages' }, run.message)
+                    ]
+                    return React.DOM.li({}, ...fields)
+                }
+                else {
+                    const messages = run.messages.map(message => {
+                        return React.DOM.span({ className: message.type }, message.value)
+                    })
+                    const fields = [
+                        React.DOM.span({ className: 'date', title: run.date }, Moment(run.date).fromNow()),
+                        React.DOM.span({ className: 'state ' + run.state }, run.state),
+                        React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize()),
+                        React.DOM.span({ className: 'records' }, 'added ' + run.recordsAdded + ', removed ' + run.recordsRemoved),
+                        React.DOM.code({ className: 'messages' }, messages)
+                    ]
+                    return React.DOM.li({}, ...fields)
+                }
             })
             const list = React.DOM.ol({}, ...items)
             return React.DOM.div({ className: 'section runs' }, React.DOM.h3({}, 'Runs'), React.DOM.hr({}), list)
