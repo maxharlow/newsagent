@@ -355,6 +355,10 @@ table a {
     color: #bc544f;
 }
 
+.page.agent .body .section.runs ol li > span.state.system-error {
+    color: #bc544f;
+}
+
 .page.agent .body .section.runs ol li .messages {
     max-height: 150px;
     margin-top: 5px;
