@@ -136,6 +136,10 @@ async function fromContainer(id, path) {
     })
 }
 
+export async function getSetup(id) {
+    return fromContainer(id, '/setup')
+}
+
 export async function getRuns(id) {
     return fromContainer(id, '/runs')
 }

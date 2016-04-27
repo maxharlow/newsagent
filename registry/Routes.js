@@ -52,9 +52,17 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
+    app.get('/agents/:id/setup', (request, response) => {
+         Agents.getSetup(request.params.id)
+             .then(setup => response.status(200).send(setup))
+             .catch(e => {
+                 if (e.message === 'missing') response.status(404).send({ error: 'agent setup not found' })
+                 else response.status(500).send({ error: e.message })
+             })
+    })
     app.get('/agents/:id/runs', (request, response) => {
         Agents.getRuns(request.params.id)
-            .then(build => response.status(200).send(build))
+            .then(runs => response.status(200).send(runs))
             .catch(e => response.status(500).send({ error: e.message }))
     })
     app.listen(Config.port)
