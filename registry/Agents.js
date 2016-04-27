@@ -72,20 +72,17 @@ async function build(client, clientInfo, stored, recipe) {
 
 async function buildContext(client, id, recipe) {
     const dockerfile = 'FROM node:5'
-          + '\n' + 'COPY package.json /'
-          + '\n' + 'COPY config.json /'
-          + '\n' + 'COPY *.js /'
-          + '\n' + `COPY ${id}.json /`
-          + '\n' + 'EXPOSE 3000'
-          + '\n' + 'RUN npm install'
+          + '\n' + 'COPY runner /runner'
+          + '\n' + 'WORKDIR /runner'
+          + '\n' + 'RUN npm install --quiet'
           + '\n' + `CMD node Start ${id}.json`
     const tar = Promisify(TarStream.pack())
     const files = await Promisify(Glob)('../runner/*(package.json|config.json|**.js)')
     const entries = files.map(filename => {
-        return Promisify(FS.readFile)(filename).then(contents => tar.entry({ name: Path.basename(filename) }, contents))
+        return Promisify(FS.readFile)(filename).then(contents => tar.entry({ name: 'runner/' + Path.basename(filename) }, contents))
     })
     await Promise.all(entries)
-    await tar.entry({ name: id + '.json' }, JSON.stringify(recipe))
+    await tar.entry({ name: `runner/${id}.json` }, JSON.stringify(recipe))
     await tar.entry({ name: 'Dockerfile' }, dockerfile)
     tar.finalize()
     return tar
