@@ -12,7 +12,11 @@ const Routes = require('./Routes')
 const Runner = require('./Runner')
 
 const args = Process.argv.slice(2)
-const filename = args[0]
+const command = args[0]
+const filename = args[1]
 
-Runner.setup(filename)
-Routes.listen()
+if (command === 'setup') Runner.setup(filename)
+else if (command === 'serve') {
+    Runner.schedule(filename)
+    Routes.listen()
+}

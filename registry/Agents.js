@@ -60,7 +60,6 @@ async function build(client, clientInfo, stored, recipe) {
         Database.update('agent', stored.id, agent, stored.rev)
     }
     catch (e) {
-        console.log(e.stack ? e.stack : e)
         const agent = {
             state: 'failed',
             recipe,
@@ -74,8 +73,9 @@ async function buildContext(client, id, recipe) {
     const dockerfile = 'FROM node:5'
           + '\n' + 'COPY runner /runner'
           + '\n' + 'WORKDIR /runner'
-          + '\n' + 'RUN npm install --quiet'
-          + '\n' + `CMD node Start ${id}.json`
+          + '\n' + 'RUN npm install --silent > /dev/null'
+          + '\n' + `RUN node Start setup ${id}.json`
+          + '\n' + `CMD node Start serve ${id}.json`
     const tar = Promisify(TarStream.pack())
     const files = await Promisify(Glob)('../runner/*(package.json|config.json|**.js)')
     const entries = files.map(filename => {
@@ -89,7 +89,7 @@ async function buildContext(client, id, recipe) {
 }
 
 async function buildImage(client, id, tar) {
-    const stream = await client.buildImage(tar, { t: id })
+    const stream = await client.buildImage(tar, { t: id, forcerm: true })
     var   log = []
     const logCreation = await Database.add('build', id, { log })
     var   logRevision = logCreation.rev

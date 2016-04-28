@@ -3,6 +3,7 @@
 import Promisify from 'promisify-node'
 import FS from 'fs'
 import Path from 'path'
+import Process from 'process'
 import ChildProcess from 'child_process'
 import Schedule from 'node-schedule'
 import NeatCSV from 'neat-csv'
@@ -14,32 +15,25 @@ import Config from './config.json'
 export async function setup(filename) {
     const id = Path.parse(filename).name
     const dateStarted = new Date()
-    try {
-        const data = await Promisify(FS.readFile)(filename)
-        const recipe = JSON.parse(data.toString())
-        await Promisify(FS.mkdir)(Config.sourceLocation)
-        const messages = await sequentially(shell(Config.sourceLocation), recipe.setup)
-        const isFailure = messages.some(message => message.type === 'failure')
-        if (recipe.schedule) {
-            const job = Schedule.scheduleJob(recipe.schedule, () => run(id, recipe))
-            if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
-        }
-        const log = {
-            state: isFailure ? 'failure' : 'success',
-            date: dateStarted.toISOString(),
-            duration: new Date() - dateStarted,
-            messages
-        }
-        Database.add('log', 'setup', log)
-    }
-    catch (e) {
-        const log = {
-            state: 'system-error',
-            date: dateStarted.toISOString(),
-            message: e.stack
-        }
-        console.log(log)
-        Database.add('log', 'setup', log)
+    const data = await Promisify(FS.readFile)(filename)
+    const recipe = JSON.parse(data.toString())
+    await Promisify(FS.mkdir)(Config.sourceLocation)
+    const messages = await sequentially(shell(Config.sourceLocation), recipe.setup)
+    messages.forEach(message => {
+        if (message.type === 'stderr') Process.stderr.write(message.value)
+        else if (message.type == 'stdout') Process.stdout.write(message.value)
+    })
+    const isFailure = messages.some(message => message.type === 'failure')
+    Process.exit(isFailure ? 1 : 0)
+}
+
+export async function schedule(filename) {
+    const id = Path.parse(filename).name
+    const data = await Promisify(FS.readFile)(filename)
+    const recipe = JSON.parse(data.toString())
+    if (recipe.schedule) {
+        const job = Schedule.scheduleJob(recipe.schedule, () => run(id, recipe))
+        if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
     }
 }
 
