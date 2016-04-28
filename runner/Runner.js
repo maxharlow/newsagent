@@ -46,7 +46,7 @@ async function run(id, recipe) {
         await Database.addWithTimestamp('data', id, data)
         const stored = await Database.retrieveAll('data', id)
         const diff = await difference(stored.current, stored.previous)
-        const sent = await trigger(diff, recipe.triggers, recipe.name)
+        const triggered = await trigger(diff, recipe.triggers, recipe.name)
         const log = {
             state: isFailure ? 'failure' : 'success',
             date: dateStarted.toISOString(),
@@ -56,7 +56,7 @@ async function run(id, recipe) {
             recordsAdded: diff.added.length,
             recordsRemoved: diff.removed.length,
             messages,
-            sent
+            triggered
         }
         Database.addWithTimestamp('log', 'run', log)
         console.log(log)
