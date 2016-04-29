@@ -99,8 +99,8 @@ async function buildImage(client, id, tar) {
     const logUpdater = setInterval(logUpdate, 1 * 1000) // in milliseconds
     return new Promise((resolve, reject) => {
         const handler = event => {
-            if (event.stream) log.push({ text: StripAnsi(event.stream) })
-            else log.push(event)
+            if (event.stream) log.push({ type: 'stdout', value: StripAnsi(event.stream) })
+            else if (event.error) log.push({ type: 'stderr', value: event.error, code: event.errorDetail.code })
             if (event.stream && event.stream.startsWith('Successfully built')) {
                 clearInterval(logUpdater)
                 logUpdate()

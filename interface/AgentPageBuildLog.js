@@ -30,8 +30,7 @@ export default class AgentPageBuildLog extends React.Component {
     render() {
         if (this.state.log) {
             const text = Object.keys(this.state.log).map(i => {
-                if (this.state.log[i].text) return this.state.log[i].text
-                else return React.DOM.span({ className: 'error-message' }, this.state.log[i].error)
+                return React.DOM.span({ className: this.state.log[i].type }, this.state.log[i].value)
             })
             const textBlock = React.DOM.code({ ref: 'buildlog' }, ...text)
             return React.DOM.div({ className: 'section buildlog' }, React.DOM.h3({}, 'Build log'), textBlock)
