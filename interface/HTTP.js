@@ -4,7 +4,7 @@ export default class HTTP {
         const request = new XMLHttpRequest()
         request.open(method, location)
         request.addEventListener('load', event => {
-            if (callback && request.status < 400) callback(null, JSON.parse(request.responseText))
+            if (callback && request.status < 400) callback(null, request.responseText ? JSON.parse(request.responseText) : null)
             else if (callback) callback(new Error(request.response), null)
         })
         if (data) {
