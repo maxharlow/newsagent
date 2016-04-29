@@ -43,9 +43,9 @@ async function run(id, recipe) {
         const messages = await sequentially(shell(Config.sourceLocation), recipe.run)
         const isFailure = messages.some(message => message.type === 'failure') // carry on regardless
         const data = await csv(Config.sourceLocation + '/' + recipe.result)
-        await Database.addWithTimestamp('data', id, data)
+        await Database.add('data', dateStarted.toISOString(), data)
         const stored = await Database.retrieveAll('data', id)
-        const diff = await difference(stored.current, stored.previous)
+        const diff = await difference(stored[0], stored[1])
         const triggered = await trigger(diff, recipe.triggers, recipe.name)
         const log = {
             state: isFailure ? 'failure' : 'success',
@@ -58,8 +58,7 @@ async function run(id, recipe) {
             messages,
             triggered
         }
-        Database.addWithTimestamp('log', 'run', log)
-        console.log(log)
+        Database.add('run', dateStarted.toISOString(), log)
     }
     catch (e) {
         const log = {
@@ -68,8 +67,7 @@ async function run(id, recipe) {
             duration: new Date() - dateStarted,
             message: e.stack
         }
-        Database.addWithTimestamp('log', 'run', log)
-        console.log(log)
+        Database.add('run', dateStarted.toISOString(), log)
     }
 }
 
@@ -80,9 +78,11 @@ async function csv(location) {
 
 function difference(current, previous) {
     if (previous === undefined) return { added: [], removed: [] }
+    const currentItems = Object.keys(current).map(key => current[key])
+    const previousItems = Object.keys(previous).map(key => previous[key])
     return {
-        added: current.filter(currentItem => !previous.some(previousItem => DeepEqual(currentItem, previousItem))),
-        removed: previous.filter(previousItem => !current.some(currentItem => DeepEqual(previousItem, currentItem))),
+        added: currentItems.filter(currentItem => !previousItems.some(previousItem => DeepEqual(currentItem, previousItem))),
+        removed: previousItems.filter(previousItem => !currentItems.some(currentItem => DeepEqual(previousItem, currentItem))),
     }
 }
 

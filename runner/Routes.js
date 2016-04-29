@@ -7,12 +7,15 @@ import Config from './config.json'
 export function listen() {
     const app = Express()
     app.get('/runs', (request, response) => {
-        Database.retrieveAll('log', 'run')
+        Database.retrieveAll('run', true)
             .then(runs => response.status(200).send(runs))
-            .catch(e => {
-                console.log(e.stack)
-                response.status(500).send({ error: e.message })
-            })
+            .catch(e => response.status(500).send({ error: e.message }))
+    })
+    app.get('/runs/:id', (request, response) => {
+        console.log(request.params.id)
+        Database.retrieve('data', request.params.id)
+            .then(runs => response.status(200).send(runs))
+            .catch(e => response.status(500).send({ error: e.message }))
     })
     app.listen(Config.port)
 }
