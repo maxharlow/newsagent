@@ -55,7 +55,10 @@ export function listen() {
     app.get('/agents/:id/runs', (request, response) => {
         Agents.getRuns(request.params.id)
             .then(runs => response.status(200).send(runs))
-            .catch(e => response.status(500).send({ error: e.message }))
+            .catch(e => {
+                if (e.message === 'missing') response.status(404).send({ error: 'agent runs not found' })
+                else response.status(500).send({ error: e.message })
+            })
     })
     app.listen(Config.port)
 }
