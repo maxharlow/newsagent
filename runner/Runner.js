@@ -112,7 +112,7 @@ async function sendEmail(recipient, name, text) {
         html: text
     }
     const sent = await Nodemailer.createTransport(Config.email).sendMail(message)
-    return sent.response
+    return { response: sent.response }
 }
 
 function sequentially(fn, array) {
