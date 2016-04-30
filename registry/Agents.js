@@ -147,11 +147,14 @@ export async function getRuns(id) {
 export async function destroy(id) {
     const agent = await Database.retrieve('agent', id)
     if (agent.state === 'starting') throw new Error('cannot destroy an agent until it has started')
-    const client = await Docker.client(agent.client)
-    const container = client.getContainer(id)
-    await container.stop()
-    await container.remove()
-    const image = client.getImage(id)
-    await image.remove()
+    else if (agent.stated === 'started') {
+        const client = await Docker.client(agent.client)
+        const container = client.getContainer(id)
+        await container.stop()
+        await container.remove()
+        const image = client.getImage(id)
+        await image.remove()
+    }
+    await Database.remove('build', id)
     return Database.remove('agent', id)
 }
