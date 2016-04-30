@@ -136,8 +136,8 @@ async function fromContainer(id, path) {
     })
 }
 
-export async function getRuns(id) {
-    return fromContainer(id, '/runs')
+export async function getRuns(agent) {
+    return fromContainer(agent, '/runs')
 }
 
 export async function destroy(id) {
