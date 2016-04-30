@@ -9,6 +9,7 @@ import Glob from 'glob'
 import JsonSchema from 'jsonschema'
 import JsonStream from 'json-stream'
 import StripAnsi from 'strip-ansi'
+import ToCSV from 'to-csv'
 import * as Database from './Database'
 import * as Docker from './Docker'
 import Config from './config.json'
@@ -132,7 +133,7 @@ async function fromContainer(id, path) {
         parser.on('data', data => response += data)
         parser.on('error', reject)
         container.modem.demuxStream(stream, parser, parser)
-        stream.on('end', () => resolve(response))
+        stream.on('end', () => resolve(JSON.parse(response)))
     })
 }
 
@@ -140,8 +141,9 @@ export async function getRuns(agent) {
     return fromContainer(agent, '/runs')
 }
 
-export async function getRunData(agent, run) {
-    return fromContainer(agent, '/runs/' + run)
+export async function getRunData(agent, run, asCSV) {
+    const data = await fromContainer(agent, '/runs/' + run)
+    return asCSV ? ToCSV(data) : data
 }
 
 export async function destroy(id) {
