@@ -140,6 +140,10 @@ export async function getRuns(agent) {
     return fromContainer(agent, '/runs')
 }
 
+export async function getRunData(agent, run) {
+    return fromContainer(agent, '/runs/' + run)
+}
+
 export async function destroy(id) {
     const agent = await Database.retrieve('agent', id)
     if (agent.state === 'starting') throw new Error('cannot destroy an agent until it has started')

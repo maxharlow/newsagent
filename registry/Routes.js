@@ -60,5 +60,13 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
+    app.get('/agents/:agent/runs/:run', (request, response) => {
+        Agents.getRunData(request.params.agent, request.params.run)
+            .then(data => response.status(200).send(data))
+            .catch(e => {
+                if (e.message === 'missing') response.status(404).send({ error: 'agent data not found' })
+                else response.status(500).send({ error: e.message })
+            })
+    })
     app.listen(Config.port)
 }
