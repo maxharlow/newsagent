@@ -10,6 +10,7 @@ import NeatCSV from 'neat-csv'
 import DeepEqual from 'deep-equal'
 import Nodemailer from 'nodemailer'
 import * as Database from './Database'
+import * as Email from './Email'
 import Config from './config.json'
 
 export async function setup(filename) {
@@ -88,31 +89,9 @@ function difference(current, previous) {
 
 function trigger(diff, triggers, name) {
     const responses = triggers.map(trigger => {
-        return (diff.added.length > 0 || diff.removed.length > 0) ? sendEmail(trigger.recipient, name, format(diff, name)) : null
+        return (diff.added.length > 0 || diff.removed.length > 0) ? Email.send(trigger.recipient, name, Email.format(diff, name)) : null
     })
     return Promise.all(responses.filter(Boolean))
-}
-
-function format(diff, name) {
-    function table(data) {
-        if (data.length === 0) return '(None.)'
-        return '<table>'
-             + '<thead><tr>' + Object.keys(data[0]).map(key => '<td><strong>' + key + '</strong></td>').join('') + '</tr></thead>'
-             + data.map(d => '<tr>' + Object.keys(d).map(key => '<td>' + d[key] + '</td>').join('') + '</tr>').join('')
-             + '</table>'
-    }
-    return `<h1>${name}</h1>` + '<h2>Data added</h2>' + table(diff.added) + '<h2>Data removed</h2>' + table(diff.removed)
-}
-
-async function sendEmail(recipient, name, text) {
-    const message = {
-        from: 'Datastash <' + Config.email.from + '>',
-        to: recipient,
-        subject: '[ALERT] ' + name,
-        html: text
-    }
-    const sent = await Nodemailer.createTransport(Config.email).sendMail(message)
-    return { response: sent.response }
 }
 
 function sequentially(fn, array) {

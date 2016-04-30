@@ -39,12 +39,16 @@ export default class AgentPageRuns extends React.Component {
                     const messages = run.messages.map(message => {
                         return React.DOM.span({ className: message.type }, message.value)
                     })
+                    const triggered = run.triggered.map(sent => {
+                        return React.DOM.li({}, React.DOM.span({}, sent.type), React.DOM.span({}, sent.recipient), React.DOM.span({}, sent.status))
+                    })
                     const fields = [
                         React.DOM.span({ className: 'date', title: run.date }, Moment(run.date).fromNow()),
                         React.DOM.span({ className: 'state ' + run.state }, run.state),
                         React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize()),
                         React.DOM.span({ className: 'records' }, 'added ' + run.recordsAdded + ', removed ' + run.recordsRemoved),
-                        React.DOM.code({ className: 'messages' }, messages)
+                        React.DOM.code({ className: 'messages' }, messages),
+                        React.DOM.ol({ className: 'triggered' }, triggered)
                     ]
                     return React.DOM.li({}, ...fields)
                 }
