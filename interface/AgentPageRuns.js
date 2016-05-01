@@ -9,6 +9,7 @@ export default class AgentPageRuns extends React.Component {
         super()
         this.state = { loading: false }
         this.load = this.load.bind(this)
+        this.download = this.download.bind(this)
     }
 
     componentDidMount() {
@@ -22,8 +23,29 @@ export default class AgentPageRuns extends React.Component {
         })
     }
 
+    download(run) {
+        return () => {
+            HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + run, (e, response) => {
+                if (!e) {
+                    const anchor = document.createElement('a')
+                    anchor.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(response))
+                    anchor.setAttribute('download', 'datastash-' + run + '.json')
+                    document.body.appendChild(anchor)
+                    anchor.click()
+                }
+            })
+        }
+    }
+
     render() {
-        if (this.state.runs && this.state.runs.length > 0) {
+        if (this.state.loading) {
+            const loading = React.DOM.div({ className: 'loading' })
+            return React.DOM.div({ className: 'section runs' }, React.DOM.h3({}, 'Runs'), loading)
+        }
+        else if (this.state.runs === undefined || this.state.runs.length === 0) {
+            return React.DOM.div({ className: 'section runs' }, React.DOM.h3({}, 'Runs'), React.DOM.hr({}), 'This agent has not run yet.')
+        }
+        else {
             const items = Object.keys(this.state.runs).map(i => {
                 const run = this.state.runs[i]
                 if (run.state === 'system-error') {
@@ -36,17 +58,29 @@ export default class AgentPageRuns extends React.Component {
                     return React.DOM.li({}, ...fields)
                 }
                 else {
+                    const records = run.recordsAdded === 0 && run.recordsRemoved === 0
+                          ? 'nothing changed'
+                          : 'added ' + run.recordsAdded + ', removed ' + run.recordsRemoved
                     const messages = run.messages.map(message => {
                         return React.DOM.span({ className: message.type }, message.value)
                     })
                     const triggered = run.triggered.map(sent => {
-                        return React.DOM.li({}, React.DOM.span({}, sent.type), React.DOM.span({}, sent.recipient), React.DOM.span({}, sent.status))
+                        const fields = [
+                            React.DOM.span({ className: 'type' }, sent.type),
+                            React.DOM.span({ className: 'recipient' }, sent.recipient),
+                            React.DOM.span({ className: 'status' }, sent.status)
+                        ]
+                        return React.DOM.li({}, fields)
                     })
-                    const fields = [
+                    const info = [
                         React.DOM.span({ className: 'date', title: run.date }, Moment(run.date).fromNow()),
                         React.DOM.span({ className: 'state ' + run.state }, run.state),
                         React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize()),
-                        React.DOM.span({ className: 'records' }, 'added ' + run.recordsAdded + ', removed ' + run.recordsRemoved),
+                        React.DOM.span({ className: 'records' }, records)
+                    ]
+                    const fields = [
+                        React.DOM.div({ className: 'info' }, ...info),
+                        React.DOM.button({ onClick: this.download(run.id) }, 'Download'),
                         React.DOM.code({ className: 'messages' }, messages),
                         React.DOM.ol({ className: 'triggered' }, triggered)
                     ]
@@ -56,11 +90,6 @@ export default class AgentPageRuns extends React.Component {
             const list = React.DOM.ol({}, ...items)
             return React.DOM.div({ className: 'section runs' }, React.DOM.h3({}, 'Runs'), React.DOM.hr({}), list)
         }
-        else if (this.state.loading) {
-            const loading = React.DOM.div({ className: 'loading' })
-            return React.DOM.div({ className: 'section runs' }, React.DOM.h3({}, 'Runs'), loading)
-        }
-        else return React.DOM.div({ className: 'section runs' }, React.DOM.h3({}, 'Runs'), React.DOM.hr({}), 'This agent has not run yet.')
     }
 
 }
