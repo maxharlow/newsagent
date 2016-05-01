@@ -11,7 +11,7 @@ export function format(diff, name) {
              + data.map(d => '<tr>' + Object.keys(d).map(key => '<td>' + d[key] + '</td>').join('') + '</tr>').join('')
              + '</table>'
     }
-    return `<h1>${name}</h1>` + '<h2>Data added</h2>' + table(diff.added) + '<h2>Data removed</h2>' + table(diff.removed)
+    return `<h1>${name}</h1>` + '<h2>Added</h2>' + table(diff.added) + '<h2>Removed</h2>' + table(diff.removed)
 }
 
 export async function send(recipient, name, text) {
