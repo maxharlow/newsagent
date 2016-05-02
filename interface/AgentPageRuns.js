@@ -7,7 +7,6 @@ export default class AgentPageRuns extends React.Component {
 
     constructor() {
         super()
-        this.state = { loading: false }
         this.load = this.load.bind(this)
         this.download = this.download.bind(this)
     }
@@ -17,9 +16,9 @@ export default class AgentPageRuns extends React.Component {
     }
 
     load() {
-        this.setState({ loading: true })
         HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs', (e, response) => {
-            if (!e) this.setState({ runs: response, loading: false })
+            if (!e) this.setState({ runs: response })
+            setTimeout(this.load, 1 * 1000) // in seconds
         })
     }
 
@@ -38,7 +37,7 @@ export default class AgentPageRuns extends React.Component {
     }
 
     render() {
-        if (this.state.loading) {
+        if (this.state === null) {
             const loading = React.DOM.div({ className: 'loading' })
             return React.DOM.div({ className: 'section runs' }, React.DOM.h3({}, 'Runs'), loading)
         }

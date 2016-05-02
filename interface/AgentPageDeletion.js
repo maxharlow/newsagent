@@ -23,7 +23,7 @@ export default class AgentPageDeletion extends React.Component {
             accept: this.deletion,
             cancel: () => this.setState({ confirming: false })
         })
-        const button = React.DOM.button({ disabled: this.props.state === 'starting', onClick: () => this.setState({ confirming: true }) }, 'Delete')
+        const button = React.DOM.button({ onClick: () => this.setState({ confirming: true }) }, 'Delete')
         return React.DOM.div({ className: 'section deletion' }, React.DOM.h3({}, 'Delete this agent'), button, dialog)
     }
 

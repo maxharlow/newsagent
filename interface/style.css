@@ -279,11 +279,12 @@ table a {
 
 .page.agent .body {
     padding: 0 10px;
+    margin: 10px auto;
+    max-width: 980px;
 }
 
 .page.agent .body .section {
-    max-width: 960px;
-    margin: 10px auto;
+    margin-bottom: 10px;
     border: 1px solid #bbb;
     border-radius: 3px;
     padding: 10px;
@@ -328,6 +329,16 @@ table a {
 
 .page.agent .body .section.recipe ul.triggers li + .page.agent .body .section.recipe ul.triggers li {
     margin: 5px 0;
+}
+
+.page.agent .body .section.deletion {
+    position: relative;
+}
+
+.page.agent .body .section.deletion > button {
+    position: absolute;
+    top: 8px;
+    right: 10px;
 }
 
 .page.agent .body .section.runs > ol {
@@ -421,21 +432,6 @@ table a {
     text-align: right;
 }
 
-.page.agent .body .section.state {
-    color: white;
-    font-weight: bold;
-}
-
-.page.agent .body .section.state.creating {
-    background: #3d8b30;
-    border-color: #002a00;
-}
-
-.page.agent .body .section.state.failed {
-    background: #bc544f;
-    border-color: #48211d;
-}
-
 .page.agent .body .section.buildlog {
     position: relative;
 }
@@ -446,16 +442,6 @@ table a {
 }
 
 .page.agent .body .section.buildlog button {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-}
-
-.page.agent .body .section.deletion {
-    position: relative;
-}
-
-.page.agent .body .section.deletion > button {
     position: absolute;
     top: 8px;
     right: 10px;
@@ -601,4 +587,23 @@ table a {
 
 .page.new-agent .error p {
     margin: 10px 0 0 0;
+}
+
+
+
+@media (min-width: 600px) {
+
+    .page.agent .body .section.recipe,
+    .page.agent .body .section.deletion {
+        float: right;
+        clear: right;
+        width: 300px;
+    }
+
+    .page.agent .body .section.message,
+    .page.agent .body .section.runs,
+    .page.agent .body .section.buildlog {
+        margin-right: 330px;
+    }
+
 }
