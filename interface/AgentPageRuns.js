@@ -24,10 +24,11 @@ export default class AgentPageRuns extends React.Component {
 
     download(run) {
         return () => {
-            HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + run).then(response => {
+            HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + run, [{ 'Accept': 'text/csv' }]).then(response => {
+                const blob = new Blob([response], { type: 'data:text/csv;charset=utf-8,' })
                 const anchor = document.createElement('a')
-                anchor.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(response))
-                anchor.setAttribute('download', 'datastash-' + run + '.json')
+                anchor.setAttribute('href', URL.createObjectURL(blob))
+                anchor.setAttribute('download', `datastash-${this.props.id}-${run}.csv`)
                 document.body.appendChild(anchor)
                 anchor.click()
             })

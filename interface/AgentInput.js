@@ -40,9 +40,9 @@ export default class AgentInput extends React.Component {
         const isInvalid = Object.keys(validation).some(key => validation[key] === true)
         if (isInvalid) return this.setState({ validation })
         this.setState({ loading: true })
-        HTTP.post(Config.registry + '/agents', this.state.recipe)
+        HTTP.post(Config.registry + '/agents', [], this.state.recipe)
             .then(response => Page('/agents/' + response.id))
-            .catch(e => this.setState({ error: JSON.parse(e.message).error }))
+            .catch(e => this.setState({ error: e.error }))
     }
 
     render() {
