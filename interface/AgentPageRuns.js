@@ -16,22 +16,20 @@ export default class AgentPageRuns extends React.Component {
     }
 
     load() {
-        HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs', (e, response) => {
-            if (!e) this.setState({ runs: response })
+        HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs').then(response => {
+            this.setState({ runs: response })
             setTimeout(this.load, 1 * 1000) // in seconds
         })
     }
 
     download(run) {
         return () => {
-            HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + run, (e, response) => {
-                if (!e) {
-                    const anchor = document.createElement('a')
-                    anchor.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(response))
-                    anchor.setAttribute('download', 'datastash-' + run + '.json')
-                    document.body.appendChild(anchor)
-                    anchor.click()
-                }
+            HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + run).then(response => {
+                const anchor = document.createElement('a')
+                anchor.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(response))
+                anchor.setAttribute('download', 'datastash-' + run + '.json')
+                document.body.appendChild(anchor)
+                anchor.click()
             })
         }
     }

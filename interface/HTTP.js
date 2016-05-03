@@ -1,29 +1,31 @@
 export default class HTTP {
 
-    static request(method, location, data, callback) {
-        const request = new XMLHttpRequest()
-        request.open(method, location)
-        request.addEventListener('load', event => {
-            if (callback && request.status < 400) callback(null, request.responseText ? JSON.parse(request.responseText) : null)
-            else if (callback) callback(new Error(request.response), null)
+    static request(method, location, data) {
+        return new Promise((resolve, reject) => {
+            const request = new XMLHttpRequest()
+            request.open(method, location)
+            request.addEventListener('load', event => {
+                if (request.status < 400) resolve(request.responseText ? JSON.parse(request.responseText) : null)
+                else reject(new Error(request.response))
+            })
+            if (data) {
+                request.setRequestHeader('Content-Type', 'application/json')
+                request.send(JSON.stringify(data))
+            }
+            else request.send()
         })
-        if (data) {
-            request.setRequestHeader('Content-Type', 'application/json')
-            request.send(JSON.stringify(data))
-        }
-        else request.send()
     }
 
-    static get(location, callback) {
-        this.request('GET', location, undefined, callback)
+    static get(location) {
+        return this.request('GET', location, undefined)
     }
 
-    static post(location, data, callback) {
-        this.request('POST', location, data, callback)
+    static post(location, data) {
+        return this.request('POST', location, data)
     }
 
-    static delete(location, callback) {
-        this.request('DELETE', location, undefined, callback)
+    static delete(location) {
+        return this.request('DELETE', location, undefined)
     }
 
 }

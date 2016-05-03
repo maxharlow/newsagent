@@ -25,8 +25,8 @@ export default class AgentsPage extends React.Component {
 
     update() {
         this.setState({ loading: true })
-        HTTP.get(Config.registry + '/agents', (e, response) => {
-            if (!e) this.setState({ agents: response, agentsFiltered: response, loading: false })
+        HTTP.get(Config.registry + '/agents').then(response => {
+            this.setState({ agents: response, agentsFiltered: response, loading: false })
         })
     }
 

@@ -13,7 +13,7 @@ export default class AgentPageDeletion extends React.Component {
     }
 
     deletion() {
-        HTTP.delete(Config.registry + '/agents/' + this.props.id, () => Page('/agents'))
+        HTTP.delete(Config.registry + '/agents/' + this.props.id).then(() => Page('/agents'))
     }
 
     render() {

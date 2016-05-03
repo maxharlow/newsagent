@@ -18,8 +18,8 @@ export default class AgentPage extends React.Component {
     }
 
     load() {
-        HTTP.get(Config.registry + '/agents/' + this.props.id, (e, response) => {
-            if (!e) this.setState(response)
+        HTTP.get(Config.registry + '/agents/' + this.props.id).then(response => {
+            this.setState(response)
             setTimeout(this.load, 1 * 1000) // in seconds
         })
     }
