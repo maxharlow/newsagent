@@ -1,0 +1,76 @@
+.page.new-agent .triggers ol {
+    margin: 0;
+    padding: 0;
+}
+
+.page.new-agent .triggers ol li {
+    width: 100%;
+    margin: 10px 0;
+    list-style-type: none;
+}
+
+.page.new-agent .triggers ol li span {
+    display: inline-block;
+    padding: 8px;
+}
+
+.page.new-agent .triggers ol li span.event {
+    position: relative;
+    width: calc(35% - 33px);
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.page.new-agent .triggers ol li span.action {
+    width: calc(20% - 31px);
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.page.new-agent .triggers ol li span.recipient {
+    position: relative;
+    width: calc(45% - 33px);
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.page.new-agent .triggers ol li button {
+    vertical-align: -1px;
+    margin-left: 5px;
+    border-radius: 50%;
+    padding: 1px 8px 2px 8px;
+    font-size: 20px;
+}
+
+.page.new-agent .triggers .adder .event {
+    display: inline-block;
+    width: calc(35% - 33px);
+    background: #eee;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    padding: 9px 8px 8px 8px;
+    color: #666;
+}
+
+.page.new-agent .triggers .adder .action {
+    display: inline-block;
+    width: calc(20% - 31px);
+    background: #eee;
+    border: 1px solid #bbb;
+    margin: 0 5px;
+    border-radius: 3px;
+    padding: 9px 8px 8px 8px;
+    color: #666;
+}
+
+.page.new-agent .triggers .adder .recipient {
+    width: calc(45% - 33px);
+}
+
+.page.new-agent .triggers .adder button {
+    vertical-align: -1px;
+    margin-left: 5px;
+    padding: 1px 8px 2px 8px;
+    font-size: 20px;
+}

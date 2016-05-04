@@ -1,0 +1,90 @@
+.page.agent .body .section.runs > ol {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.page.agent .body .section.runs > ol li {
+    margin: 10px 0;
+    border-radius: 2px;
+    padding: 5px;
+    background: #dfdfdf;
+}
+
+.page.agent .body .section.runs > ol li .info {
+    display: inline-block;
+    width: calc(100% - 100px);
+}
+
+.page.agent .body .section.runs > ol li .info span {
+    display: inline-block;
+    width: 25%;
+    vertical-align: middle;
+}
+
+.page.agent .body .section.runs > ol li .info span.state.success {
+    color: #3d8b30;
+}
+
+.page.agent .body .section.runs > ol li .info span.state.failure {
+    color: #bc544f;
+}
+
+.page.agent .body .section.runs > ol li .info span.state.system-error {
+    color: #bc544f;
+}
+
+.page.agent .body .section.runs > ol li button {
+    display: inline-block;
+    width: 100px;
+}
+
+.page.agent .body .section.runs > ol li .messages {
+    max-height: 150px;
+    margin-top: 5px;
+}
+
+.page.agent .body .section.runs > ol li .messages .stdin:before {
+    content: '$';
+    margin: 0 8px 0 5px;
+    color: #999;
+}
+
+.page.agent .body .section.runs > ol li .messages .failure {
+    color: #999;
+}
+
+.page.agent .body .section.runs > ol li .messages .stdout,
+.page.agent .body .section.runs > ol li .messages .stderr {
+    margin-left: 20px;
+}
+
+.page.agent .body .section.runs > ol li .triggered {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.page.agent .body .section.runs > ol li .triggered li {
+    margin: 5px 0 0 0;
+    border-radius: 2px;
+    background: white;
+    font-weight: bold;
+}
+
+.page.agent .body .section.runs > ol li .triggered li span {
+    display: inline-block;
+    width: calc(100% / 3);
+}
+
+.page.agent .body .section.runs > ol li .triggered li span.type {
+    text-align: left;
+}
+
+.page.agent .body .section.runs > ol li .triggered li span.recipient {
+    text-align: center;
+}
+
+.page.agent .body .section.runs > ol li .triggered li span.status {
+    text-align: right;
+}

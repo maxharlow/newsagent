@@ -1,0 +1,35 @@
+.page.agents .filter {
+    float: right;
+    width: 33%;
+    padding: 4px;
+    background: white;
+}
+
+.page.agents table {
+    margin-top: 15px;
+}
+
+.page.agents table td a {
+    padding: 5px;
+}
+
+.page.agents table td.state {
+    text-align: right;
+    font-weight: bold;
+}
+
+.page.agents table h5 {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+}
+
+.page.agents table p {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+}
+
+.page.agents table span {
+    font-size: 10px;
+}

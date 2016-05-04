@@ -1,0 +1,14 @@
+.page.agent .body .section.buildlog {
+    position: relative;
+}
+
+.page.agent .body .section.buildlog code {
+    height: 500px;
+    margin-top: 10px;
+}
+
+.page.agent .body .section.buildlog button {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+}

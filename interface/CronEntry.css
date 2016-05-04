@@ -1,0 +1,35 @@
+.page.new-agent .cron label + label {
+    margin-left: 10px;
+}
+
+.page.new-agent .cron label > span {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(20% - 8px);
+    height: 40px;
+    background: #eee;
+    border-radius: 3px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+}
+
+.page.new-agent .cron label input {
+    padding: 2px 7px;
+    text-align: center;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.page.new-agent .cron label input[type=radio] {
+    display: none;
+}
+
+.page.new-agent .cron label input:checked + span {
+    background: #bbb;
+}
+
+.page.new-agent .cron p {
+    max-width: 75%;
+}

@@ -10,7 +10,7 @@ export default class Menu extends React.Component {
             React.DOM.a({ href: '/new-agent', className: 'button' }, 'Create new agent')
         ]
         const linkList = React.DOM.ul({}, ...links.map(link => React.DOM.li({}, link)))
-        return React.DOM.header({}, React.DOM.nav({}, title, linkList))
+        return React.DOM.header({ className: 'menu' }, React.DOM.nav({}, title, linkList))
     }
 
 }

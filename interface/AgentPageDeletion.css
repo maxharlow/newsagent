@@ -1,0 +1,9 @@
+.page.agent .body .section.deletion {
+    position: relative;
+}
+
+.page.agent .body .section.deletion > button {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+}
