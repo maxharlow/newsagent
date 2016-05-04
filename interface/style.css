@@ -7,6 +7,9 @@
 @import url('AgentPageBuildLog.css');
 @import url('AgentPageRecipe.css');
 @import url('AgentPageDeletion.css');
+@import url('CommandEntry.css');
+@import url('CronEntry.css');
+@import url('TriggerEntry.css');
 
 body {
     margin: 0;
