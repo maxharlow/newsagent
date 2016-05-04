@@ -149,7 +149,7 @@ export async function getRunData(agent, run, asCSV) {
 export async function destroy(id) {
     const agent = await Database.retrieve('agent', id)
     if (agent.state === 'starting') throw new Error('cannot destroy an agent until it has started')
-    else if (agent.stated === 'started') {
+    else if (agent.state === 'started') {
         const client = await Docker.client(agent.client)
         const container = client.getContainer(id)
         await container.stop()

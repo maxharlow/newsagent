@@ -12,7 +12,6 @@ export function listen() {
             .catch(e => response.status(500).send({ error: e.message }))
     })
     app.get('/runs/:id', (request, response) => {
-        console.log(request.params.id)
         Database.retrieve('data', request.params.id)
             .then(runs => response.status(200).send(runs))
             .catch(e => response.status(500).send({ error: e.message }))
