@@ -31,7 +31,7 @@ export default class AgentPage extends React.Component {
             React.DOM.p({}, this.state.recipe.description)
         ]
         const header = React.DOM.div({ className: 'header' }, ...headerElements)
-        const recipe = React.createElement(AgentPageRecipe, this.state.recipe)
+        const recipe = React.createElement(AgentPageRecipe, { recipe: this.state.recipe, state: this.state.state })
         const deletion = React.createElement(AgentPageDeletion, { id: this.props.id })
         if (this.state.state === 'starting') {
             const message = React.DOM.div({ className: 'section message' }, 'This agent is currently loading...')
