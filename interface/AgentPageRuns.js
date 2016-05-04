@@ -11,14 +11,18 @@ export default class AgentPageRuns extends React.Component {
         this.download = this.download.bind(this)
     }
 
-    componentDidMount() {
-        if (this.props.state === 'started') this.load()
+    componentWillMount() {
+        this.load()
+    }
+
+    componentWillUnmount() {
+        if (this.state.timeout) clearTimeout(this.state.timeout)
     }
 
     load() {
         HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs').then(response => {
-            this.setState({ runs: response })
-            setTimeout(this.load, 1 * 1000) // in seconds
+            const timeout = setTimeout(this.load, 1 * 1000) // in seconds
+            this.setState({ runs: response, timeout })
         })
     }
 

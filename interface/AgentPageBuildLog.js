@@ -10,20 +10,24 @@ export default class AgentPageBuildLog extends React.Component {
         this.load = this.load.bind(this)
     }
 
-    componentDidMount() {
+    componentWillMount() {
         if (this.props.state === 'starting') this.load()
+    }
+
+    componentWillUnmount() {
+        if (this.state.timeout) clearTimeout(this.state.timeout)
     }
 
     load() {
         this.setState({ loading: true })
         const since = this.state.log ? this.state.log.length : 0
         HTTP.get(Config.registry + '/agents/' + this.props.id + '/build?since=' + since).then(response => {
+            const timeout = this.props.state === 'starting' ? setTimeout(this.load, 1 * 1000) : null // in seconds
             const atBottom = this.refs['buildlog']
                   ? this.refs['buildlog'].scrollHeight === this.refs['buildlog'].scrollTop + this.refs['buildlog'].clientHeight
                   : true
-            this.setState({ log: this.state.log ? this.state.log.concat(response.log) : response.log, loading: false })
+            this.setState({ log: this.state.log ? this.state.log.concat(response.log) : response.log, loading: false, timeout })
             if (atBottom && this.refs['buildlog']) this.refs['buildlog'].scrollTop = this.refs['buildlog'].scrollHeight
-            if (this.props.state === 'starting') setTimeout(this.load, 1 * 1000) // in seconds
         })
     }
 

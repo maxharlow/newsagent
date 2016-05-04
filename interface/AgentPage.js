@@ -13,14 +13,18 @@ export default class AgentPage extends React.Component {
         this.load = this.load.bind(this)
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.load()
+    }
+
+    componentWillUnmount() {
+        if (this.state.timeout) clearTimeout(this.state.timeout)
     }
 
     load() {
         HTTP.get(Config.registry + '/agents/' + this.props.id).then(response => {
+            const timeout = setTimeout(this.load, 1 * 1000) // in seconds
             this.setState(response)
-            setTimeout(this.load, 1 * 1000) // in seconds
         })
     }
 
@@ -45,7 +49,7 @@ export default class AgentPage extends React.Component {
             return React.DOM.div({ className: 'agent page' }, header, body)
         }
         else {
-            const runs = React.createElement(AgentPageRuns, { id: this.props.id, state: this.state.state })
+            const runs = React.createElement(AgentPageRuns, { id: this.props.id })
             const buildLog = React.createElement(AgentPageBuildLog, { id: this.props.id, state: this.state.state })
             const body = React.DOM.div({ className: 'body' }, recipe, deletion, runs, buildLog)
             return React.DOM.div({ className: 'agent page' }, header, body)
