@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Page from 'page'
 import Menu from '/Menu.js'
-import AgentsPage from '/AgentsPage.js'
+import DashboardPage from '/DashboardPage.js'
 import AgentPage from '/AgentPage.js'
 import NewAgentPage from '/NewAgentPage.js'
 
@@ -12,11 +12,7 @@ export default class Routes {
         const main = document.querySelector('main')
         const menu = React.createElement(Menu, {})
         Page('/', context => {
-            main.classList.remove('loading')
-            ReactDOM.render(React.DOM.div({}, menu), main)
-        })
-        Page('/agents', context => {
-            const page = React.createElement(AgentsPage, {})
+            const page = React.createElement(DashboardPage, {})
             main.classList.remove('loading')
             ReactDOM.render(React.DOM.div({}, menu, page), main)
         })

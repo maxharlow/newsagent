@@ -1,67 +1,30 @@
-.page.agent {
-    max-width: inherit;
-    margin: 0;
-    padding: 0;
-}
-
-.page.agent .header {
-    background: #dfdfdf;
-    padding: 40px 10px;
-}
-
-.page.agent .header * {
-    max-width: 980px;
-    margin: 0 auto;
-}
-
-.page.agent .header p {
-    font-size: 14px;
-}
-
-.page.agent .body {
+.agent-page {
+    max-width: 1200px;
+    margin: 0 auto 50px auto;
     padding: 0 10px;
-    margin: 10px auto;
-    max-width: 980px;
 }
 
-.page.agent .body .section {
-    margin-bottom: 10px;
-    border: 1px solid #bbb;
-    border-radius: 3px;
-    padding: 10px;
+.agent-page h2 {
+    margin-bottom: 0;
 }
 
-.page.agent .body .section h3 {
-    margin: 0;
-    font-size: 18px;
-}
-
-.page.agent .body .section h4 {
-    margin: 10px 0 2px 0;
+.agent-page .description {
+    margin: 0 0 15px 0;
     font-size: 12px;
 }
 
-.page.agent .body .section hr {
-    margin: 10px 0;
+.agent-page .message.starting {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #51a7e8;
+    color: white;
+    font-weight: bold;
 }
 
-.page.agent .body .section p {
-    margin: 0;
-}
-
-@media (min-width: 600px) {
-
-    .page.agent .body .section.recipe,
-    .page.agent .body .section.deletion {
-        float: right;
-        clear: right;
-        width: 300px;
-    }
-
-    .page.agent .body .section.message,
-    .page.agent .body .section.runs,
-    .page.agent .body .section.buildlog {
-        margin-right: 330px;
-    }
-
+.agent-page .message.failed {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #ed5c5c;
+    color: white;
+    font-weight: bold;
 }

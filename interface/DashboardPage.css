@@ -1,0 +1,72 @@
+.agents-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.agents-page button {
+    float: right;
+}
+
+.agents-page .filter {
+    float: right;
+    width: 30%;
+    padding: 5px 10px;
+    border-radius: 15px;
+    margin: 2px 25px;
+}
+
+.agents-page ol {
+    margin: 0 0 50px 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.agents-page ol li {
+    background: white;
+    margin-bottom: 15px;
+}
+
+.agents-page ol li a {
+    display: block;
+    height: 42px;
+    padding: 15px;
+    text-decoration: none;
+}
+
+.agents-page ol li a .state {
+    float: right;
+    clear: right;
+    border-radius: 5px;
+    padding: 0 5px;
+    color: white;
+    font-size: 12px;
+}
+
+.agents-page ol li a .schedule {
+    float: right;
+    clear: right;
+    font-size: 12px;
+}
+
+.agents-page ol li a .state.started {
+    background: #aaa;
+}
+
+.agents-page ol li a .state.starting {
+    background: #51a7e8;
+}
+
+.agents-page ol li a .state.failed {
+    background: #ed5c5c;
+}
+
+.agents-page ol li a h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.agents-page ol li a .description {
+    font-size: 12px;
+}

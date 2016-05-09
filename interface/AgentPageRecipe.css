@@ -1,22 +1,70 @@
-.page.agent .body .section.recipe p.field {
-    background: #dfdfdf;
-    margin: 2px 0;
-    border-radius: 3px;
-    padding: 5px;
+.agent-page-recipe {
+    padding: 15px;
+    background: white;
+    color: #555;
 }
 
-.page.agent .body .section.recipe ul.triggers {
+.agent-page-recipe p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.agent-page-recipe h4 {
+    margin: 15px 0 4px 0;
+    font-size: 11px;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+.agent-page-recipe code {
+    display: block;
+    overflow: scroll;
+    padding: 5px;
+    border-radius: 2px;
+    background: #212121;
+    white-space: pre;
+    color: #e8e8e8;
+    font-size: 12px;
+}
+
+.agent-page-recipe code ol {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 
-.page.agent .body .section.recipe ul.triggers li {
+.agent-page-recipe code ol li:before {
+    content: '$';
+    margin: 0 8px 0 5px;
+    color: #999;
+}
+
+.agent-page-recipe .field {
+    display: block;
+    margin: 2px 0;
+    border-radius: 3px;
+    padding: 5px;
+    background: #dfdfdf;
+    font-size: 12px;
+}
+
+.agent-page-recipe .note {
+    font-size: 12px;
+}
+
+.agent-page-recipe ul.triggers {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.agent-page-recipe ul.triggers li {
     background: #dfdfdf;
     border-radius: 3px;
     padding: 5px;
+    font-size: 12px;
 }
 
-.page.agent .body .section.recipe ul.triggers li + .page.agent .body .section.recipe ul.triggers li {
+.agent-page-recipe ul.triggers li + .agent-page-recipe ul.triggers li {
     margin: 5px 0;
 }

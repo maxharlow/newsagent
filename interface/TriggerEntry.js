@@ -49,7 +49,7 @@ export default class TriggerEntry extends React.Component {
             React.DOM.button({ onClick: this.add }, '+')
         ]
         const adder = React.DOM.div({ className: 'adder' }, ...adderElements)
-        return React.DOM.div({ className: 'triggers' }, current, adder)
+        return React.DOM.div({ className: 'trigger-entry' }, current, adder)
     }
 
 }

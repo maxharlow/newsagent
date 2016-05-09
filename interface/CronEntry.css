@@ -1,35 +1,37 @@
-.page.new-agent .cron label + label {
+.cron-entry label + label {
     margin-left: 10px;
 }
 
-.page.new-agent .cron label > span {
+.cron-entry label > span {
     display: inline-block;
     vertical-align: top;
     width: calc(20% - 8px);
     height: 40px;
-    background: #eee;
+    background: #f5f5f5;
     border-radius: 3px;
+    font-size: 12px;
     font-weight: bold;
     text-align: center;
     line-height: 40px;
     cursor: pointer;
 }
 
-.page.new-agent .cron label input {
+.cron-entry label input {
     padding: 2px 7px;
     text-align: center;
     font-family: monospace;
     font-weight: bold;
 }
 
-.page.new-agent .cron label input[type=radio] {
+.cron-entry label input[type=radio] {
     display: none;
 }
 
-.page.new-agent .cron label input:checked + span {
-    background: #bbb;
+.cron-entry label input:checked + span {
+    background: #ccc;
 }
 
-.page.new-agent .cron p {
+.cron-entry p {
     max-width: 75%;
+    margin: 10px 0 15px 0;
 }

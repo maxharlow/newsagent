@@ -52,9 +52,9 @@ export default class NewAgentPage extends React.Component {
             const error = React.DOM.h2({}, 'Something went wrong')
             const info = React.DOM.p({}, 'An error occured whilst creating this agent.')
             const message = React.DOM.p({}, this.state.error)
-            return React.DOM.div({ className: 'new-agent page' }, title, hr, React.DOM.div({ className: 'error' }, error, info, message))
+            return React.DOM.div({ className: 'new-agent-page' }, title, hr, React.DOM.div({ className: 'error' }, error, info, message))
         }
-        if (this.state.loading) return React.DOM.div({ className: 'new-agent page' }, title, hr, React.DOM.div({ className: 'loading' }))
+        if (this.state.loading) return React.DOM.div({ className: 'new-agent-page' }, title, hr, React.DOM.div({ className: 'loading' }))
         const elements = [
             this.state.validation['name'] ? React.DOM.span({ className: 'validation' }, 'You must give this agent a name') : null,
             React.DOM.h4({}, 'Agent name'),
@@ -62,13 +62,12 @@ export default class NewAgentPage extends React.Component {
             React.DOM.h4({}, 'Description'),
             React.DOM.input({ onChange: this.set('description') }),
             React.DOM.hr({}),
-            React.DOM.h4({}, 'When should this agent run?'),
-            React.createElement(CronEntry, { defaultValue: this.state.recipe.schedule, onChange: this.set('schedule') }),
-            React.DOM.hr({}),
             React.DOM.h4({}, 'Setup commands'),
             React.createElement(CommandEntry, { onChange: this.set('setup') }),
             React.DOM.p({}, 'These commands will only be executed once, when the agent is being built.'),
             React.DOM.hr({}),
+            React.DOM.h4({}, 'When should this agent run?'),
+            React.createElement(CronEntry, { defaultValue: this.state.recipe.schedule, onChange: this.set('schedule') }),
             this.state.validation['run'] ? React.DOM.span({ className: 'validation' }, 'At least one command needs to be entered') : null,
             React.DOM.h4({}, 'Run commands'),
             React.createElement(CommandEntry, { onChange: this.set('run') }),
@@ -77,12 +76,12 @@ export default class NewAgentPage extends React.Component {
             React.DOM.h4({}, 'What file gets created?'),
             React.DOM.input({ onChange: this.set('result') }),
             React.DOM.hr({}),
-            React.DOM.h4({}, 'Who should be alerted?'),
+            React.DOM.h4({}, 'What should happen next?'),
             React.createElement(TriggerEntry, { onChange: this.set('triggers') }),
             React.DOM.hr({}),
             React.DOM.button({ onClick: this.create }, 'Create agent')
         ]
-        return React.DOM.div({ className: 'new-agent page' }, title, hr, React.DOM.div({}, ...elements))
+        return React.DOM.div({ className: 'new-agent-page' }, title, hr, React.DOM.div({}, ...elements))
     }
 
 }

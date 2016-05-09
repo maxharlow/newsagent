@@ -1,90 +1,152 @@
-.page.agent .body .section.runs > ol {
+.agent-page-runs h3 {
+    margin: 15px 0;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.agent-page-runs > ol {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 
-.page.agent .body .section.runs > ol li {
-    margin: 10px 0;
-    border-radius: 2px;
-    padding: 5px;
-    background: #dfdfdf;
+.agent-page-runs > ol > li {
+    background: white;
+    margin-bottom: 6px;
+    padding: 6px;
 }
 
-.page.agent .body .section.runs > ol li .info {
-    display: inline-block;
-    width: calc(100% - 100px);
+.agent-page-runs > ol > li.success {
+    border-right: 2px solid #42c88a;
 }
 
-.page.agent .body .section.runs > ol li .info span {
+.agent-page-runs > ol > li.failure {
+    border-right: 2px solid #ed5c5c;
+}
+
+.agent-page-runs > ol > li.system-error {
+    border-right: 2px solid #aaa;
+}
+
+.agent-page-runs > ol > li .state {
     display: inline-block;
-    width: 25%;
+    width: 120px;
+    border-radius: 15px;
+    padding: 4px 10px;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.agent-page-runs > ol > li .state.success {
+    background: #42c88a;
+}
+
+.agent-page-runs > ol > li .state.failure {
+    background: #ed5c5c;
+}
+
+.agent-page-runs > ol > li .state.system-error {
+    background: #aaa;
+}
+
+.agent-page-runs > ol > li .info {
+    display: inline-block;
+    width: calc(100% - 244px);
+    margin: 0 12px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    font-size: 12px;
+}
+
+.agent-page-runs > ol > li .info span {
+    display: inline-block;
+    padding: 3px 0;
+    width: calc(100% / 3);
+    text-align: center;
+}
+
+.agent-page-runs > ol > li .info span::before {
+    display: inline-block;
+    height: 14px;
+    margin-right: 8px;
     vertical-align: middle;
 }
 
-.page.agent .body .section.runs > ol li .info span.state.success {
-    color: #3d8b30;
+.agent-page-runs > ol > li .info span.date::before {
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 8 8"><path fill="#ccc" d="M0 0v2h7v-2h-7zm0 3v4.91c0 .05.04.09.09.09h6.81c.05 0 .09-.04.09-.09v-4.91h-7zm1 1h1v1h-1v-1zm2 0h1v1h-1v-1zm2 0h1v1h-1v-1zm-4 2h1v1h-1v-1zm2 0h1v1h-1v-1z"/></svg>')
 }
 
-.page.agent .body .section.runs > ol li .info span.state.failure {
-    color: #bc544f;
+.agent-page-runs > ol > li .info span.duration::before {
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 8 8"><path fill="#ccc" d="M4 0c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 1c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm-.5 1v2.22l.16.13.5.5.34.38.72-.72-.38-.34-.34-.34v-1.81h-1z"/></svg>');
 }
 
-.page.agent .body .section.runs > ol li .info span.state.system-error {
-    color: #bc544f;
+.agent-page-runs > ol > li .info span.records::before {
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 8 8"><path fill="#ccc" d="M.75 0c-.41 0-.75.34-.75.75v5.5c0 .41.34.75.75.75h6.5c.41 0 .75-.34.75-.75v-5.5c0-.41-.34-.75-.75-.75h-6.5zm.25 1h1v1h-1v-1zm2 0h4v1h-4v-1zm-2 2h1v1h-1v-1zm2 0h4v1h-4v-1zm-2 2h1v1h-1v-1zm2 0h4v1h-4v-1z"/></svg>');
 }
 
-.page.agent .body .section.runs > ol li button {
+.agent-page-runs > ol > li button {
     display: inline-block;
-    width: 100px;
+    padding: 3px 10px;
+    font-size: 12px;
 }
 
-.page.agent .body .section.runs > ol li .messages {
+.agent-page-runs > ol > li .messages {
     max-height: 150px;
+    display: block;
+    overflow: scroll;
     margin-top: 5px;
+    padding: 5px;
+    border-radius: 2px;
+    background: #212121;
+    white-space: pre;
+    color: #e8e8e8;
+    font-size: 12px;
 }
 
-.page.agent .body .section.runs > ol li .messages .stdin:before {
+.agent-page-runs > ol > li .messages .stdin:before {
     content: '$';
     margin: 0 8px 0 5px;
     color: #999;
 }
 
-.page.agent .body .section.runs > ol li .messages .failure {
+.agent-page-runs > ol > li .messages .failure {
     color: #999;
 }
 
-.page.agent .body .section.runs > ol li .messages .stdout,
-.page.agent .body .section.runs > ol li .messages .stderr {
+.agent-page-runs > ol > li .messages .stdout,
+.agent-page-runs > ol > li .messages .stderr {
     margin-left: 20px;
 }
 
-.page.agent .body .section.runs > ol li .triggered {
+.agent-page-runs > ol > li .triggered {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    font-size: 12px;
 }
 
-.page.agent .body .section.runs > ol li .triggered li {
+.agent-page-runs > ol > li .triggered li {
     margin: 5px 0 0 0;
     border-radius: 2px;
     background: white;
     font-weight: bold;
 }
 
-.page.agent .body .section.runs > ol li .triggered li span {
+.agent-page-runs > ol > li .triggered li span {
     display: inline-block;
     width: calc(100% / 3);
 }
 
-.page.agent .body .section.runs > ol li .triggered li span.type {
+.agent-page-runs > ol > li .triggered li span.type {
     text-align: left;
 }
 
-.page.agent .body .section.runs > ol li .triggered li span.recipient {
+.agent-page-runs > ol > li .triggered li span.recipient {
     text-align: center;
 }
 
-.page.agent .body .section.runs > ol li .triggered li span.status {
+.agent-page-runs > ol > li .triggered li span.status {
     text-align: right;
 }

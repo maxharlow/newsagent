@@ -1,0 +1,22 @@
+.agent-page-build h3 {
+    margin: 15px 0;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.agent-page-build .log {
+    background: white;
+    padding: 15px;
+}
+
+.agent-page-build .log code {
+    max-height: 400px;
+    display: block;
+    overflow: scroll;
+    padding: 5px;
+    border-radius: 2px;
+    background: #212121;
+    white-space: pre;
+    color: #e8e8e8;
+    font-size: 12px;
+}

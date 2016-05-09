@@ -34,7 +34,7 @@ export default class CronEntry extends React.Component {
         const customText = React.DOM.span({}, 'Custom...', customInput)
         const custom = React.DOM.label({}, customRadio, customText)
         const description = React.DOM.p({}, this.state.value === '' ? 'Never runs.' : 'Run at ' + PrettyCron.toString(this.state.value).toLowerCase() + '.')
-        return React.DOM.div({ className: 'cron' }, ...presets, custom, description)
+        return React.DOM.div({ className: 'cron-entry' }, ...presets, custom, description)
     }
 
     componentDidUpdate(_, prevState) {

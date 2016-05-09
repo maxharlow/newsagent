@@ -1,24 +1,41 @@
-.page.new-agent {
-    max-width: 700px;
-    padding: 0 10px;
+.new-agent-page {
+    max-width: 750px;
+    margin: 15px auto 50px auto;
+    padding: 15px;
+    background: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.page.new-agent h4 {
+.new-agent-page h2 {
+    margin-top: 0
+}
+
+.new-agent-page h4 {
     margin: 10px 0 5px 0;
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: normal;
+    text-transform: uppercase;
 }
 
-.page.new-agent p {
+.new-agent-page p {
     margin: 15px 0;
 }
 
-.page.new-agent .validation {
+.new-agent-page .validation {
     float: right;
     padding-bottom: 5px;
     color: #a60000;
-    font-size: 10px;
+    font-size: 11px;
 }
 
-.page.new-agent .error p {
+.new-agent-page .error {
+    width: calc(100% - 42px);
+    background: #ed5c5c;
+    border-radius: 3px;
+    padding: 15px;
+    color: white;
+}
+
+.new-agent-page .error p {
     margin: 10px 0 0 0;
 }

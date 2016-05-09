@@ -1,10 +1,10 @@
 @import url('Menu.css');
 @import url('Dialog.css');
 @import url('NewAgentPage.css');
-@import url('AgentsPage.css');
+@import url('DashboardPage.css');
 @import url('AgentPage.css');
 @import url('AgentPageRuns.css');
-@import url('AgentPageBuildLog.css');
+@import url('AgentPageBuild.css');
 @import url('AgentPageRecipe.css');
 @import url('AgentPageDeletion.css');
 @import url('CommandEntry.css');
@@ -13,16 +13,22 @@
 
 body {
     margin: 0;
-    color: #322f32;
-    font: 12px Helvetica, sans-serif;
+    background: #f5f5f5;
+    color: #212121;
+    font: 14px 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.5;
 }
 
 a {
     color: inherit;
+    text-decoration: none;
 }
 
-button,
-.button {
+a:hover {
+    text-decoration: underline;
+}
+
+button {
     margin: 0;
     border: none;
     border-radius: 3px;
@@ -38,16 +44,11 @@ button:enabled:active {
     background: #770000;
 }
 
-button:disabled {
-    background: #bbb;
-    cursor: not-allowed
-}
-
 input {
     width: calc(100% - 18px);
-    background: #eee;
+    background: #f5f5f5;
     margin: 0;
-    border: 1px solid #bbb;
+    border: 1px solid #ccc;
     border-radius: 3px;
     padding: 8px;
     font-size: 12px;
@@ -59,100 +60,30 @@ input:focus {
     border-color: #51a7e8;
 }
 
-.page {
-    max-width: 980px;
-    min-height: 500px;
-    margin: 20px auto 50px auto;
-    padding: 0 10px;
-    background: white;
+h2 {
+    margin: 15px 0;
+    font-size: 21px;
+    font-weight: normal;
 }
 
-.page h2 {
-    margin: 0;
-    font-size: 22px;
-}
-
-.page hr {
+hr {
     margin: 15px 0;
     border: none;
-    border-top: 1px solid #bbb;
-}
-
-.error {
-    width: calc(100% - 42px);
-    background: #bc544f;
-    border: 1px solid #48211d;
-    border-radius: 3px;
-    padding: 20px;
-    color: white;
+    border-top: 1px solid #ccc;
 }
 
 .loading {
-    width: 75px;
-    height: 75px;
-    margin: 20% auto;
-    border: 12px solid #322f32;
+    width: 50px;
+    height: 50px;
+    margin: 15% auto;
+    border: 15px solid #ccc;
     border-right-color: transparent;
     border-radius: 50%;
-    animation: rotate 0.8s infinite linear;
+    animation: rotate 1s infinite linear;
 }
 
 @keyframes rotate {
     to {
         transform: rotate(360deg);
     }
-}
-
-code {
-    display: block;
-    overflow: scroll;
-    white-space: pre;
-    background: #333;
-    border-radius: 2px;
-    padding: 5px;
-    color: #e8e8e8;
-}
-
-code ol {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-
-code li:before {
-    content: '$';
-    margin: 0 8px 0 5px;
-    color: #999;
-}
-
-code li input {
-    width: calc(100% - 23px);
-    background: none;
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    color: inherit;
-    font: inherit;
-}
-
-code li input:focus {
-    background: none;
-}
-
-table {
-    width: 100%;
-    border-spacing: 0;
-}
-
-table tr {
-    background: #dfdfdf;
-}
-
-table td {
-    border-bottom: 4px solid white;
-}
-
-table a {
-    display: block;
-    text-decoration: none;
 }

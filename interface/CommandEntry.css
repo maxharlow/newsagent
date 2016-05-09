@@ -1,3 +1,36 @@
-.page.new-agent code {
-    padding: 9px 9px 9px 6px;
+.command-entry {
+    display: block;
+    overflow: scroll;
+    border-radius: 2px;
+    padding: 8px;
+    background: #212121;
+    white-space: pre;
+    color: #e8e8e8;
+    font-size: 12px;
+}
+
+.command-entry ol {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.command-entry ol li:before {
+    content: '$';
+    margin: 0 8px 0 5px;
+    color: #999;
+}
+
+.command-entry ol li input {
+    width: calc(100% - 23px);
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+}
+
+.command-entry li input:focus {
+    background: none;
 }

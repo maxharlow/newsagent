@@ -13,7 +13,7 @@ export default class AgentPageDeletion extends React.Component {
     }
 
     deletion() {
-        HTTP.delete(Config.registry + '/agents/' + this.props.id).then(() => Page('/agents'))
+        HTTP.delete(Config.registry + '/agents/' + this.props.id).then(() => Page('/'))
     }
 
     render() {
@@ -23,8 +23,8 @@ export default class AgentPageDeletion extends React.Component {
             accept: this.deletion,
             cancel: () => this.setState({ confirming: false })
         })
-        const button = React.DOM.button({ onClick: () => this.setState({ confirming: true }) }, 'Delete')
-        return React.DOM.div({ className: 'section deletion' }, React.DOM.h3({}, 'Delete this agent'), button, dialog)
+        const button = React.DOM.button({ onClick: () => this.setState({ confirming: true }) }, 'Delete agent')
+        return React.DOM.div({ className: 'agent-page-deletion' }, button, dialog)
     }
 
 }

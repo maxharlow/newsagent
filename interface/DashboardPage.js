@@ -1,4 +1,5 @@
 import React from 'react'
+import Page from 'page'
 import PrettyCron from 'prettycron'
 import HTTP from '/HTTP.js'
 import Config from '/config.js'
@@ -7,6 +8,7 @@ export default class AgentsPage extends React.Component {
 
     constructor() {
         super()
+        this.create = this.create.bind(this)
         this.filter = this.filter.bind(this)
         this.update = this.update.bind(this)
         this.state = {
@@ -14,6 +16,10 @@ export default class AgentsPage extends React.Component {
             agentsFiltered: [],
             agents: []
         }
+    }
+
+    create() {
+        Page('/new-agent')
     }
 
     filter(event) {
@@ -40,24 +46,25 @@ export default class AgentsPage extends React.Component {
 
     render() {
         if (this.state.loading) return React.DOM.div({ className: 'loading' })
-        const title = React.DOM.h2({}, 'Agents')
+        const title = React.DOM.h2({}, 'Dashboard')
         const hr = React.DOM.hr({})
+        const create = React.DOM.button({ onClick: this.create }, 'Create new agent')
         if (this.state.agents.length > 0) {
             const filter = React.DOM.input({ placeholder: 'Filter agents...', className: 'filter', onInput: this.filter })
-            const tableRows = this.state.agentsFiltered.map(agent => {
-                const rowNameFields = [
+            const agents = this.state.agentsFiltered.map(agent => {
+                const schedule = agent.recipe.schedule === '' ? '' : PrettyCron.toString(agent.recipe.schedule).toLowerCase()
+                const fields = [
+                    React.DOM.div({ className: 'state ' + agent.state }, agent.state),
+                    React.DOM.div({ className: 'schedule' }, schedule),
                     React.DOM.h5({}, agent.recipe.name),
-                    React.DOM.p({}, agent.recipe.description),
-                    React.DOM.span({}, PrettyCron.toString(agent.recipe.schedule).toLowerCase())
+                    React.DOM.div({ className: 'description' }, agent.recipe.description)
                 ]
-                const rowName = React.DOM.a({ href: '/agents/' + agent.id }, ...rowNameFields)
-                const rowState = agent.state === 'started' ? '' : React.DOM.a({ href: '/agents/' + agent.id }, agent.state)
-                return React.DOM.tr({}, React.DOM.td({ className: 'name' }, rowName), React.DOM.td({ className: 'state' }, rowState))
+                return React.DOM.li({ className: agent.state }, React.DOM.a({ href: '/agents/' + agent.id }, ...fields))
             })
-            const table = React.DOM.table({}, React.DOM.tbody({}, ...tableRows))
-            return React.DOM.div({ className: 'agents page' }, filter, title, hr, table)
+            const list = React.DOM.ol({}, ...agents)
+            return React.DOM.div({ className: 'agents-page' }, create, filter, title, hr, list)
         }
-        else return React.DOM.div({ className: 'agents page' }, title, hr, React.DOM.p({}, 'No agents have been created.'))
+        else return React.DOM.div({ className: 'agents-page' }, create, title, hr, React.DOM.p({}, 'No agents have been created.'))
     }
 
 }
