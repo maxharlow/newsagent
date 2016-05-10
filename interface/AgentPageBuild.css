@@ -10,7 +10,7 @@
 }
 
 .agent-page-build .log code {
-    max-height: 400px;
+    min-height: 400px;
     display: block;
     overflow: scroll;
     padding: 5px;
