@@ -42,7 +42,7 @@ export default class AgentPageBuild extends React.Component {
             return React.DOM.div({ className: 'agent-page-build' }, React.DOM.h3({}, 'Build'), log)
         }
         else if (this.state.loading) {
-            const loading = React.DOM.div({ className: 'loading' })
+            const loading = React.DOM.div({ className: 'log' }, React.DOM.div({ className: 'loading' }))
             return React.DOM.div({ className: 'agent-page-build' }, React.DOM.h3({}, 'Build'), loading)
         }
         else {
