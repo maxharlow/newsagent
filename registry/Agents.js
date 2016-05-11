@@ -48,6 +48,7 @@ function validate(recipe) {
 }
 
 async function build(client, clientInfo, stored, recipe) {
+    const builtDate = new Date().toISOString()
     try {
         const context = await buildContext(client, stored.id, recipe)
         const image = await buildImage(client, stored.id, context)
@@ -55,6 +56,7 @@ async function build(client, clientInfo, stored, recipe) {
         await container.start()
         const agent = {
             state: 'started',
+            builtDate,
             recipe,
             client: clientInfo.ID
         }
@@ -63,6 +65,7 @@ async function build(client, clientInfo, stored, recipe) {
     catch (e) {
         const agent = {
             state: 'failed',
+            builtDate,
             recipe,
             client: clientInfo.ID
         }
