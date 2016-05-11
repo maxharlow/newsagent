@@ -13,18 +13,27 @@
     font-size: 12px;
 }
 
-.agent-page .message.starting {
+.agent-page .summary {
+    display: inline-block;
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+
+.agent-page .summary .title {
+    color: #555;
+}
+
+.agent-page .message {
     margin-bottom: 15px;
     padding: 15px;
-    background: #51a7e8;
     color: white;
     font-weight: bold;
 }
 
+.agent-page .message.starting {
+    background: #51a7e8;
+}
+
 .agent-page .message.failed {
-    margin-bottom: 15px;
-    padding: 15px;
     background: #ed5c5c;
-    color: white;
-    font-weight: bold;
 }

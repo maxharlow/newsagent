@@ -3,10 +3,10 @@
 @import url('NewAgentPage.css');
 @import url('DashboardPage.css');
 @import url('AgentPage.css');
+@import url('AgentPageDeletion.css');
+@import url('AgentPageRecipe.css');
 @import url('AgentPageRuns.css');
 @import url('AgentPageBuild.css');
-@import url('AgentPageRecipe.css');
-@import url('AgentPageDeletion.css');
 @import url('CommandEntry.css');
 @import url('CronEntry.css');
 @import url('TriggerEntry.css');
