@@ -9,24 +9,6 @@
     font-size: 13px;
 }
 
-.agent-page-recipe h4 {
-    margin: 15px 0 4px 0;
-    font-size: 11px;
-    font-weight: normal;
-    text-transform: uppercase;
-}
-
-.agent-page-recipe code {
-    display: block;
-    overflow: scroll;
-    padding: 5px;
-    border-radius: 2px;
-    background: #212121;
-    white-space: pre;
-    color: #e8e8e8;
-    font-size: 12px;
-}
-
 .agent-page-recipe code ol {
     margin: 0;
     padding: 0;
