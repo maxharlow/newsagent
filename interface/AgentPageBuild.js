@@ -15,7 +15,7 @@ export default class AgentPageBuild extends React.Component {
     }
 
     componentWillUnmount() {
-        if (this.state.timeout) clearTimeout(this.state.timeout)
+        if (this.state && this.state.timeout) clearTimeout(this.state.timeout)
     }
 
     load() {

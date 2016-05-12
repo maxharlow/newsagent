@@ -17,7 +17,7 @@ export default class AgentPageRuns extends React.Component {
     }
 
     componentWillUnmount() {
-        if (this.state.timeout) clearTimeout(this.state.timeout)
+        if (this.state && this.state.timeout) clearTimeout(this.state.timeout)
     }
 
     load() {
