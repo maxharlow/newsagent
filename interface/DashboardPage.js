@@ -10,12 +10,31 @@ export default class AgentsPage extends React.Component {
         super()
         this.create = this.create.bind(this)
         this.filter = this.filter.bind(this)
-        this.update = this.update.bind(this)
+        this.load = this.load.bind(this)
         this.state = {
             filter: '',
             agentsFiltered: [],
             agents: []
         }
+    }
+
+    componentWillMount() {
+        this.load()
+    }
+
+    componentWillReceiveProps() {
+        this.load()
+    }
+
+    componentWillUnmount() {
+        if (this.state && this.state.timeout) clearTimeout(this.state.timeout)
+    }
+
+    load() {
+        HTTP.get(Config.registry + '/agents').then(response => {
+            const timeout = setTimeout(this.load, 1 * 1000) // in seconds
+            this.setState({ agents: response, agentsFiltered: response, timeout })
+        })
     }
 
     create() {
@@ -29,27 +48,19 @@ export default class AgentsPage extends React.Component {
         this.setState({ agentsFiltered: agents })
     }
 
-    update() {
-        this.setState({ loading: true })
-        HTTP.get(Config.registry + '/agents').then(response => {
-            this.setState({ agents: response, agentsFiltered: response, loading: false })
-        })
-    }
-
-    componentWillMount() {
-        this.update()
-    }
-
-    componentWillReceiveProps() {
-        this.update()
-    }
-
     render() {
-        if (this.state.loading) return React.DOM.div({ className: 'loading' })
         const title = React.DOM.h2({}, 'Dashboard')
         const hr = React.DOM.hr({})
         const create = React.DOM.button({ onClick: this.create }, 'Create new agent')
-        if (this.state.agents.length > 0) {
+        if (this.state === null) {
+            const loading = React.DOM.div({ className: 'loading' })
+            return React.DOM.div({ className: 'agents-page' }, create, title, hr, loading)
+        }
+        else if (this.state.agents.length === 0) {
+            const message = React.DOM.p({}, 'No agents have been created.')
+            return React.DOM.div({ className: 'agents-page' }, create, title, hr, message)
+        }
+        else {
             const filter = React.DOM.input({ placeholder: 'Filter agents...', className: 'filter', onInput: this.filter })
             const agents = this.state.agentsFiltered.map(agent => {
                 const schedule = agent.recipe.schedule === '' ? '' : PrettyCron.toString(agent.recipe.schedule).toLowerCase()
@@ -64,7 +75,6 @@ export default class AgentsPage extends React.Component {
             const list = React.DOM.ol({}, ...agents)
             return React.DOM.div({ className: 'agents-page' }, create, filter, title, hr, list)
         }
-        else return React.DOM.div({ className: 'agents-page' }, create, title, hr, React.DOM.p({}, 'No agents have been created.'))
     }
 
 }
