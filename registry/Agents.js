@@ -131,12 +131,12 @@ async function fromContainer(id, path) {
     const exec = await container.exec({ Cmd: ['curl', 'localhost:3000' + path], AttachStdin: true, AttachStdout: true })
     const stream = await exec.start()
     return new Promise((resolve, reject) => {
-        const parser = new Stream.PassThrough()
         var response = ''
+        const parser = new Stream.PassThrough()
         parser.on('data', data => response += data)
         parser.on('error', reject)
         container.modem.demuxStream(stream, parser, parser)
-        stream.on('end', () => resolve(JSON.parse(response)))
+        stream.on('end', () => resolve(response ? JSON.parse(response) : reject(new Error('missing'))))
     })
 }
 
