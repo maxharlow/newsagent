@@ -5,8 +5,8 @@ A tool to detect when things happen.
 
 Datastash lets you give it a list of instructions which it runs periodically. For example, this could be scraping a list of names from a website and comparing them against another list of people you are interested in. Each time it runs it compares the results to the previous time. If there are any new records you recieve an email.
 
-Running
--------
+Deploying
+---------
 
 Firstly you'll need to clone this repository. You will also need to install [Docker] (https://www.docker.com/products/docker-engine) and [Docker Machine] (https://www.docker.com/products/docker-machine).
 
@@ -59,43 +59,6 @@ To remove the local machine:
 
     $ docker-machine stop datastash-local
     $ docker-machine rm datastash-local
-
-
-API
----
-
-The API, also known as the Registry, is available by default on port 4001.
-
-To add a new agent, for example:
-
-    $ curl -vX POST <DATASTASH LOCATION>:4001/agents -H 'Content-Type: application/json' -d @- <<EOF
-    {
-        "name": "MP declares a new financial interest",
-        "description": "Scrape the Register of Member's Financial Interests, and alert if anything new is found",
-        "setup": [
-            "git clone https://github.com/maxharlow/scrape-members-financial-interests.git .",
-            "npm install"
-        ],
-        "schedule": "0 1 * * *",
-        "run": [
-            "node members-financial-interests"
-        ],
-        "result": "members-financial-interests.csv",
-        "triggers": [
-            {
-                "recipient": "you@example.com"
-            }
-        ]
-    }
-    EOF
-
-Get all existing agents:
-
-    $ curl -vX GET <DATASTASH LOCATION>:4001/agents
-
-Remove an agent:
-
-    $ curl -vX DELETE <DATASTASH LOCATION>:4001/agents/<AGENT NAME>
 
 
 Similar tools
