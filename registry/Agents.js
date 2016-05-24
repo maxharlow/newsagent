@@ -140,6 +140,10 @@ async function fromContainer(id, path) {
     })
 }
 
+export async function getSummary(agent) {
+    return fromContainer(agent, '/summary')
+}
+
 export async function getRuns(agent) {
     return fromContainer(agent, '/runs')
 }

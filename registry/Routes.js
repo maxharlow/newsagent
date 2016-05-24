@@ -44,6 +44,14 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
+    app.get('/agents/:id/summary', (request, response) => {
+        Agents.getSummary(request.params.id)
+            .then(summary => response.status(200).send(summary))
+            .catch(e => {
+                if (e.message === 'missing') response.status(404).send({ error: 'agent summary not found' })
+                else response.status(500).send({ error: e.message })
+            })
+    })
     app.get('/agents/:id/build', (request, response) => {
         Database.retrieve('build', request.params.id)
             .then(build => response.status(200).send({ id: build.id, log: build.log.slice(request.query.since || 0) }))

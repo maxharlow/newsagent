@@ -13,6 +13,18 @@ import * as Database from './Database'
 import * as Email from './Email'
 import Config from './config.json'
 
+export async function summary() {
+    const runs = await Database.retrieveAll('run')
+    const runsSuccessful = runs.filter(run => run.state === 'success')
+    return {
+        numberRuns: runs.length,
+        numberRunsSuccessful: runsSuccessful.length,
+        successRate: runsSuccessful.length / runs.length,
+        averageRunTime: runs.reduce((a, run) => a + run.duration, 0) / runs.length,
+        dateLastSuccessfulRun: runsSuccessful.length > 0 ? runsSuccessful[runsSuccessful.length - 1].date : null
+    }
+}
+
 export async function setup(filename) {
     const id = Path.parse(filename).name
     const dateStarted = new Date()
