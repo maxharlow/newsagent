@@ -14,6 +14,15 @@ import * as Database from './Database'
 import * as Docker from './Docker'
 import Config from './config.json'
 
+export async function info(agent) {
+    const entry = await Database.retrieve('agent', agent)
+    if (entry.state !== 'started') return Object.assign({}, entry, { summary: null })
+    else {
+        const summary = await getSummary(agent)
+        return Object.assign({}, entry, { summary })
+    }
+}
+
 export async function create(recipe) {
     const validation = validate(recipe)
     if (validation.length > 0) {
@@ -140,11 +149,11 @@ async function fromContainer(id, path) {
     })
 }
 
-export async function getSummary(agent) {
+function getSummary(agent) {
     return fromContainer(agent, '/summary')
 }
 
-export async function getRuns(agent) {
+export function getRuns(agent) {
     return fromContainer(agent, '/runs')
 }
 

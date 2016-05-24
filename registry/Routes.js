@@ -29,7 +29,7 @@ export function listen() {
             })
     })
     app.get('/agents/:id', (request, response) => {
-        Database.retrieve('agent', request.params.id)
+        Agents.info(request.params.id)
             .then(agent => response.status(200).send(agent))
             .catch(e => {
                 if (e.message === 'missing') response.status(404).send({ error: 'agent not found' })
@@ -41,14 +41,6 @@ export function listen() {
             .then(() => response.status(204).send())
             .catch(e => {
                 if (e.message === 'missing') response.status(404).send({ error: 'agent not found' })
-                else response.status(500).send({ error: e.message })
-            })
-    })
-    app.get('/agents/:id/summary', (request, response) => {
-        Agents.getSummary(request.params.id)
-            .then(summary => response.status(200).send(summary))
-            .catch(e => {
-                if (e.message === 'missing') response.status(404).send({ error: 'agent summary not found' })
                 else response.status(500).send({ error: e.message })
             })
     })
