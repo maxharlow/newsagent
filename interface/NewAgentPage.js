@@ -54,7 +54,7 @@ export default class NewAgentPage extends React.Component {
             const message = React.DOM.p({}, this.state.error)
             return React.DOM.div({ className: 'new-agent-page' }, title, hr, React.DOM.div({ className: 'error' }, error, info, message))
         }
-        if (this.state.loading) return React.DOM.div({ className: 'new-agent-page' }, title, hr, React.DOM.div({ className: 'loading' }))
+        if (this.state.loading) return React.DOM.div({ className: 'new-agent-page' }, React.DOM.div({ className: 'loading' }))
         const elements = [
             this.state.validation['name'] ? React.DOM.span({ className: 'validation' }, 'You must give this agent a name') : null,
             React.DOM.h4({}, 'Agent name'),
