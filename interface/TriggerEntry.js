@@ -44,7 +44,7 @@ export default class TriggerEntry extends React.Component {
         const current = React.DOM.ol({}, ...currentElements)
         const adderElements = [
             React.DOM.span({ className: 'event' }, 'If the data changes'),
-            React.DOM.span({className: 'action' }, 'email'),
+            React.DOM.span({ className: 'action' }, 'email'),
             React.DOM.input({ className: 'recipient', value: this.state.current, onChange: this.update, onKeyUp: this.update }),
             React.DOM.button({ onClick: this.add }, '+')
         ]
