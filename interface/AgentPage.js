@@ -35,7 +35,7 @@ export default class AgentPage extends React.Component {
         const description = React.DOM.p({ className: 'description' }, this.state.recipe.description)
         const hr = React.DOM.hr({})
         const deletion = React.createElement(AgentPageDeletion, { id: this.props.id })
-        const summary = React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, 'Built: '), Moment(this.state.builtDate).format('LLL'))
+        const summaryBuiltDate = React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, 'Built: '), Moment(this.state.builtDate).format('LLL'))
         const recipe = React.createElement(AgentPageRecipe, { recipe: this.state.recipe, state: this.state.state })
         if (this.state.state === 'starting') {
             const message = React.DOM.div({ className: 'starting message' }, 'This agent is starting up...')
@@ -45,12 +45,20 @@ export default class AgentPage extends React.Component {
         else if (this.state.state === 'failed') {
             const message = React.DOM.div({ className: 'failed message' }, 'This agent failed to load.')
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page' }, deletion, title, description, hr, summary, message, recipe, build)
+            return React.DOM.div({ className: 'agent-page' }, deletion, title, description, hr, summaryBuiltDate, message, recipe, build)
         }
         else {
+            const summary = [
+                summaryBuiltDate,
+                this.state.summary.averageRunTime ? React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, 'Average run time: '), Moment.duration(this.state.summary.averageRunTime).humanize()) : '',
+                this.state.summary.numberRuns ? React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, 'Total runs: '), this.state.summary.numberRuns) : '',
+                this.state.summary.numberRunsSuccessful ? React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, 'Successful runs: '), this.state.summary.numberRunsSuccessful) : '',
+                this.state.summary.successRate ? React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, 'Success rate: '), this.state.summary.successRate * 100 + '%') : '',
+                this.state.summary.dateLastSuccessfulRun ? React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, 'Last successful run: '), Moment(this.state.summary.dateLastSuccessfulRun).fromNow()) : ''
+            ]
             const runs = React.createElement(AgentPageRuns, { id: this.props.id })
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page' }, deletion, title, description, hr, summary, recipe, runs, build)
+            return React.DOM.div({ className: 'agent-page' }, deletion, title, description, hr, ...summary, recipe, runs, build)
         }
     }
 

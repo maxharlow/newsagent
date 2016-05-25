@@ -15,7 +15,7 @@
 
 .agent-page .summary {
     display: inline-block;
-    margin-bottom: 15px;
+    margin: 0 15px 15px 0;
     font-size: 13px;
 }
 
