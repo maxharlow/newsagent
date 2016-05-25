@@ -4,7 +4,7 @@ import Dialog from '/Dialog.js'
 import HTTP from '/HTTP.js'
 import Config from '/config.js'
 
-export default class AgentPageDeletion extends React.Component {
+export default class AgentPageDelete extends React.Component {
 
     constructor() {
         super()
@@ -24,7 +24,7 @@ export default class AgentPageDeletion extends React.Component {
             cancel: () => this.setState({ confirming: false })
         })
         const button = React.DOM.button({ onClick: () => this.setState({ confirming: true }) }, 'Delete agent')
-        return React.DOM.div({ className: 'agent-page-deletion' }, button, dialog)
+        return React.DOM.div({ className: 'agent-page-delete' }, button, dialog)
     }
 
 }
