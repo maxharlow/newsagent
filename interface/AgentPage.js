@@ -51,11 +51,12 @@ export default class AgentPage extends React.Component {
         else {
             const summary = [
                 summaryBuiltDate,
-                this.state.summary.averageRunTime ? summarise('Average run time: ', Moment.duration(this.state.summary.averageRunTime).humanize()) : '',
-                this.state.summary.numberRuns ? summarise('Total runs: ', this.state.summary.numberRuns) : '',
-                this.state.summary.numberRunsSuccessful ? summarise('Successful runs: ', this.state.summary.numberRunsSuccessful) : '',
-                this.state.summary.successRate ? summarise('Success rate: ', this.state.summary.successRate + '%') : '',
-                this.state.summary.dateLastSuccessfulRun ? summarise('Last successful run: ', Moment(this.state.summary.dateLastSuccessfulRun).fromNow()) : ''
+                this.state.runs.averageRunTime ? summarise('Average run time: ', Moment.duration(this.state.runs.averageRunTime).humanize()) : '',
+                this.state.runs.numberRuns ? summarise('Total runs: ', this.state.runs.numberRuns) : '',
+                this.state.runs.numberRunsSuccessful ? summarise('Successful runs: ', this.state.runs.numberRunsSuccessful) : '',
+                this.state.runs.successRate ? summarise('Success rate: ', this.state.runs.successRate + '%') : '',
+                this.state.runs.dateLastSuccessfulRun ? summarise('Last successful run: ', Moment(this.state.runs.dateLastSuccessfulRun).fromNow()) : '',
+                this.state.system.spaceUsed ? summarise('Space used: ', this.state.system.spaceUsed + ' MB') : ''
             ]
             const runs = React.createElement(AgentPageRuns, { id: this.props.id })
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })

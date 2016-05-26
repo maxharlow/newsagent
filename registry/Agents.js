@@ -18,8 +18,14 @@ export async function info(agent) {
     const entry = await Database.retrieve('agent', agent)
     if (entry.state !== 'started') return Object.assign({}, entry, { summary: null })
     else {
-        const summary = await getSummary(agent)
-        return Object.assign({}, entry, { summary })
+        const client = await Docker.client()
+        const container = await client.getContainer(agent)
+        const inspection = await container.inspect({ size: true })
+        const system = {
+            spaceUsed: Math.round((inspection.SizeRootFs / 1024 / 1024) * 100) / 100 // in MB
+        }
+        const runs = await getSummary(agent)
+        return Object.assign({}, entry, { system }, { runs })
     }
 }
 
