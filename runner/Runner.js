@@ -54,24 +54,34 @@ async function run(id, recipe) {
     const dateStarted = new Date()
     try {
         const messages = await sequentially(shell(Config.sourceLocation), recipe.run)
-        const isFailure = messages.some(message => message.type === 'failure') // carry on regardless
-        const data = await csv(Config.sourceLocation + '/' + recipe.result)
-        await Database.add('data', dateStarted.toISOString(), data)
-        const stored = await Database.retrieveAll('data', id)
-        const diff = await difference(stored[0], stored[1])
-        const triggered = await trigger(diff, recipe.triggers, recipe.name)
-        const log = {
-            state: isFailure ? 'failure' : 'success',
-            date: dateStarted.toISOString(),
-            duration: new Date() - dateStarted,
-            currentDocDate: stored.currentDate,
-            previousDocDate: stored.previousDate,
-            recordsAdded: diff.added.length,
-            recordsRemoved: diff.removed.length,
-            messages,
-            triggered
+        const isFailure = messages.some(message => message.type === 'failure')
+        if (isFailure) {
+            const log = {
+                state: 'failure',
+                date: dateStarted.toISOString(),
+                duration: new Date() - dateStarted,
+                messages
+            }
+            Database.add('run', dateStarted.toISOString(), log)
         }
-        Database.add('run', dateStarted.toISOString(), log)
+        else {
+            const data = await csv(Config.sourceLocation + '/' + recipe.result)
+            await Database.add('data', dateStarted.toISOString(), data)
+            const runs = await Database.retrieveAll('data', id)
+            const runsSuccessful = runs.filter(run => run.state === 'successful')
+            const diff = await difference(runsSuccessful[0], runsSuccessful[1])
+            const triggered = await trigger(diff, recipe.triggers, recipe.name)
+            const log = {
+                state: 'success',
+                date: dateStarted.toISOString(),
+                duration: new Date() - dateStarted,
+                recordsAdded: diff.added.length,
+                recordsRemoved: diff.removed.length,
+                messages,
+                triggered
+            }
+            Database.add('run', dateStarted.toISOString(), log)
+        }
     }
     catch (e) {
         const log = {

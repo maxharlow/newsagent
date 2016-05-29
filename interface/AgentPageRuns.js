@@ -70,6 +70,21 @@ export default class AgentPageRuns extends React.Component {
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)
                 }
+                else if (run.state === 'failure') {
+                    const messages = run.messages.map(message => {
+                        return React.DOM.span({ className: message.type }, message.value)
+                    })
+                    const info = [
+                        React.DOM.span({ className: 'date', title: Moment(run.date).format('LLL') }, 'ran ' + Moment(run.date).fromNow()),
+                        React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize())
+                    ]
+                    const fields = [
+                        React.DOM.span({ className: 'state ' + run.state }, run.state),
+                        React.DOM.div({ className: 'info' }, ...info),
+                        React.DOM.code({ className: 'messages' }, messages)
+                    ]
+                    return React.DOM.li({ className: run.state }, ...fields)
+                }
                 else {
                     const records = run.recordsAdded === 0 && run.recordsRemoved === 0
                           ? 'nothing changed'
