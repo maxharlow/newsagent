@@ -31,6 +31,7 @@
     font-size: 11px;
     font-weight: bold;
     text-transform: uppercase;
+    text-align: center;
 }
 
 .agent-page-runs > ol > li .state.success {
@@ -47,10 +48,8 @@
 
 .agent-page-runs > ol > li .info {
     display: inline-block;
-    width: calc(100% - 244px);
-    margin: 0 12px;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+    width: calc(100% - 230px);
+    margin: 0 5px;
     font-size: 12px;
 }
 
@@ -83,7 +82,21 @@
 .agent-page-runs > ol > li button {
     display: inline-block;
     padding: 3px 10px;
+    background: white;
+    border: 1px solid #888;
+    color: #888;
     font-size: 12px;
+}
+
+.agent-page-runs > ol > li button:hover {
+    background: #888;
+    color: white;
+}
+
+.agent-page-runs > ol > li button:active {
+    background: #555;
+    border-color: #555;
+    color: white;
 }
 
 .agent-page-runs > ol > li .messages {

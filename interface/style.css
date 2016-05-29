@@ -40,6 +40,10 @@ button {
     cursor: pointer;
 }
 
+button:enabled:hover {
+    background: #ba0000;
+}
+
 button:enabled:active {
     background: #770000;
 }
