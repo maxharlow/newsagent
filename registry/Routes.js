@@ -72,5 +72,15 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
+    app.get('/export', (request, response) => {
+        Database.retrieveAll('agent')
+            .then(agents => response.status(200).send(agents.map(agent => agent.recipe)))
+            .catch(e => response.status(500).send({ error: e.message }))
+    })
+    app.post('/import', (request, response) => {
+        Promise.all(request.body.map(Agents.create))
+            .then(() => response.status(204).send())
+            .catch(e => response.status(500).send({ error: e.message }))
+    })
     app.listen(Config.port)
 }
