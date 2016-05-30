@@ -1,3 +1,9 @@
+.agent-page-runs .not-yet {
+    display: block;
+    background: white;
+    padding: 15px;
+}
+
 .agent-page-runs > ol {
     margin: 0;
     padding: 0;

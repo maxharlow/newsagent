@@ -51,7 +51,8 @@ export default class AgentPageRuns extends React.Component {
             return React.DOM.div({ className: 'agent-page-runs' }, React.DOM.h3({}, 'Runs'), loading)
         }
         else if (this.state.runs === undefined || this.state.runs.length === 0) {
-            return React.DOM.div({ className: 'agent-page-runs' }, React.DOM.h3({}, 'Runs'), 'This agent has not run yet.')
+            const message = React.DOM.span({ className: 'not-yet' }, 'This agent has not run yet.')
+            return React.DOM.div({ className: 'agent-page-runs' }, React.DOM.h3({}, 'Runs'), message)
         }
         else {
             const keys = Object.keys(this.state.runs)
@@ -116,7 +117,9 @@ export default class AgentPageRuns extends React.Component {
                 }
             })
             const list = React.DOM.ol({}, ...items)
-            const unhide = this.state.hidden > 0 ? '' : React.DOM.button({ onClick: this.unhide, className: 'hollow unhide' }, `Show ${this.state.hidden} more`)
+            const unhide = this.state.hidden === 0
+                  ? ''
+                  : React.DOM.button({ onClick: this.unhide, className: 'hollow unhide' }, `Show ${this.state.hidden} more`)
             return React.DOM.div({ className: 'agent-page-runs' }, React.DOM.h3({}, 'Runs'), list, unhide)
         }
     }
