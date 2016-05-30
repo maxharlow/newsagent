@@ -44,7 +44,7 @@ export default class AgentPage extends React.Component {
             return React.DOM.div({ className: 'agent-page' }, title, description, hr, message, recipe, build)
         }
         else if (this.state.state === 'failed') {
-            const message = React.DOM.div({ className: 'failed message' }, 'This agent failed to load.')
+            const message = React.DOM.div({ className: 'failed message' }, 'This agent failed to build.')
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
             return React.DOM.div({ className: 'agent-page' }, deleteButton, title, description, hr, summaryBuiltDate, message, recipe, build)
         }
