@@ -48,6 +48,23 @@ button:enabled:active {
     background: #770000;
 }
 
+button.hollow {
+    background: none;
+    border: 1px solid #888;
+    color: #888;
+}
+
+button.hollow:hover {
+    background: #888;
+    color: white;
+}
+
+button.hollow:active {
+    background: #555;
+    border-color: #555;
+    color: white;
+}
+
 input {
     width: calc(100% - 18px);
     background: #f5f5f5;

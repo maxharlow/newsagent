@@ -82,21 +82,7 @@
 .agent-page-runs > ol > li button {
     display: inline-block;
     padding: 3px 10px;
-    background: white;
-    border: 1px solid #888;
-    color: #888;
     font-size: 12px;
-}
-
-.agent-page-runs > ol > li button:hover {
-    background: #888;
-    color: white;
-}
-
-.agent-page-runs > ol > li button:active {
-    background: #555;
-    border-color: #555;
-    color: white;
 }
 
 .agent-page-runs > ol > li .messages {
@@ -156,4 +142,8 @@
 
 .agent-page-runs > ol > li .triggered li span.status {
     text-align: right;
+}
+
+.agent-page-runs .uhide {
+    width: 100%;
 }
