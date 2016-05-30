@@ -54,11 +54,11 @@ export default class AgentsPage extends React.Component {
         const create = React.DOM.button({ onClick: this.create }, 'Create new agent')
         if (this.state === null) {
             const loading = React.DOM.div({ className: 'loading' })
-            return React.DOM.div({ className: 'agents-page' }, create, title, hr, loading)
+            return React.DOM.div({ className: 'dashboard-page' }, create, title, hr, loading)
         }
         else if (this.state.agents.length === 0) {
             const message = React.DOM.p({}, 'No agents have been created.')
-            return React.DOM.div({ className: 'agents-page' }, create, title, hr, message)
+            return React.DOM.div({ className: 'dashboard-page' }, create, title, hr, message)
         }
         else {
             const filter = React.DOM.input({ placeholder: 'Filter agents...', className: 'filter', onInput: this.filter })
@@ -73,7 +73,7 @@ export default class AgentsPage extends React.Component {
                 return React.DOM.li({ className: agent.state }, React.DOM.a({ href: '/agents/' + agent.id }, ...fields))
             })
             const list = React.DOM.ol({}, ...agents)
-            return React.DOM.div({ className: 'agents-page' }, create, filter, title, hr, list)
+            return React.DOM.div({ className: 'dashboard-page' }, create, filter, title, hr, list)
         }
     }
 
