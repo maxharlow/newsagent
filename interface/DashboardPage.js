@@ -51,8 +51,8 @@ export default class AgentsPage extends React.Component {
             const file = eventInput.target.files[0]
             const fileReader = new FileReader()
             fileReader.addEventListener('load', eventRead => {
-                const data = eventRead.target.result
-                HTTP.post(Config.registry + '/import', [], JSON.parse(data))
+                const data = JSON.parse(eventRead.target.result)
+                HTTP.post(Config.registry + '/import', [], data)
             })
             fileReader.readAsText(file)
         })
