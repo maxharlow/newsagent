@@ -92,7 +92,7 @@ async function buildContext(client, id, recipe) {
     const dockerfile = 'FROM node:5'
           + '\n' + 'COPY runner /runner'
           + '\n' + 'WORKDIR /runner'
-          + '\n' + 'RUN npm install --silent > /dev/null'
+          + '\n' + 'RUN npm install 2> /dev/null'
           + '\n' + `RUN node Start setup ${id}.json`
           + '\n' + `CMD node Start serve ${id}.json`
     const tar = Promisify(TarStream.pack())

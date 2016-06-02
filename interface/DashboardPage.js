@@ -9,6 +9,8 @@ export default class AgentsPage extends React.Component {
     constructor() {
         super()
         this.create = this.create.bind(this)
+        this.import = this.import.bind(this)
+        this.export = this.export.bind(this)
         this.filter = this.filter.bind(this)
         this.load = this.load.bind(this)
         this.state = {
@@ -41,6 +43,33 @@ export default class AgentsPage extends React.Component {
         Page('/new-agent')
     }
 
+    import() {
+        const input = document.createElement('input')
+        input.setAttribute('type', 'file')
+        input.setAttribute('accept', 'application/json')
+        input.addEventListener('change', eventInput => {
+            const file = eventInput.target.files[0]
+            const fileReader = new FileReader()
+            fileReader.addEventListener('load', eventRead => {
+                const data = eventRead.target.result
+                HTTP.post(Config.registry + '/import', [], JSON.parse(data))
+            })
+            fileReader.readAsText(file)
+        })
+        input.click()
+    }
+
+    export() {
+        HTTP.get(Config.registry + '/export').then(response => {
+            const blob = new Blob([JSON.stringify(response)], { type: 'data:application/json;charset=utf-8,' })
+            const anchor = document.createElement('a')
+            anchor.setAttribute('href', URL.createObjectURL(blob))
+            anchor.setAttribute('download', 'datastash-export.json')
+            document.body.appendChild(anchor)
+            anchor.click()
+        })
+    }
+
     filter(event) {
         const agents = this.state.agents.filter(agent => {
             return agent.recipe.name.toLowerCase().indexOf(event.target.value.toLowerCase()) >= 0
@@ -51,14 +80,16 @@ export default class AgentsPage extends React.Component {
     render() {
         const title = React.DOM.h2({}, 'Dashboard')
         const hr = React.DOM.hr({})
-        const create = React.DOM.button({ onClick: this.create }, 'Create new agent')
+        const createButton = React.DOM.button({ onClick: this.create }, 'Create new agent')
+        const importButton = React.DOM.button({ onClick: this.import }, 'Import')
+        const exportButton = React.DOM.button({ onClick: this.export }, 'Export')
         if (this.state === null) {
             const loading = React.DOM.div({ className: 'loading' })
-            return React.DOM.div({ className: 'dashboard-page' }, create, title, hr, loading)
+            return React.DOM.div({ className: 'dashboard-page' }, createButton, importButton, title, hr, loading)
         }
         else if (this.state.agents.length === 0) {
             const message = React.DOM.p({}, 'No agents have been created.')
-            return React.DOM.div({ className: 'dashboard-page' }, create, title, hr, message)
+            return React.DOM.div({ className: 'dashboard-page' }, createButton, importButton, title, hr, message)
         }
         else {
             const filter = React.DOM.input({ placeholder: 'Filter agents...', className: 'filter', onInput: this.filter })
@@ -73,7 +104,7 @@ export default class AgentsPage extends React.Component {
                 return React.DOM.li({ className: agent.state }, React.DOM.a({ href: '/agents/' + agent.id }, ...fields))
             })
             const list = React.DOM.ol({}, ...agents)
-            return React.DOM.div({ className: 'dashboard-page' }, create, filter, title, hr, list)
+            return React.DOM.div({ className: 'dashboard-page' }, createButton, exportButton, importButton, filter, title, hr, list)
         }
     }
 

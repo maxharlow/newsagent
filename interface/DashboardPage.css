@@ -8,6 +8,10 @@
     float: right;
 }
 
+.dashboard-page button + button {
+    margin-right: 5px;
+}
+
 .dashboard-page .filter {
     float: right;
     width: 30%;
