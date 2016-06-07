@@ -21,7 +21,7 @@ export async function summary() {
         numberRunsSuccessful: runsSuccessful.length,
         successRate: Math.round((runsSuccessful.length / runs.length * 100) * 10) / 10,
         averageRunTime: runs.reduce((a, run) => a + run.duration, 0) / runs.length,
-        dateLastSuccessfulRun: runsSuccessful.length > 0 ? runsSuccessful[runsSuccessful.length - 1].date : null
+        dateLastSuccessfulRun: runsSuccessful.length > 0 ? runsSuccessful[0].date : null
     }
 }
 
