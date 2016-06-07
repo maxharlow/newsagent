@@ -89,7 +89,7 @@ export default class AgentPageRuns extends React.Component {
                 else {
                     const records = run.recordsAdded === 0 && run.recordsRemoved === 0
                           ? 'nothing changed'
-                          : 'added ' + run.recordsAdded + ', removed ' + run.recordsRemoved
+                          : 'added ' + run.recordsAdded.toLocaleString() + ', removed ' + run.recordsRemoved.toLocaleString()
                     const messages = run.messages.map(message => {
                         return React.DOM.span({ className: message.type }, message.value)
                     })
