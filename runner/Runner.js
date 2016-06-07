@@ -65,11 +65,11 @@ async function run(id, recipe) {
             Database.add('run', dateStarted.toISOString(), log)
         }
         else {
-            const data = await csv(Config.sourceLocation + '/' + recipe.result)
+            const rows = await csv(Config.sourceLocation + '/' + recipe.result)
+            const data = { rows }
             await Database.add('data', dateStarted.toISOString(), data)
-            const runs = await Database.retrieveAll('data', id)
-            const runsSuccessful = runs.filter(run => run.state === 'successful')
-            const diff = await difference(runsSuccessful[0], runsSuccessful[1])
+            const dataPrevious = await Database.retrieveAll('data') // only successful runs store data
+            const diff = difference(data, dataPrevious[1])
             const triggered = await trigger(diff, recipe.triggers, recipe.name)
             const log = {
                 state: 'success',
@@ -101,8 +101,8 @@ async function csv(location) {
 
 function difference(current, previous) {
     if (previous === undefined) return { added: [], removed: [] }
-    const currentItems = Object.keys(current).map(key => current[key])
-    const previousItems = Object.keys(previous).map(key => previous[key])
+    const currentItems = Object.keys(current.rows).map(key => current.rows[key])
+    const previousItems = Object.keys(previous.rows).map(key => previous.rows[key])
     return {
         added: currentItems.filter(currentItem => !previousItems.some(previousItem => DeepEqual(currentItem, previousItem))),
         removed: previousItems.filter(previousItem => !currentItems.some(currentItem => DeepEqual(previousItem, currentItem))),
