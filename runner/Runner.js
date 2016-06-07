@@ -41,16 +41,15 @@ export async function setup(filename) {
 }
 
 export async function schedule(filename) {
-    const id = Path.parse(filename).name
     const data = await Promisify(FS.readFile)(filename)
     const recipe = JSON.parse(data.toString())
     if (recipe.schedule) {
-        const job = Schedule.scheduleJob(recipe.schedule, () => run(id, recipe))
+        const job = Schedule.scheduleJob(recipe.schedule, () => run(recipe))
         if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
     }
 }
 
-async function run(id, recipe) {
+async function run(recipe) {
     const dateStarted = new Date()
     try {
         const messages = await sequentially(shell(Config.sourceLocation), recipe.run)
@@ -67,9 +66,9 @@ async function run(id, recipe) {
         else {
             const rows = await csv(Config.sourceLocation + '/' + recipe.result)
             const data = { rows }
-            await Database.add('data', dateStarted.toISOString(), data)
-            const dataPrevious = await Database.retrieveAll('data') // only successful runs store data
-            const diff = difference(data, dataPrevious[1])
+            const id = dateStarted.toISOString()
+            await Database.add('data', id, data)
+            const diff = await difference(id)
             const triggered = await trigger(diff, recipe.triggers, recipe.name)
             const log = {
                 state: 'success',
@@ -94,19 +93,27 @@ async function run(id, recipe) {
     }
 }
 
+async function difference(id) {
+    const data = await Database.retrieveAll('data', true) // note only successful runs store data
+    const index = data.findIndex(d => d.id === id)
+    if (index === data.length - 1) return { added: [], removed: [] } // it's the first set of data we have
+    const current = data[index].rows.map((item, _i) => Object.assign({ _i }, item))
+    const previous = data[index + 1].rows.map((item, _i) => Object.assign({ _i }, item))
+    const added = current.filter(currentItem => { // current items not in previous
+        return !previous.some(previousItem => DeepEqual(currentItem, previousItem))
+    })
+    const removed = previous.filter(previousItem => { // previous items not in current
+        return !current.some(currentItem => DeepEqual(previousItem, currentItem))
+    })
+    return {
+        added: added.map(item => { delete item._i; return item }),
+        removed: removed.map(item => { delete item._i; return item })
+    }
+}
+
 async function csv(location) {
     const data = await Promisify(FS.readFile)(location)
     return Promisify(NeatCSV)(data)
-}
-
-function difference(current, previous) {
-    if (previous === undefined) return { added: [], removed: [] }
-    const currentItems = Object.keys(current.rows).map(key => current.rows[key])
-    const previousItems = Object.keys(previous.rows).map(key => previous.rows[key])
-    return {
-        added: currentItems.filter(currentItem => !previousItems.some(previousItem => DeepEqual(currentItem, previousItem))),
-        removed: previousItems.filter(previousItem => !currentItems.some(currentItem => DeepEqual(previousItem, currentItem))),
-    }
 }
 
 function trigger(diff, triggers, name) {
