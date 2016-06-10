@@ -72,6 +72,30 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
+    app.get('/agents/:agent/runs/:run/added', (request, response) => {
+        const asCSV = request.accepts(['application/json', 'text/csv']) === 'text/csv'
+        Agents.getDiffAdded(request.params.agent, request.params.run, asCSV)
+            .then(data => {
+                if (asCSV) response.append('Content-Type', 'text/csv')
+                response.status(200).send(data)
+            })
+            .catch(e => {
+                if (e.message === 'missing') response.status(404).send({ error: 'agent diff not found' })
+                else response.status(500).send({ error: e.message })
+            })
+    })
+    app.get('/agents/:agent/runs/:run/removed', (request, response) => {
+        const asCSV = request.accepts(['application/json', 'text/csv']) === 'text/csv'
+        Agents.getDiffRemoved(request.params.agent, request.params.run, asCSV)
+            .then(data => {
+                if (asCSV) response.append('Content-Type', 'text/csv')
+                response.status(200).send(data)
+            })
+            .catch(e => {
+                if (e.message === 'missing') response.status(404).send({ error: 'agent diff not found' })
+                else response.status(500).send({ error: e.message })
+            })
+    })
     app.get('/export', (request, response) => {
         Database.retrieveAll('agent')
             .then(agents => response.status(200).send(agents.map(agent => agent.recipe)))

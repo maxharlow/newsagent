@@ -170,6 +170,16 @@ export async function getRunData(agent, run, asCSV) {
     return asCSV ? ToCSV(data) : data
 }
 
+export async function getDiffAdded(agent, run, asCSV) {
+    const data = await fromContainer(agent, '/runs/' + run + '/diff')
+    return asCSV ? ToCSV(data.added) : data.added
+}
+
+export async function getDiffRemoved(agent, run, asCSV) {
+    const data = await fromContainer(agent, '/runs/' + run + '/diff')
+    return asCSV ? ToCSV(data.removed) : data.removed
+}
+
 export async function destroy(id) {
     const agent = await Database.retrieve('agent', id)
     if (agent.state === 'starting') throw new Error('cannot destroy an agent until it has started')

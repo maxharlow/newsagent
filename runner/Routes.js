@@ -22,5 +22,10 @@ export function listen() {
             .then(data => response.status(200).send(data.rows))
             .catch(e => response.status(500).send({ error: e.message }))
     })
+    app.get('/runs/:id/diff', (request, response) => {
+        Runner.difference(request.params.id)
+            .then(diff => response.status(200).send(diff))
+            .catch(e => response.status(500).send({ error: e.message }))
+    })
     app.listen(Config.port)
 }

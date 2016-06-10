@@ -93,7 +93,7 @@ async function run(recipe) {
     }
 }
 
-async function difference(id) {
+export async function difference(id) {
     const data = await Database.retrieveAll('data', true) // note only successful runs store data
     const index = data.findIndex(d => d.id === id)
     if (index === data.length - 1) return { added: [], removed: [] } // it's the first set of data we have
