@@ -1,5 +1,6 @@
 import React from 'react'
 import Moment from 'moment'
+import RunDataView from '/RunDataView.js'
 import HTTP from '/HTTP.js'
 import Config from '/config.js'
 
@@ -109,6 +110,7 @@ export default class AgentPageRuns extends React.Component {
                     const fields = [
                         React.DOM.span({ className: 'state ' + run.state }, run.state),
                         React.DOM.div({ className: 'info' }, ...info),
+                        React.DOM.button({ onClick: () => this.setState({ viewing: run }), className: 'hollow' }, 'View'),
                         React.DOM.button({ onClick: this.download(run.id), className: 'hollow' }, 'Download'),
                         React.DOM.code({ className: 'messages' }, messages),
                         React.DOM.ol({ className: 'triggered' }, triggered)
@@ -119,8 +121,14 @@ export default class AgentPageRuns extends React.Component {
             const list = React.DOM.ol({}, ...items)
             const unhide = this.state.hidden === 0
                   ? ''
-                  : React.DOM.button({ onClick: this.unhide, className: 'hollow unhide' }, `Show ${this.state.hidden} more...`)
-            return React.DOM.div({ className: 'agent-page-runs' }, React.DOM.h3({}, 'Runs'), list, unhide)
+                  : React.DOM.button({ onClick: this.unhide, className: 'hollow unhide' }, `Show ${this.state.hidden.toLocaleString()} more...`)
+            const view = !this.state.viewing ? '' : React.createElement(RunDataView, {
+                id: this.props.id,
+                run: this.state.viewing.id,
+                date: this.state.viewing.date,
+                close: () => this.setState({ viewing: null })
+            })
+            return React.DOM.div({ className: 'agent-page-runs' }, React.DOM.h3({}, 'Runs'), list, unhide, view)
         }
     }
 

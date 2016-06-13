@@ -54,7 +54,7 @@
 
 .agent-page-runs > ol > li .info {
     display: inline-block;
-    width: calc(100% - 230px);
+    width: calc(100% - 285px);
     margin: 0 5px;
     font-size: 12px;
 }
@@ -89,6 +89,10 @@
     display: inline-block;
     padding: 3px 10px;
     font-size: 12px;
+}
+
+.agent-page-runs > ol > li button + button {
+    margin-left: 5px;
 }
 
 .agent-page-runs > ol > li .messages {

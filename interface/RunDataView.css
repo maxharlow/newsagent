@@ -1,0 +1,117 @@
+.run-data-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.run-data-view > div {
+    width: 90%;
+    height: calc(90% - 40px);
+    margin: 35px auto;
+    padding: 15px 0;
+    background: white;
+    box-shadow: 0 0 10px 2px #212121;
+}
+
+.run-data-view > div button.close {
+    float: left;
+    margin-left: 15px;
+}
+
+.run-data-view > div h3 {
+    margin: 2px 100px;
+    text-align: center;
+}
+
+.run-data-view > div .download {
+    float: right;
+    margin-right: 15px;
+}
+
+.run-data-view > div .data {
+    height: calc(100% - 92px);
+    margin-top: 15px;
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #999;
+    overflow: scroll;
+}
+
+.run-data-view > div .data .loading {
+    margin-top: 150px;
+}
+
+.run-data-view > div .data .no-data {
+    display: block;
+    margin-top: 175px;
+    text-align: center;
+}
+
+.run-data-view > div .data table {
+    min-width: 100%;
+    border-spacing: 0;
+    font-size: 12px;
+}
+
+.run-data-view > div .data table thead {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+}
+
+.run-data-view > div .data table thead th {
+    background: #f5f5f5;
+    font-family: monospace;
+}
+
+.run-data-view > div .data table thead th,
+.run-data-view > div .data table tbody td {
+    border-bottom: 1px solid #dfdfdf;
+    padding: 5px 10px;
+    white-space: nowrap;
+}
+
+.run-data-view > div .data table thead th + th,
+.run-data-view > div .data table tbody td + td {
+    border-left: 1px solid #dfdfdf;
+}
+
+.run-data-view > div label:first-of-type {
+    margin-left: 15px;
+}
+
+.run-data-view > div label input {
+    display: none;
+}
+
+.run-data-view > div label span {
+    display: inline-block;
+    width: 100px;
+    background: #f5f5f5;
+    margin: 15px 0 0 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 7px 0 6px 0;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.run-data-view > div label + label {
+    margin-left: 2px;
+}
+
+.run-data-view > div label input:checked + span {
+    background: white;
+}
+
+.run-data-view > div .count {
+    float: right;
+    margin: 20px 15px;
+    font-weight: bold;
+}
