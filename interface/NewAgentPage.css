@@ -1,6 +1,7 @@
 .new-agent-page {
     max-width: 750px;
     margin: 15px auto 50px auto;
+    box-shadow: 1px 1px 2px 1px #eee;
     padding: 15px;
     background: white;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
