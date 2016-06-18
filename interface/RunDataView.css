@@ -14,7 +14,7 @@
     margin: 35px auto;
     padding: 15px 0;
     background: white;
-    box-shadow: 0 0 10px 2px #212121;
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
 }
 
 .run-data-view > div button.close {
