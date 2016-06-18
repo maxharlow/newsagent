@@ -2,6 +2,7 @@
     "port": 3000,
     "pouchLocation": "/data",
     "sourceLocation": "/source",
+    "storedRuns": 25,
     "email": {
         "from": "datastash@example.com",
         "service": "",

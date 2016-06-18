@@ -5,8 +5,13 @@ import Config from './config.json'
 
 const db = new PouchDB(Config.pouchLocation)
 
-export async function add(type, id, data) {
+export function add(type, id, data) {
     return db.put({ _id: type + '/' + id, data })
+}
+
+export async function remove(type, id) {
+    const document = await db.get(type + '/' + id)
+    return db.remove(document)
 }
 
 export async function retrieve(type, id) {

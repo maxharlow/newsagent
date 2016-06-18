@@ -80,6 +80,7 @@ async function run(recipe) {
                 triggered
             }
             Database.add('run', dateStarted.toISOString(), log)
+            removeOldRuns()
         }
     }
     catch (e) {
@@ -109,6 +110,15 @@ export async function difference(id) {
         added: added.map(item => { delete item._i; return item }),
         removed: removed.map(item => { delete item._i; return item })
     }
+}
+
+async function removeOldRuns() {
+    const runs = await Database.retrieveAll('run', true)
+    if (runs.length <= Config.storedRuns) return
+    runs.slice(Config.storedRuns).forEach(run => {
+        Database.remove('run', run.id)
+        if (run.state === 'success') Database.remove('data', run.id)
+    })
 }
 
 async function csv(location) {
