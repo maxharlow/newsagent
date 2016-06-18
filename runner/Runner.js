@@ -123,7 +123,7 @@ async function removeOldRuns() {
 
 async function csv(location) {
     const data = await Promisify(FS.readFile)(location)
-    return Promisify(NeatCSV)(data)
+    return NeatCSV(data)
 }
 
 function trigger(diff, triggers, name) {
