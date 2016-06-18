@@ -2,15 +2,15 @@
     "name": "datastash-runner",
     "private": true,
     "dependencies": {
-        "babel-register": "6.5.x",
-        "babel-plugin-transform-async-to-generator": "6.5.x",
-        "babel-plugin-transform-es2015-modules-commonjs": "6.5.x",
-        "promisify-node": "0.3.x",
-        "express": "4.13.x",
-        "node-schedule": "0.6.x",
-        "neat-csv": "1.1.x",
-        "pouchdb": "5.2.x",
+        "babel-register": "6.8.x",
+        "babel-plugin-transform-async-to-generator": "6.8.x",
+        "babel-plugin-transform-es2015-modules-commonjs": "6.8.x",
+        "promisify-node": "0.4.x",
+        "express": "4.14.x",
+        "node-schedule": "1.1.x",
+        "neat-csv": "2.1.x",
+        "pouchdb": "5.4.x",
         "deep-equal": "1.0.x",
-        "nodemailer": "2.0.x"
+        "nodemailer": "2.4.x"
     }
 }
