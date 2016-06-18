@@ -52,9 +52,9 @@ export default class AgentPage extends React.Component {
             const summary = [
                 summaryBuiltDate,
                 this.state.runs.averageRunTime ? summarise('Average run time: ', Moment.duration(this.state.runs.averageRunTime).humanize()) : '',
-                this.state.runs.numberRuns ? summarise('Total runs: ', this.state.runs.numberRuns) : '',
-                this.state.runs.numberRunsSuccessful ? summarise('Successful runs: ', this.state.runs.numberRunsSuccessful) : '',
-                this.state.runs.successRate ? summarise('Success rate: ', this.state.runs.successRate + '%') : '',
+                summarise('Total runs: ', this.state.runs.numberRuns || 0),
+                summarise('Successful runs: ', this.state.runs.numberRunsSuccessful || 0),
+                summarise('Success rate: ', (this.state.runs.successRate || 0) + '%'),
                 this.state.runs.dateLastSuccessfulRun ? summarise('Last successful run: ', Moment(this.state.runs.dateLastSuccessfulRun).fromNow()) : '',
                 this.state.system.spaceUsed ? summarise('Space used: ', this.state.system.spaceUsed + ' MB') : ''
             ]
