@@ -23,7 +23,6 @@
 }
 
 .new-agent-page .error {
-    width: calc(100% - 42px);
     background: #ed5c5c;
     border-radius: 3px;
     padding: 15px;
