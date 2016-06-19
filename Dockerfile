@@ -1,10 +1,9 @@
-FROM node:5
+FROM alpine:3.4
 
 VOLUME /data
 VOLUME /var/lib/docker
 
-RUN curl -sSL https://get.docker.com/ | sh
-RUN apt-get install -y nginx
+RUN apk add --no-cache docker nodejs nginx
 
 COPY runner/*.js           /runner/
 COPY runner/package.json   /runner/
@@ -15,8 +14,8 @@ COPY registry/package.json /registry/
 COPY registry/config.json  /registry/
 
 COPY interface/*.js        /interface/
+COPY interface/*.css       /interface/
 COPY interface/index.html  /interface/
-COPY interface/style.css   /interface/
 COPY interface/nginx.conf  /interface/
 
 RUN cd registry && npm install
@@ -24,6 +23,6 @@ RUN cd registry && npm install
 EXPOSE 4001
 EXPOSE 4000
 
-CMD service docker start; \
+CMD (docker daemon &); \
     (cd registry && node Start &); \
     nginx -c /interface/nginx.conf
