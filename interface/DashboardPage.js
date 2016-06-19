@@ -11,7 +11,8 @@ export default class AgentsPage extends React.Component {
         this.create = this.create.bind(this)
         this.import = this.import.bind(this)
         this.export = this.export.bind(this)
-        this.filter = this.filter.bind(this)
+        this.doFilter = this.doFilter.bind(this)
+        this.onFilter = this.onFilter.bind(this)
         this.load = this.load.bind(this)
         this.state = {
             filter: '',
@@ -35,7 +36,7 @@ export default class AgentsPage extends React.Component {
     load() {
         HTTP.get(Config.registry + '/agents').then(response => {
             const timeout = setTimeout(this.load, 1 * 1000) // in seconds
-            this.setState({ agents: response, agentsFiltered: response, timeout })
+            this.setState({ agents: response, agentsFiltered: this.doFilter(response, this.state.filter), timeout })
         })
     }
 
@@ -70,11 +71,15 @@ export default class AgentsPage extends React.Component {
         })
     }
 
-    filter(event) {
-        const agents = this.state.agents.filter(agent => {
-            return agent.recipe.name.toLowerCase().indexOf(event.target.value.toLowerCase()) >= 0
+    doFilter(agents, value) {
+        return agents.filter(agent => {
+            return agent.recipe.name.toLowerCase().indexOf(value.toLowerCase()) >= 0
         })
-        this.setState({ agentsFiltered: agents })
+    }
+
+    onFilter(event) {
+        const agents = this.doFilter(this.state.agents, event.target.value)
+        this.setState({ filter: event.target.value, agentsFiltered: agents })
     }
 
     render() {
@@ -92,7 +97,7 @@ export default class AgentsPage extends React.Component {
             return React.DOM.div({ className: 'dashboard-page' }, createButton, importButton, title, hr, message)
         }
         else {
-            const filter = React.DOM.input({ placeholder: 'Filter agents...', className: 'filter', onInput: this.filter })
+            const filter = React.DOM.input({ placeholder: 'Filter agents...', className: 'filter', onInput: this.onFilter })
             const agents = this.state.agentsFiltered.map(agent => {
                 const schedule = agent.recipe.schedule === '' ? '' : PrettyCron.toString(agent.recipe.schedule).toLowerCase()
                 const fields = [
