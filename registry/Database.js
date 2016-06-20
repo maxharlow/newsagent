@@ -7,8 +7,8 @@ const db = new PouchDB(Config.pouchLocation)
 
 export async function add(type, id, data) {
     try {
-        const stored = await db.put({ _id: type + '/' + id, data })
-        return { id: stored.id.split(type + '/')[1], rev: stored.rev }
+        const document = await db.put({ _id: type + '/' + id, data })
+        return { id, rev: document.rev }
     }
     catch (e) {
         if (e.name === 'conflict') {
@@ -20,13 +20,13 @@ export async function add(type, id, data) {
 }
 
 export async function update(type, id, data, rev) {
-    const stored = await db.put({ _id: type + '/' + id, _rev: rev, data })
-    return { id: stored.id.split(type + '/')[1], rev: stored.rev }
+    const document = await db.put({ _id: type + '/' + id, _rev: rev, data })
+    return { id, rev: document.rev }
 }
 
 export async function retrieve(type, id) {
-    const item = await db.get(type + '/' + id)
-    return Object.assign({ id }, item.data)
+    const document = await db.get(type + '/' + id)
+    return Object.assign({ id }, document.data)
 }
 
 export async function retrieveAll(type) {
