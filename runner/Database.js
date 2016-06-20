@@ -9,11 +9,6 @@ export function add(type, id, data) {
     return db.put({ _id: type + '/' + id, data })
 }
 
-export async function remove(type, id) {
-    const document = await db.get(type + '/' + id)
-    return db.remove(document)
-}
-
 export async function retrieve(type, id) {
     const document = await db.get(type + '/' + id)
     return document.data
@@ -25,4 +20,9 @@ export async function retrieveAll(type, includeIDs) {
         if (includeIDs === true) return Object.assign({ id: row.id.replace(type + '/', '') }, row.doc.data)
         else return row.doc.data
     })
+}
+
+export async function remove(type, id) {
+    const document = await db.get(type + '/' + id)
+    return db.remove(document)
 }
