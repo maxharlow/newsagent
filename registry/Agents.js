@@ -37,10 +37,9 @@ export async function create(recipe) {
         throw e
     }
     const id = recipe.name.replace(/ /g, '-').toLowerCase()
-    const stored = await Database.add('agent', id, { state: 'starting', recipe })
-    const client = await Docker.client()
-    const clientInfo = await client.info()
-    build(client, clientInfo, stored, recipe) // runs in background
+    const agent = { state: 'starting', recipe }
+    const stored = await Database.add('agent', id, agent)
+    build(Object.assign({}, stored, agent)) // runs in background
     return { id: stored.id }
 }
 
@@ -62,29 +61,32 @@ function validate(recipe) {
     return validation.errors.map(e => e.stack)
 }
 
-async function build(client, clientInfo, stored, recipe) {
+async function build(agent) {
     const builtDate = new Date().toISOString()
     try {
-        const context = await buildContext(client, stored.id, recipe)
-        const image = await buildImage(client, stored.id, context)
-        const container = await client.createContainer({ name: stored.id, Image: image.id })
+        const client = await Docker.client()
+        const clientInfo = await client.info()
+        const context = await buildContext(client, agent.id, agent.recipe)
+        const image = await buildImage(client, agent.id, context)
+        const container = await client.createContainer({ name: agent.id, Image: image.id })
         await container.start()
-        const agent = {
+        const agentUpdated = {
             state: 'started',
             builtDate,
-            recipe,
+            recipe: agent.recipe,
             client: clientInfo.ID
         }
-        Database.update('agent', stored.id, agent, stored.rev)
+        Database.update('agent', agent.id, agentUpdated, agent.rev)
     }
     catch (e) {
-        const agent = {
+        console.error(e.stack)
+        const agentUpdated = {
             state: 'failed',
             builtDate,
-            recipe,
+            recipe: agent.recipe,
             client: clientInfo.ID
         }
-        Database.update('agent', stored.id, agent, stored.rev)
+        Database.update('agent', agent.id, agentUpdated, agent.rev)
     }
 }
 
