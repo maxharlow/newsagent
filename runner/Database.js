@@ -15,8 +15,8 @@ export async function remove(type, id) {
 }
 
 export async function retrieve(type, id) {
-    const item = await db.get(type + '/' + id)
-    return item.data
+    const document = await db.get(type + '/' + id)
+    return document.data
 }
 
 export async function retrieveAll(type, includeIDs) {
