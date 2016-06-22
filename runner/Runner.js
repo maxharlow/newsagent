@@ -43,15 +43,17 @@ export async function setup(filename) {
 export async function schedule(filename) {
     const data = await Promisify(FS.readFile)(filename)
     const recipe = JSON.parse(data.toString())
+    await Database.add('system', 'recipe', recipe)
     if (recipe.schedule) {
-        const job = Schedule.scheduleJob(recipe.schedule, () => run(recipe))
+        const job = Schedule.scheduleJob(recipe.schedule, run)
         if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
     }
 }
 
-async function run(recipe) {
+async function run() {
     const dateStarted = new Date()
     try {
+        const recipe = await Database.retrieve('system', 'recipe')
         const messages = await sequentially(shell(Config.sourceLocation), recipe.run)
         const isFailure = messages.some(message => message.type === 'failure')
         if (isFailure) {
