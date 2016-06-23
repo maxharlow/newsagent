@@ -13,18 +13,6 @@ import * as Database from './Database'
 import * as Email from './Email'
 import Config from './config.json'
 
-export async function summary() {
-    const runs = await Database.retrieveAll('run')
-    const runsSuccessful = runs.filter(run => run.state === 'success')
-    return {
-        numberRuns: runs.length,
-        numberRunsSuccessful: runsSuccessful.length,
-        successRate: Math.round((runsSuccessful.length / runs.length * 100) * 10) / 10,
-        averageRunTime: runs.reduce((a, run) => a + run.duration, 0) / runs.length,
-        dateLastSuccessfulRun: runsSuccessful.length > 0 ? runsSuccessful[0].date : null
-    }
-}
-
 export async function setup(filename) {
     const id = Path.parse(filename).name
     const dateStarted = new Date()
@@ -48,6 +36,20 @@ export async function schedule(filename) {
         const job = Schedule.scheduleJob(recipe.schedule, run)
         if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
     }
+}
+
+export async function describe() {
+    const recipe = await Database.retrieve('system', 'recipe')
+    const runs = await Database.retrieveAll('run')
+    const runsSuccessful = runs.filter(run => run.state === 'success')
+    const status = {
+        numberRuns: runs.length,
+        numberRunsSuccessful: runsSuccessful.length,
+        successRate: Math.round((runsSuccessful.length / runs.length * 100) * 10) / 10,
+        averageRunTime: runs.reduce((a, run) => a + run.duration, 0) / runs.length,
+        dateLastSuccessfulRun: runsSuccessful.length > 0 ? runsSuccessful[0].date : null
+    }
+    return { recipe, status }
 }
 
 async function run() {

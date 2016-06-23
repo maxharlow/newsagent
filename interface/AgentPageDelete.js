@@ -23,7 +23,7 @@ export default class AgentPageDelete extends React.Component {
             accept: this.deletion,
             cancel: () => this.setState({ confirming: false })
         })
-        const button = React.DOM.button({ onClick: () => this.setState({ confirming: true }) }, 'Delete agent')
+        const button = React.DOM.button({ onClick: () => this.setState({ confirming: true }) }, 'Delete')
         return React.DOM.div({ className: 'agent-page-delete' }, button, dialog)
     }
 

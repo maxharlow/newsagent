@@ -16,7 +16,7 @@ export function listen() {
         next()
     })
     app.get('/agents', (request, response) => {
-        Database.retrieveAll('agent')
+        Agents.getAll()
             .then(agents => response.status(200).send(agents))
             .catch(e => response.status(500).send({ error: e.message }))
     })
@@ -29,7 +29,7 @@ export function listen() {
             })
     })
     app.get('/agents/:id', (request, response) => {
-        Agents.info(request.params.id)
+        Agents.get(request.params.id)
             .then(agent => response.status(200).send(agent))
             .catch(e => {
                 if (e.message === 'missing') response.status(404).send({ error: 'agent not found' })

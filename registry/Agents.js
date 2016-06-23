@@ -14,19 +14,24 @@ import * as Database from './Database'
 import * as Docker from './Docker'
 import Config from './config.json'
 
-export async function info(agent) {
-    const entry = await Database.retrieve('agent', agent)
-    if (entry.state !== 'started') return Object.assign({}, entry, { summary: null })
+export async function get(id) {
+    const entry = await Database.retrieve('agent', id)
+    if (entry.state !== 'started') return entry
     else {
         const client = await Docker.client()
-        const container = await client.getContainer(agent)
+        const container = await client.getContainer(id)
         const inspection = await container.inspect({ size: true })
         const system = {
             spaceUsed: Math.round((inspection.SizeRootFs / 1024 / 1024) * 100) / 100 // in MB
         }
-        const runs = await getSummary(agent)
-        return Object.assign({}, entry, { system }, { runs })
+        const description = await fromContainer(id, '/')
+        return Object.assign({ id: entry.id, state: entry.state }, description, system)
     }
+}
+
+export async function getAll() {
+    const entries = await Database.retrieveAll('agent', true)
+    return Promise.all(entries.map(entry => get(entry.id)))
 }
 
 export async function create(recipe) {
@@ -70,23 +75,22 @@ async function build(agent) {
         const image = await buildImage(client, agent.id, context)
         const container = await client.createContainer({ name: agent.id, Image: image.id })
         await container.start()
-        const agentUpdated = {
+        const agentStarted = {
             state: 'started',
             builtDate,
-            recipe: agent.recipe,
             client: clientInfo.ID
         }
-        Database.update('agent', agent.id, agentUpdated, agent.rev)
+        Database.update('agent', agent.id, agentStarted, agent.rev)
     }
     catch (e) {
         console.error(e.stack)
-        const agentUpdated = {
+        const agentFailed = {
             state: 'failed',
             builtDate,
             recipe: agent.recipe,
             client: clientInfo.ID
         }
-        Database.update('agent', agent.id, agentUpdated, agent.rev)
+        Database.update('agent', agent.id, agentFailed, agent.rev)
     }
 }
 
@@ -157,10 +161,6 @@ async function fromContainer(id, path) {
         container.modem.demuxStream(stream, parser, parser)
         stream.on('end', () => resolve(response ? JSON.parse(response) : reject(new Error('missing'))))
     })
-}
-
-function getSummary(agent) {
-    return fromContainer(agent, '/summary')
 }
 
 export function getRuns(agent) {

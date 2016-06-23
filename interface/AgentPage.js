@@ -51,12 +51,12 @@ export default class AgentPage extends React.Component {
         else {
             const summary = [
                 summaryBuiltDate,
-                this.state.runs.averageRunTime ? summarise('Average run time: ', Moment.duration(this.state.runs.averageRunTime).humanize()) : '',
-                summarise('Total runs: ', this.state.runs.numberRuns || 0),
-                this.state.runs.numberRuns > 0 ? summarise('Successful runs: ', this.state.runs.numberRunsSuccessful || 0) : '',
-                this.state.runs.numberRuns > 0 ? summarise('Success rate: ', (this.state.runs.successRate || 0) + '%') : '',
-                this.state.runs.dateLastSuccessfulRun ? summarise('Last successful run: ', Moment(this.state.runs.dateLastSuccessfulRun).fromNow()) : '',
-                this.state.system.spaceUsed ? summarise('Space used: ', this.state.system.spaceUsed + ' MB') : ''
+                this.state.status.averageRunTime ? summarise('Average run time: ', Moment.duration(this.state.status.averageRunTime).humanize()) : '',
+                summarise('Total status: ', this.state.status.numberRuns || 0),
+                this.state.status.numberRuns > 0 ? summarise('Successful runs: ', this.state.status.numberRunsSuccessful || 0) : '',
+                this.state.status.numberRuns > 0 ? summarise('Success rate: ', (this.state.status.successRate || 0) + '%') : '',
+                this.state.status.dateLastSuccessfulRun ? summarise('Last successful run: ', Moment(this.state.status.dateLastSuccessfulRun).fromNow()) : '',
+                this.state.spaceUsed ? summarise('Space used: ', this.state.spaceUsed + ' MB') : ''
             ]
             const runs = React.createElement(AgentPageRuns, { id: this.props.id })
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })

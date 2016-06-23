@@ -29,10 +29,11 @@ export async function retrieve(type, id) {
     return Object.assign({ id }, document.data)
 }
 
-export async function retrieveAll(type) {
+export async function retrieveAll(type, includeIDs) {
     const documents = await db.allDocs({ startkey: type + '/\uffff', endkey: type + '/', include_docs: true, descending: true })
     return documents.rows.map(row => {
-        return Object.assign({ id: row.id.replace(type + '/', '') }, row.doc.data)
+        if (includeIDs === true) return Object.assign({ id: row.id.replace(type + '/', '') }, row.doc.data)
+        else return row.doc.data
     })
 }
 

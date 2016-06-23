@@ -7,8 +7,8 @@ import Config from './config.json'
 
 export function listen() {
     const app = Express()
-    app.get('/summary', (request, response) => {
-        Runner.summary()
+    app.get('/', (request, response) => {
+        Runner.describe()
             .then(summary => response.status(200).send(summary))
             .catch(e => response.status(500).send({ error: e.message }))
     })
