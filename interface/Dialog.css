@@ -17,14 +17,16 @@
     box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
 }
 
-.dialog > div h6 {
-    margin: 0 0 15px 0;
-    font-size: 16px;
+.dialog > div * {
     text-align: left;
 }
 
+.dialog > div button {
+    margin-top: 10px;
+}
+
 .dialog > div button + button {
-    margin: 0 5px;
+    margin-left: 5px;
 }
 
 .dialog > div .loading {

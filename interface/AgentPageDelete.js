@@ -18,7 +18,7 @@ export default class AgentPageDelete extends React.Component {
 
     render() {
         const dialog = !this.state.confirming ? undefined : React.createElement(Dialog, {
-            text: 'Are you sure you want to delete this agent?',
+            body: React.DOM.h5({}, 'Are you sure you want to delete this agent?'),
             acceptText: 'Delete agent',
             accept: this.send,
             cancel: () => this.setState({ confirming: false })
