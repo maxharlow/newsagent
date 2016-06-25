@@ -9,6 +9,7 @@ export default class Dialog extends React.Component {
     }
 
     proceed() {
+        if (this.props.validate && this.props.validate() === false) return
         this.setState({ loading: true })
         this.props.accept()
     }

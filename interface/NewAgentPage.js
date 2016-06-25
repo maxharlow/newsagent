@@ -37,8 +37,9 @@ export default class NewAgentPage extends React.Component {
             run: this.state.recipe.run.length === 0 || this.state.recipe.run[0] === '',
             result: this.state.recipe.result === ''
         }
-        const isInvalid = Object.keys(validation).some(key => validation[key] === true)
-        if (isInvalid) return this.setState({ validation })
+        this.setState({ validation })
+        const isValid = Object.keys(validation).every(key => validation[key] === false)
+        if (!isValid) return
         this.setState({ loading: true })
         HTTP.post(Config.registry + '/agents', [], this.state.recipe)
             .then(response => Page('/agents/' + response.id))

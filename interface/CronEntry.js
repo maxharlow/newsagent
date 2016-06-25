@@ -6,12 +6,13 @@ export default class CronEntry extends React.Component {
     constructor(props) {
         super(props)
         this.presets = [
-            { name: 'Never', value: ''},
+            { name: 'Never',  value: '' },
             { name: 'Hourly', value: '0 * * * *' },
             { name: 'Daily',  value: '0 1 * * *' },
             { name: 'Weekly', value: '0 1 * * 1' }
         ]
-        this.state = this.presets.find(preset => preset.value === this.props.defaultValue)
+        if (this.props.value) this.state = this.presets.find(preset => preset.value === this.props.value) || { name: 'Custom', value: this.props.value }
+        else this.state = this.presets.find(preset => preset.name === 'Daily')
         this.update = this.update.bind(this)
     }
 

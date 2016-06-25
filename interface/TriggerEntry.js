@@ -2,9 +2,10 @@ import React from 'react'
 
 export default class TriggerEntry extends React.Component {
 
-    constructor() {
-        super()
-        this.state = { current: '', triggers: [] }
+    constructor(props) {
+        super(props)
+        if (this.props.value) this.state = { current: '', triggers: this.props.value }
+        else this.state = { current: '', triggers: [] }
         this.update = this.update.bind(this)
         this.add = this.add.bind(this)
         this.remove = this.remove.bind(this)

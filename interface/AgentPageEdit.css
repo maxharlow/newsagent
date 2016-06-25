@@ -1,0 +1,11 @@
+.agent-page-edit {
+    float: right;
+    margin-left: 5px;
+}
+
+.agent-page-edit .validation {
+    float: right;
+    padding-bottom: 5px;
+    color: #a60000;
+    font-size: 11px;
+}

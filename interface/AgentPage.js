@@ -1,5 +1,6 @@
 import React from 'react'
 import Moment from 'moment'
+import AgentPageEdit from '/AgentPageEdit.js'
 import AgentPageDelete from '/AgentPageDelete.js'
 import AgentPageRecipe from '/AgentPageRecipe.js'
 import AgentPageRuns from '/AgentPageRuns.js'
@@ -35,6 +36,7 @@ export default class AgentPage extends React.Component {
         const title = React.DOM.h2({}, 'Agent ' + this.state.recipe.name)
         const description = React.DOM.p({ className: 'description' }, this.state.recipe.description)
         const hr = React.DOM.hr({})
+        const editButton = React.createElement(AgentPageEdit, { id: this.props.id, recipe: this.state.recipe })
         const deleteButton = React.createElement(AgentPageDelete, { id: this.props.id })
         const summaryBuiltDate = summarise('Built: ', Moment(this.state.builtDate).format('LLL'))
         const recipe = React.createElement(AgentPageRecipe, { recipe: this.state.recipe, state: this.state.state })
@@ -60,7 +62,7 @@ export default class AgentPage extends React.Component {
             ]
             const runs = React.createElement(AgentPageRuns, { id: this.props.id })
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page' }, deleteButton, title, description, hr, ...summary, recipe, runs, build)
+            return React.DOM.div({ className: 'agent-page' }, editButton, deleteButton, title, description, hr, ...summary, recipe, runs, build)
         }
     }
 

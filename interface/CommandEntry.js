@@ -2,9 +2,10 @@ import React from 'react'
 
 export default class CommandEntry extends React.Component {
 
-    constructor() {
-        super()
-        this.state = { commands: [] }
+    constructor(props) {
+        super(props)
+        if (props.value) this.state = { commands: props.value }
+        else this.state = { commands: [] }
         this.press = this.press.bind(this)
         this.leave = this.leave.bind(this)
     }

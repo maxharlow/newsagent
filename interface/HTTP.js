@@ -31,6 +31,10 @@ export default class HTTP {
         return this.request('POST', location, headers, data)
     }
 
+    static patch(location, headers, data) {
+        return this.request('PATCH', location, headers, data)
+    }
+
     static delete(location, headers) {
         return this.request('DELETE', location, headers)
     }
