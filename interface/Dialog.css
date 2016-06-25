@@ -21,11 +21,11 @@
     text-align: left;
 }
 
-.dialog > div button {
+.dialog > div button.modal {
     margin-top: 15px;
 }
 
-.dialog > div button + button {
+.dialog > div button.modal + button.modal {
     margin-left: 5px;
 }
 
