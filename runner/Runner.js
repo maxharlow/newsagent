@@ -57,6 +57,24 @@ export async function modify(recipeNew) {
     return Database.update('system', 'recipe', recipeNew, recipeCurrent.rev)
 }
 
+export async function difference(id) {
+    const data = await Database.retrieveAll('data', true) // note only successful runs store data
+    const index = data.findIndex(d => d.id === id)
+    if (index === data.length - 1) return { added: [], removed: [] } // it's the first set of data we have
+    const current = data[index].rows.map((item, _i) => Object.assign({ _i }, item))
+    const previous = data[index + 1].rows.map((item, _i) => Object.assign({ _i }, item))
+    const added = current.filter(currentItem => { // current items not in previous
+        return !previous.some(previousItem => DeepEqual(currentItem, previousItem))
+    })
+    const removed = previous.filter(previousItem => { // previous items not in current
+        return !current.some(currentItem => DeepEqual(previousItem, currentItem))
+    })
+    return {
+        added: added.map(item => { delete item._i; return item }),
+        removed: removed.map(item => { delete item._i; return item })
+    }
+}
+
 async function run() {
     const dateStarted = new Date()
     try {
@@ -100,24 +118,6 @@ async function run() {
             message: e.stack
         }
         Database.add('run', dateStarted.toISOString(), log)
-    }
-}
-
-export async function difference(id) {
-    const data = await Database.retrieveAll('data', true) // note only successful runs store data
-    const index = data.findIndex(d => d.id === id)
-    if (index === data.length - 1) return { added: [], removed: [] } // it's the first set of data we have
-    const current = data[index].rows.map((item, _i) => Object.assign({ _i }, item))
-    const previous = data[index + 1].rows.map((item, _i) => Object.assign({ _i }, item))
-    const added = current.filter(currentItem => { // current items not in previous
-        return !previous.some(previousItem => DeepEqual(currentItem, previousItem))
-    })
-    const removed = previous.filter(previousItem => { // previous items not in current
-        return !current.some(currentItem => DeepEqual(previousItem, currentItem))
-    })
-    return {
-        added: added.map(item => { delete item._i; return item }),
-        removed: removed.map(item => { delete item._i; return item })
     }
 }
 
