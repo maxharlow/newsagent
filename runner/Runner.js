@@ -18,6 +18,7 @@ export async function setup(filename) {
     const dateStarted = new Date()
     const data = await Promisify(FS.readFile)(filename)
     const recipe = JSON.parse(data.toString())
+    await Database.add('system', 'recipe', recipe)
     await Promisify(FS.mkdir)(Config.sourceLocation)
     const messages = await sequentially(shell(Config.sourceLocation), recipe.setup)
     messages.forEach(message => {
@@ -28,10 +29,9 @@ export async function setup(filename) {
     Process.exit(isFailure ? 1 : 0)
 }
 
-export async function schedule(filename) {
-    const data = await Promisify(FS.readFile)(filename)
-    const recipe = JSON.parse(data.toString())
-    await Database.add('system', 'recipe', recipe)
+export async function schedule() {
+    Object.keys(Schedule.scheduledJobs).forEach(Schedule.cancelJob)
+    const recipe = await Database.retrieve('system', 'recipe')
     if (recipe.schedule) {
         const job = Schedule.scheduleJob(recipe.schedule, run)
         if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
@@ -54,7 +54,7 @@ export async function describe() {
 
 export async function modify(recipeNew) {
     const recipeCurrent = await Database.retrieve('system', 'recipe', true)
-    return Database.update('system', 'recipe', recipeNew, recipeCurrent.rev)
+    return Database.update('system', 'recipe', recipeNew, recipeCurrent.rev).then(schedule)
 }
 
 export async function difference(id) {

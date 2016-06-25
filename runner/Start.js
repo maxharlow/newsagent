@@ -17,6 +17,6 @@ const filename = args[1]
 
 if (command === 'setup') Runner.setup(filename)
 else if (command === 'serve') {
-    Runner.schedule(filename)
+    Runner.schedule()
     Routes.listen()
 }
