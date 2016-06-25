@@ -14,6 +14,20 @@ import * as Database from './Database'
 import * as Docker from './Docker'
 import Config from './config.json'
 
+export async function create(recipe) {
+    const validation = validate(recipe)
+    if (validation.length > 0) {
+        const e = new Error('recipe not valid')
+        e.validation = validation
+        throw e
+    }
+    const id = recipe.name.replace(/ /g, '-').toLowerCase()
+    const agent = { state: 'starting', recipe }
+    const stored = await Database.add('agent', id, agent)
+    build(Object.assign({}, stored, agent)) // runs in background
+    return { id: stored.id }
+}
+
 export async function get(id) {
     const entry = await Database.retrieve('agent', id)
     if (entry.state !== 'started') return entry
@@ -48,18 +62,38 @@ export async function getAll() {
     return Promise.all(entries.map(entry => get(entry.id)))
 }
 
-export async function create(recipe) {
-    const validation = validate(recipe)
-    if (validation.length > 0) {
-        const e = new Error('recipe not valid')
-        e.validation = validation
-        throw e
+export async function destroy(id) {
+    const agent = await Database.retrieve('agent', id)
+    if (agent.state === 'starting') throw new Error('cannot destroy an agent until it has started')
+    else if (agent.state === 'started') {
+        const client = await Docker.client(agent.client)
+        const container = client.getContainer(id)
+        await container.stop()
+        await container.remove()
+        const image = client.getImage(id)
+        await image.remove()
     }
-    const id = recipe.name.replace(/ /g, '-').toLowerCase()
-    const agent = { state: 'starting', recipe }
-    const stored = await Database.add('agent', id, agent)
-    build(Object.assign({}, stored, agent)) // runs in background
-    return { id: stored.id }
+    await Database.remove('build', id)
+    return Database.remove('agent', id)
+}
+
+export function getRuns(agent) {
+    return fromContainer(agent, 'GET', '/runs')
+}
+
+export async function getRunData(agent, run, asCSV) {
+    const data = await fromContainer(agent, 'GET', '/runs/' + run)
+    return asCSV ? ToCSV(data) : data
+}
+
+export async function getDiffAdded(agent, run, asCSV) {
+    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/diff')
+    return asCSV ? ToCSV(data.added) : data.added
+}
+
+export async function getDiffRemoved(agent, run, asCSV) {
+    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/diff')
+    return asCSV ? ToCSV(data.removed) : data.removed
 }
 
 function validate(recipe, isUpdate) {
@@ -185,38 +219,4 @@ async function fromContainer(id, method, path, data) {
             }
         })
     })
-}
-
-export function getRuns(agent) {
-    return fromContainer(agent, 'GET', '/runs')
-}
-
-export async function getRunData(agent, run, asCSV) {
-    const data = await fromContainer(agent, 'GET', '/runs/' + run)
-    return asCSV ? ToCSV(data) : data
-}
-
-export async function getDiffAdded(agent, run, asCSV) {
-    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/diff')
-    return asCSV ? ToCSV(data.added) : data.added
-}
-
-export async function getDiffRemoved(agent, run, asCSV) {
-    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/diff')
-    return asCSV ? ToCSV(data.removed) : data.removed
-}
-
-export async function destroy(id) {
-    const agent = await Database.retrieve('agent', id)
-    if (agent.state === 'starting') throw new Error('cannot destroy an agent until it has started')
-    else if (agent.state === 'started') {
-        const client = await Docker.client(agent.client)
-        const container = client.getContainer(id)
-        await container.stop()
-        await container.remove()
-        const image = client.getImage(id)
-        await image.remove()
-    }
-    await Database.remove('build', id)
-    return Database.remove('agent', id)
 }
