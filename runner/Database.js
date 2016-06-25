@@ -9,9 +9,13 @@ export function add(type, id, data) {
     return db.put({ _id: type + '/' + id, data })
 }
 
+export function update(type, id, data, rev) {
+    return db.put({ _id: type + '/' + id, _rev: rev, data })
+}
+
 export async function retrieve(type, id, includeRev) {
     const document = await db.get(type + '/' + id)
-    if (includeRev) return Object.assign({ rev: document.rev }, document.data)
+    if (includeRev) return Object.assign({ rev: document._rev }, document.data)
     else return document.data
 }
 

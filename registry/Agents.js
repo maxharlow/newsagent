@@ -24,9 +24,23 @@ export async function get(id) {
         const system = {
             spaceUsed: Math.round((inspection.SizeRootFs / 1024 / 1024) * 100) / 100 // in MB
         }
-        const description = await fromContainer(id, '/')
+        const description = await fromContainer(id, 'GET', '/')
         return Object.assign({ id: entry.id, state: entry.state }, description, system)
     }
+}
+
+export async function modify(id, recipeChanges) {
+    const validation = validate(recipeChanges, true)
+    if (validation.length > 0) {
+        const e = new Error('recipe not valid')
+        e.validation = validation
+        throw e
+    }
+    const entry = await Database.retrieve('agent', id)
+    if (entry.state !== 'started') throw new Error('agent has not started')
+    const info = await fromContainer(id, 'GET', '/')
+    const recipe = Object.assign({}, info.recipe, recipeChanges)
+    return fromContainer(id, 'PATCH', '/', recipe)
 }
 
 export async function getAll() {
@@ -48,7 +62,7 @@ export async function create(recipe) {
     return { id: stored.id }
 }
 
-function validate(recipe) {
+function validate(recipe, isUpdate) {
     const schema = {
         type: 'object',
         properties: {
@@ -59,9 +73,9 @@ function validate(recipe) {
             run: { type: 'array', minimum: 1, items: { type: 'string' } },
             result: { type: 'string', minLength: 1 },
             triggers: { type: 'array', items: { type: 'object', properties: { recipient: { type: 'string' } }, required: [ 'recipient' ] } }
-        },
-        required: [ 'name', 'description', 'setup', 'schedule', 'run', 'result', 'triggers' ]
+        }
     }
+    if (!isUpdate) schema.required = [ 'name', 'description', 'setup', 'schedule', 'run', 'result', 'triggers' ]
     const validation = new JsonSchema.Validator().validate(recipe, schema)
     return validation.errors.map(e => e.stack)
 }
@@ -147,11 +161,14 @@ async function buildImage(client, id, tar) {
     })
 }
 
-async function fromContainer(id, path) {
+async function fromContainer(id, method, path, data) {
     const agent = await Database.retrieve('agent', id)
     const client = await Docker.client(agent.client)
     const container = await client.getContainer(id)
-    const exec = await container.exec({ Cmd: ['curl', 'localhost:3000' + path], AttachStdin: true, AttachStdout: true })
+    const command = ['curl', '-X', method, '-H', 'Content-Type: application/json']
+          .concat(data ? ['-d', JSON.stringify(data)] : [])
+          .concat(['localhost:3000' + path])
+    const exec = await container.exec({ Cmd: command, AttachStdin: true, AttachStdout: true })
     const stream = await exec.start()
     return new Promise((resolve, reject) => {
         var response = ''
@@ -159,26 +176,33 @@ async function fromContainer(id, path) {
         parser.on('data', data => response += data)
         parser.on('error', reject)
         container.modem.demuxStream(stream, parser, parser)
-        stream.on('end', () => resolve(response ? JSON.parse(response) : reject(new Error('missing'))))
+        stream.on('end', () => {
+            if (response === '') resolve()
+            else {
+                const data = JSON.parse(response)
+                if (data.error) reject(new Error(data.error))
+                else resolve(data)
+            }
+        })
     })
 }
 
 export function getRuns(agent) {
-    return fromContainer(agent, '/runs')
+    return fromContainer(agent, 'GET', '/runs')
 }
 
 export async function getRunData(agent, run, asCSV) {
-    const data = await fromContainer(agent, '/runs/' + run)
+    const data = await fromContainer(agent, 'GET', '/runs/' + run)
     return asCSV ? ToCSV(data) : data
 }
 
 export async function getDiffAdded(agent, run, asCSV) {
-    const data = await fromContainer(agent, '/runs/' + run + '/diff')
+    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/diff')
     return asCSV ? ToCSV(data.added) : data.added
 }
 
 export async function getDiffRemoved(agent, run, asCSV) {
-    const data = await fromContainer(agent, '/runs/' + run + '/diff')
+    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/diff')
     return asCSV ? ToCSV(data.removed) : data.removed
 }
 

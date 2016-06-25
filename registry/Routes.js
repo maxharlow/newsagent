@@ -36,6 +36,15 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
+    app.patch('/agents/:id', (request, response) => {
+        Agents.modify(request.params.id, request.body)
+            .then(agent => response.status(204).send(agent))
+            .catch(e => {
+                if (e.message === 'missing') response.status(404).send({ error: 'agent not found' })
+                else if (e.validation) response.status(400).send({ error: e.message, detail: e.validation })
+                else response.status(500).send({ error: e.message })
+            })
+    })
     app.delete('/agents/:id', (request, response) => {
         Agents.destroy(request.params.id)
             .then(() => response.status(204).send())

@@ -1,15 +1,22 @@
 'use strict'
 
 import Express from 'express'
+import BodyParser from 'body-parser'
 import * as Runner from './Runner'
 import * as Database from './Database'
 import Config from './config.json'
 
 export function listen() {
     const app = Express()
+    app.use(BodyParser.json())
     app.get('/', (request, response) => {
         Runner.describe()
             .then(summary => response.status(200).send(summary))
+            .catch(e => response.status(500).send({ error: e.message }))
+    })
+    app.patch('/', (request, response) => {
+        Runner.modify(request.body)
+            .then(() => response.status(204).send())
             .catch(e => response.status(500).send({ error: e.message }))
     })
     app.get('/runs', (request, response) => {

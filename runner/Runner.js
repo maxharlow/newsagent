@@ -52,6 +52,11 @@ export async function describe() {
     return { recipe, status }
 }
 
+export async function modify(recipeNew) {
+    const recipeCurrent = await Database.retrieve('system', 'recipe', true)
+    return Database.update('system', 'recipe', recipeNew, recipeCurrent.rev)
+}
+
 async function run() {
     const dateStarted = new Date()
     try {
