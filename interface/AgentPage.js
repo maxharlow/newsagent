@@ -33,7 +33,7 @@ export default class AgentPage extends React.Component {
     render() {
         if (this.state === null) return React.DOM.div({ className: 'loading' }, '')
         const summarise = (title, value) => React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, title), value)
-        const title = React.DOM.h2({}, 'Agent ' + this.state.recipe.name)
+        const title = React.DOM.h2({}, 'Agent: ' + this.state.recipe.name)
         const description = React.DOM.p({ className: 'description' }, this.state.recipe.description)
         const hr = React.DOM.hr({})
         const editButton = React.createElement(AgentPageEdit, { id: this.props.id, recipe: this.state.recipe })
