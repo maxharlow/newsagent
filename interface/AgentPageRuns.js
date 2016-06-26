@@ -73,8 +73,11 @@ export default class AgentPageRuns extends React.Component {
                     return React.DOM.li({ className: run.state }, ...fields)
                 }
                 else if (run.state === 'failure') {
-                    const messages = run.messages.map(message => {
-                        return React.DOM.span({ className: message.type }, message.value)
+                    const execution = run.execution.map(line => {
+                        const state = line.code === 0 ? 'success' : 'failure'
+                        const command = React.DOM.span({ className: 'stdin' }, line.command + '\n')
+                        const outputs = line.log.map(entry => React.DOM.span({ className: entry.type }, entry.value))
+                        return React.DOM.div({ className: state }, command, ...outputs)
                     })
                     const info = [
                         React.DOM.span({ className: 'date', title: Moment(run.date).format('LLL') }, 'ran ' + Moment(run.date).fromNow()),
@@ -83,7 +86,7 @@ export default class AgentPageRuns extends React.Component {
                     const fields = [
                         React.DOM.span({ className: 'state ' + run.state }, run.state),
                         React.DOM.div({ className: 'info' }, ...info),
-                        React.DOM.code({ className: 'messages' }, messages)
+                        React.DOM.code({ className: 'execution' }, execution)
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)
                 }
@@ -91,8 +94,10 @@ export default class AgentPageRuns extends React.Component {
                     const records = run.recordsAdded === 0 && run.recordsRemoved === 0
                           ? 'nothing changed'
                           : 'added ' + run.recordsAdded.toLocaleString() + ', removed ' + run.recordsRemoved.toLocaleString()
-                    const messages = run.messages.map(message => {
-                        return React.DOM.span({ className: message.type }, message.value)
+                    const execution = run.execution.map(line => {
+                        const command = React.DOM.span({ className: 'stdin' }, line.command + '\n')
+                        const outputs = line.log.map(entry => React.DOM.span({ className: entry.type }, entry.value))
+                        return React.DOM.div({}, command, ...outputs)
                     })
                     const triggered = run.triggered.map(trigger => {
                         const status = [
@@ -112,7 +117,7 @@ export default class AgentPageRuns extends React.Component {
                         React.DOM.div({ className: 'info' }, ...info),
                         React.DOM.button({ onClick: () => this.setState({ viewing: run }), className: 'hollow' }, 'View'),
                         React.DOM.button({ onClick: this.download(run.id), className: 'hollow' }, 'Download'),
-                        React.DOM.code({ className: 'messages' }, messages),
+                        React.DOM.code({ className: 'execution' }, execution),
                         React.DOM.ol({ className: 'triggered' }, triggered)
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)

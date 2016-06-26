@@ -20,10 +20,12 @@ export async function setup(filename) {
     const recipe = JSON.parse(data.toString())
     await Database.add('system', 'recipe', recipe)
     await Promisify(FS.mkdir)(Config.sourceLocation)
-    const messages = await sequentially(shell(Config.sourceLocation), recipe.setup)
-    messages.forEach(message => {
-        if (message.type === 'stderr') Process.stderr.write(message.value)
-        else if (message.type == 'stdout') Process.stdout.write(message.value)
+    const results = await sequentially(shell(Config.sourceLocation), recipe.setup)
+    results.forEach(result => {
+        result.log.forEach(message => {
+            if (message.type === 'stderr') Process.stderr.write(message.value)
+            else if (message.type == 'stdout') Process.stdout.write(message.value)
+        })
     })
     const isFailure = messages.some(message => message.type === 'failure')
     Process.exit(isFailure ? 1 : 0)
@@ -79,14 +81,14 @@ async function run() {
     const dateStarted = new Date()
     try {
         const recipe = await Database.retrieve('system', 'recipe')
-        const messages = await sequentially(shell(Config.sourceLocation), recipe.run)
-        const isFailure = messages.some(message => message.type === 'failure')
+        const execution = await sequentially(shell(Config.sourceLocation), recipe.run)
+        const isFailure = execution.some(entry => entry.code > 0)
         if (isFailure) {
             const log = {
                 state: 'failure',
                 date: dateStarted.toISOString(),
                 duration: new Date() - dateStarted,
-                messages
+                execution
             }
             Database.add('run', dateStarted.toISOString(), log)
         }
@@ -103,7 +105,7 @@ async function run() {
                 duration: new Date() - dateStarted,
                 recordsAdded: diff.added.length,
                 recordsRemoved: diff.removed.length,
-                messages,
+                execution,
                 triggered
             }
             Database.add('run', dateStarted.toISOString(), log)
@@ -142,27 +144,24 @@ function trigger(diff, triggers, name) {
     return Promise.all(responses.filter(Boolean))
 }
 
-function sequentially(fn, array) {
+function sequentially(fn, array, a = []) {
     return fn(array[0])
-        .then(data => array.length > 1 ? sequentially(fn, array.splice(1)) : data)
-        .catch(data => data)
+        .then(data => array.length > 1 ? sequentially(fn, array.splice(1), a.concat(data)) : a.concat(data))
+        .catch(data => a.concat(data))
 }
 
 function shell(location) {
     const path = Path.resolve(location)
-    var log = []
     return command => {
-        log.push({ type: 'stdin', value: command + '\n' })
+        var log = []
+        const process = ChildProcess.exec(command, { cwd: path })
+        process.stdout.on('data', data => log.push({ type: 'stdout', value: data }))
+        process.stderr.on('data', data => log.push({ type: 'stderr', value: data }))
         return new Promise((resolve, reject) => {
-            const process = ChildProcess.exec(command, { cwd: path })
-            process.stdout.on('data', data => log.push({ type: 'stdout', value: data }))
-            process.stderr.on('data', data => log.push({ type: 'stderr', value: data }))
             process.on('exit', code => {
-                if (code !== 0) {
-                    log.push({ type: 'failure', value: '[' + command + ' exited with code ' + code + ']\n' })
-                    reject(log)
-                }
-                else resolve(log)
+                const result = { command, code, log }
+                if (code > 0) reject(result)
+                else resolve(result)
             })
         })
     }

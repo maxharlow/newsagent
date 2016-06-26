@@ -98,7 +98,7 @@
     margin-left: 5px;
 }
 
-.agent-page-runs > ol > li .messages {
+.agent-page-runs > ol > li .execution {
     max-height: 150px;
     display: block;
     overflow: scroll;
@@ -111,18 +111,23 @@
     font-size: 12px;
 }
 
-.agent-page-runs > ol > li .messages .stdin:before {
+.agent-page-runs > ol > li .execution div {
+    display: block;
+    border-radius: 2px;
+}
+
+.agent-page-runs > ol > li .execution div.failure {
+    background: #550812;
+}
+
+.agent-page-runs > ol > li .execution div .stdin:before {
     content: '$';
     margin: 0 8px 0 5px;
     color: #999;
 }
 
-.agent-page-runs > ol > li .messages .failure {
-    color: #999;
-}
-
-.agent-page-runs > ol > li .messages .stdout,
-.agent-page-runs > ol > li .messages .stderr {
+.agent-page-runs > ol > li .execution div .stdout,
+.agent-page-runs > ol > li .execution div .stderr {
     margin-left: 20px;
 }
 
