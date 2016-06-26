@@ -131,12 +131,10 @@ async function build(agent) {
         Database.update('agent', agent.id, agentStarted, agent.rev)
     }
     catch (e) {
-        console.error(e.stack)
         const agentFailed = {
             state: 'failed',
             builtDate,
-            recipe: agent.recipe,
-            client: clientInfo.ID
+            recipe: agent.recipe
         }
         Database.update('agent', agent.id, agentFailed, agent.rev)
     }
@@ -175,7 +173,7 @@ async function buildImage(client, id, tar) {
     return new Promise((resolve, reject) => {
         const handler = event => {
             if (event.stream) log.push({ type: 'stdout', value: StripAnsi(event.stream) })
-            else if (event.error) log.push({ type: 'stderr', value: event.error, code: event.errorDetail.code })
+            else if (event.error) log.push({ type: 'stderr', value: event.error })
             if (event.stream && event.stream.startsWith('Successfully built')) {
                 clearInterval(logUpdater)
                 logUpdate()
@@ -190,6 +188,7 @@ async function buildImage(client, id, tar) {
         const parser = new JsonStream() // deals with (large) json objects split over multiple events
         parser.on('data', handler)
         parser.on('error', error => handler({ error, log }))
+        parser.on('end', () => handler({ error: 'Exited' }))
         stream.pipe(parser)
         setTimeout(() => handler({ timeout: true }), 30 * 60 * 1000) // in milliseconds
     })
