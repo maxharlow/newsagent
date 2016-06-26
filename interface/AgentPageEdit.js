@@ -40,7 +40,7 @@ export default class AgentPageEdit extends React.Component {
     render() {
         const body = [
             React.DOM.h5({}, 'Edit agent'),
-            React.DOM.h4({}, 'When should this agent run?'),
+            React.DOM.h4({}, 'Run schedule'),
             React.createElement(CronEntry, { value: this.state.recipe.schedule, onChange: this.set('schedule') }),
             this.state.validation['run'] ? React.DOM.span({ className: 'validation' }, 'At least one command needs to be entered') : null,
             React.DOM.h4({}, 'Run commands'),

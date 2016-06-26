@@ -1,3 +1,7 @@
+.agent-page-build button {
+    width: 100%;
+}
+
 .agent-page-build .log {
     box-shadow: 1px 1px 2px 1px #eee;
     background: white;
