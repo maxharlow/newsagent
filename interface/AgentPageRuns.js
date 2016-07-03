@@ -62,7 +62,7 @@ export default class AgentPageRuns extends React.Component {
                 const run = this.state.runs[i]
                 if (run.state === 'system-error') {
                     const info = [
-                        React.DOM.span({ className: 'date', title: Moment(run.date).format('LLL') }, 'ran ' + Moment(run.date).fromNow()),
+                        React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'ran ' + Moment(run.dateStarted).fromNow()),
                         React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize())
                     ]
                     const fields = [
@@ -80,7 +80,7 @@ export default class AgentPageRuns extends React.Component {
                         return React.DOM.div({ className: state }, command, ...outputs)
                     })
                     const info = [
-                        React.DOM.span({ className: 'date', title: Moment(run.date).format('LLL') }, 'ran ' + Moment(run.date).fromNow()),
+                        React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'ran ' + Moment(run.dateStarted).fromNow()),
                         React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize())
                     ]
                     const fields = [
@@ -108,7 +108,7 @@ export default class AgentPageRuns extends React.Component {
                         return React.DOM.li({}, status)
                     })
                     const info = [
-                        React.DOM.span({ className: 'date', title: Moment(run.date).format('LLL') }, 'ran ' + Moment(run.date).fromNow()),
+                        React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'ran ' + Moment(run.dateStarted).fromNow()),
                         React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize()),
                         React.DOM.span({ className: 'records' }, records)
                     ]

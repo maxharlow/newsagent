@@ -84,13 +84,13 @@ async function run() {
         const execution = await sequentially(shell(Config.sourceLocation), recipe.run)
         const isFailure = execution.some(entry => entry.code > 0)
         if (isFailure) {
-            const log = {
+            const run = {
                 state: 'failure',
-                date: dateStarted.toISOString(),
+                dateStarted: dateStarted.toISOString(),
                 duration: new Date() - dateStarted,
                 execution
             }
-            Database.add('run', dateStarted.toISOString(), log)
+            Database.add('run', dateStarted.toISOString(), run)
         }
         else {
             const rows = await csv(Config.sourceLocation + '/' + recipe.result)
@@ -99,27 +99,27 @@ async function run() {
             await Database.add('data', id, data)
             const diff = await difference(id)
             const triggered = await trigger(diff, recipe.triggers, recipe.name)
-            const log = {
+            const run = {
                 state: 'success',
-                date: dateStarted.toISOString(),
+                dateStarted: dateStarted.toISOString(),
                 duration: new Date() - dateStarted,
                 recordsAdded: diff.added.length,
                 recordsRemoved: diff.removed.length,
                 execution,
                 triggered
             }
-            Database.add('run', dateStarted.toISOString(), log)
+            Database.add('run', dateStarted.toISOString(), run)
             removeOldRuns()
         }
     }
     catch (e) {
-        const log = {
+        const run = {
             state: 'system-error',
-            date: dateStarted.toISOString(),
+            dateStarted: dateStarted.toISOString(),
             duration: new Date() - dateStarted,
             message: e.stack
         }
-        Database.add('run', dateStarted.toISOString(), log)
+        Database.add('run', dateStarted.toISOString(), run)
     }
 }
 
