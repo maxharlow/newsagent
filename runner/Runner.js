@@ -53,15 +53,14 @@ export async function enqueue(initiator) {
     return Database.add('run', dateQueued, run)
 }
 
-async function pluck() {
-    const runs = await Database.retrieveAll('run', true)
-    const isRunning = runs.find(run => run.state === 'running')
-    const runsQueued = runs.filter(run => run.state === 'queued')
-    if (isRunning || runsQueued.length === 0) return
-    else run(runsQueued[0].id)
-}
-
 export async function dequeue() {
+    async function pluck() {
+        const runs = await Database.retrieveAll('run', true)
+        const isRunning = runs.find(run => run.state === 'running')
+        const runsQueued = runs.filter(run => run.state === 'queued')
+        if (isRunning || runsQueued.length === 0) return
+        else run(runsQueued[0].id)
+    }
     setInterval(pluck, 10 * 1000) // in milliseconds
 }
 
