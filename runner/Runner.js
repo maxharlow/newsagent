@@ -50,7 +50,7 @@ export async function enqueue(initiator) {
         initiator,
         dateQueued
     }
-    Database.add('run', dateQueued, run)
+    return Database.add('run', dateQueued, run)
 }
 
 async function pluck() {

@@ -77,6 +77,10 @@ export async function destroy(id) {
     return Database.remove('agent', id)
 }
 
+export function run(agent) {
+    return fromContainer(agent, 'POST', '/')
+}
+
 export function getRuns(agent) {
     return fromContainer(agent, 'GET', '/runs')
 }

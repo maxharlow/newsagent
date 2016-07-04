@@ -50,6 +50,10 @@ button:enabled:active {
     background: #770000;
 }
 
+button:disabled {
+    background: #a6504e;
+}
+
 button.hollow {
     background: none;
     border: 1px solid #888;

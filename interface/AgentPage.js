@@ -13,6 +13,7 @@ export default class AgentPage extends React.Component {
     constructor() {
         super()
         this.load = this.load.bind(this)
+        this.run = this.run.bind(this)
     }
 
     componentWillMount() {
@@ -30,12 +31,17 @@ export default class AgentPage extends React.Component {
         })
     }
 
+    run() {
+        HTTP.post(Config.registry + '/agents/' + this.props.id)
+    }
+
     render() {
         if (this.state === null) return React.DOM.div({ className: 'loading' }, '')
         const summarise = (title, value) => React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, title), value)
         const title = React.DOM.h2({}, 'Agent: ' + this.state.recipe.name)
         const description = React.DOM.p({ className: 'description' }, this.state.recipe.description)
         const hr = React.DOM.hr({})
+        const runButton = React.DOM.button({ className: 'run', onClick: this.run, disabled: this.state.runDisabled }, 'Run now')
         const editButton = React.createElement(AgentPageEdit, { id: this.props.id, recipe: this.state.recipe })
         const deleteButton = React.createElement(AgentPageDelete, { id: this.props.id })
         const summaryBuiltDate = summarise('Built: ', Moment(this.state.builtDate).format('LLL'))
@@ -60,9 +66,10 @@ export default class AgentPage extends React.Component {
                 this.state.status.dateLastSuccessfulRun ? summarise('Last successful run: ', Moment(this.state.status.dateLastSuccessfulRun).fromNow()) : '',
                 this.state.spaceUsed ? summarise('Space used: ', this.state.spaceUsed + ' MB') : ''
             ]
-            const runs = React.createElement(AgentPageRuns, { id: this.props.id })
+            const setRunDisabled = runDisabled => this.setState({ runDisabled })
+            const runs = React.createElement(AgentPageRuns, { id: this.props.id, setRunDisabled })
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page' }, editButton, deleteButton, title, description, hr, ...summary, recipe, runs, build)
+            return React.DOM.div({ className: 'agent-page' }, runButton, editButton, deleteButton, title, description, hr, ...summary, recipe, runs, build)
         }
     }
 

@@ -4,6 +4,11 @@
     padding: 0 10px;
 }
 
+.agent-page button.run {
+    float: right;
+    margin-left: 5px;
+}
+
 .agent-page h2 {
     margin-bottom: 0;
 }

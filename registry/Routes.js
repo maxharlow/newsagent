@@ -36,6 +36,14 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
+    app.post('/agents/:id', (request, response) => {
+        Agents.run(request.params.id)
+            .then(() => response.status(202).send())
+            .catch(e => {
+                if (e.message === 'missing') response.status(404).send({ error: 'agent not found' })
+                else response.status(500).send({ error: e.message })
+            })
+    })
     app.patch('/agents/:id', (request, response) => {
         Agents.modify(request.params.id, request.body)
             .then(agent => response.status(204).send(agent))
