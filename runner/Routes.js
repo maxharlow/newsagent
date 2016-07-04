@@ -22,7 +22,10 @@ export function listen() {
     app.patch('/', (request, response) => {
         Runner.modify(request.body)
             .then(() => response.status(204).send())
-            .catch(e => response.status(500).send({ error: e.message }))
+            .catch(e => {
+                if (e.message === 'duplicate') response.status(403).send({ error: 'an identical run is already queued' })
+                else response.status(500).send({ error: e.message })
+            })
     })
     app.get('/runs', (request, response) => {
         Database.retrieveAll('run', true)

@@ -43,7 +43,7 @@ export async function schedule() {
 export async function enqueue(initiator) {
     const runs = await Database.retrieveAll('run')
     const runsIdenticalQueued = runs.filter(run => run.state === 'queued' && run.initiator === initiator)
-    if (runsIdenticalQueued.length > 0) return
+    if (runsIdenticalQueued.length > 0) throw new Error('duplicate')
     const dateQueued = new Date().toISOString()
     const run = {
         state: 'queued',
