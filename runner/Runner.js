@@ -35,20 +35,46 @@ export async function schedule() {
     Object.keys(Schedule.scheduledJobs).forEach(Schedule.cancelJob)
     const recipe = await Database.retrieve('system', 'recipe')
     if (recipe.schedule) {
-        const job = Schedule.scheduleJob(recipe.schedule, run)
+        const job = Schedule.scheduleJob(recipe.schedule, () => enqueue('scheduled'))
         if (job === null) throw new Error('Scheduling failed! Is the crontab valid?')
     }
+}
+
+export async function enqueue(initiator) {
+    const runs = await Database.retrieveAll('run')
+    const runsIdenticalQueued = runs.filter(run => run.state === 'queued' && run.initiator === initiator)
+    if (runsIdenticalQueued.length > 0) return
+    const dateQueued = new Date().toISOString()
+    const run = {
+        state: 'queued',
+        initiator,
+        dateQueued
+    }
+    Database.add('run', dateQueued, run)
+}
+
+async function pluck() {
+    const runs = await Database.retrieveAll('run', true)
+    const isRunning = runs.find(run => run.state === 'running')
+    const runsQueued = runs.filter(run => run.state === 'queued')
+    if (isRunning || runsQueued.length === 0) return
+    else run(runsQueued[0].id)
+}
+
+export async function dequeue() {
+    setInterval(pluck, 10 * 1000) // in milliseconds
 }
 
 export async function describe() {
     const recipe = await Database.retrieve('system', 'recipe')
     const runs = await Database.retrieveAll('run')
+    const runsFinished = runs.filter(run => run.state !== 'queued' && run.state !== 'running')
     const runsSuccessful = runs.filter(run => run.state === 'success')
     const status = {
-        numberRuns: runs.length,
+        numberRuns: runsFinished.length,
         numberRunsSuccessful: runsSuccessful.length,
-        successRate: Math.round((runsSuccessful.length / runs.length * 100) * 10) / 10,
-        averageRunTime: runs.reduce((a, run) => a + run.duration, 0) / runs.length,
+        successRate: Math.round((runsSuccessful.length / runsFinished.length * 100) * 10) / 10,
+        averageRunTime: runsFinished.reduce((a, run) => a + run.duration, 0) / runsFinished.length,
         dateLastSuccessfulRun: runsSuccessful.length > 0 ? runsSuccessful[0].date : null
     }
     return { recipe, status }
@@ -77,49 +103,49 @@ export async function difference(id) {
     }
 }
 
-async function run() {
+async function run(id) {
+    const queued = await Database.retrieve('run', id, true)
     const dateStarted = new Date()
-    try {
-        const recipe = await Database.retrieve('system', 'recipe')
-        const execution = await sequentially(shell(Config.sourceLocation), recipe.run)
-        const isFailure = execution.some(entry => entry.code > 0)
-        if (isFailure) {
-            const run = {
-                state: 'failure',
-                dateStarted: dateStarted.toISOString(),
-                duration: new Date() - dateStarted,
-                execution
-            }
-            Database.add('run', dateStarted.toISOString(), run)
-        }
-        else {
-            const rows = await csv(Config.sourceLocation + '/' + recipe.result)
-            const data = { rows }
-            const id = dateStarted.toISOString()
-            await Database.add('data', id, data)
-            const diff = await difference(id)
-            const triggered = await trigger(diff, recipe.triggers, recipe.name)
-            const run = {
-                state: 'success',
-                dateStarted: dateStarted.toISOString(),
-                duration: new Date() - dateStarted,
-                recordsAdded: diff.added.length,
-                recordsRemoved: diff.removed.length,
-                execution,
-                triggered
-            }
-            Database.add('run', dateStarted.toISOString(), run)
-            removeOldRuns()
-        }
+    const runRunning = {
+        state: 'running',
+        initiator: queued.initiator,
+        dateQueued: queued.dateQueued,
+        dateStarted: dateStarted.toISOString()
     }
-    catch (e) {
-        const run = {
-            state: 'system-error',
+    const running = await Database.update('run', id, runRunning, queued.rev)
+    const recipe = await Database.retrieve('system', 'recipe')
+    const execution = await sequentially(shell(Config.sourceLocation), recipe.run)
+    const isFailure = execution.some(entry => entry.code > 0)
+    if (isFailure) {
+        const runFailure = {
+            state: 'failure',
+            initiator: queued.initiator,
+            dateQueued: queued.dateQueued,
             dateStarted: dateStarted.toISOString(),
             duration: new Date() - dateStarted,
-            message: e.stack
+            execution
         }
-        Database.add('run', dateStarted.toISOString(), run)
+        Database.update('run', id, runFailure, running.rev)
+    }
+    else {
+        const rows = await csv(Config.sourceLocation + '/' + recipe.result)
+        const data = { rows }
+        await Database.add('data', id, data)
+        const diff = await difference(id)
+        const triggered = await trigger(diff, recipe.triggers, recipe.name)
+        const runSuccess = {
+            state: 'success',
+            initiator: queued.initiator,
+            dateQueued: queued.dateQueued,
+            dateStarted: dateStarted.toISOString(),
+            duration: new Date() - dateStarted,
+            recordsAdded: diff.added.length,
+            recordsRemoved: diff.removed.length,
+            execution,
+            triggered
+        }
+        await Database.update('run', id, runSuccess, running.rev)
+        removeOldRuns()
     }
 }
 

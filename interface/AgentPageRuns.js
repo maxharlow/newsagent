@@ -60,15 +60,24 @@ export default class AgentPageRuns extends React.Component {
             const keysLimited = keys.slice(0, keys.length - this.state.hidden)
             const items = keysLimited.map(i => {
                 const run = this.state.runs[i]
-                if (run.state === 'system-error') {
+                if (run.state === 'queued') {
                     const info = [
-                        React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'ran ' + Moment(run.dateStarted).fromNow()),
-                        React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize())
+                        React.DOM.span({ className: 'initiator' }, run.initiator)
                     ]
                     const fields = [
                         React.DOM.span({ className: 'state ' + run.state }, run.state),
-                        React.DOM.div({ className: 'info' }, ...info),
-                        React.DOM.code({ className: 'messages' }, run.message)
+                        React.DOM.div({ className: 'info' }, ...info)
+                    ]
+                    return React.DOM.li({ className: run.state }, ...fields)
+                }
+                else if (run.state === 'running') {
+                    const info = [
+                        React.DOM.span({ className: 'initiator' }, run.initiator),
+                        React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'started ' + Moment(run.dateStarted).fromNow())
+                    ]
+                    const fields = [
+                        React.DOM.span({ className: 'state ' + run.state }, run.state),
+                        React.DOM.div({ className: 'info' }, ...info)
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)
                 }
@@ -80,6 +89,7 @@ export default class AgentPageRuns extends React.Component {
                         return React.DOM.div({ className: state }, command, ...outputs)
                     })
                     const info = [
+                        React.DOM.span({ className: 'initiator' }, run.initiator),
                         React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'ran ' + Moment(run.dateStarted).fromNow()),
                         React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize())
                     ]
@@ -108,6 +118,7 @@ export default class AgentPageRuns extends React.Component {
                         return React.DOM.li({}, status)
                     })
                     const info = [
+                        React.DOM.span({ className: 'initiator' }, run.initiator),
                         React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'ran ' + Moment(run.dateStarted).fromNow()),
                         React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize()),
                         React.DOM.span({ className: 'records' }, records)

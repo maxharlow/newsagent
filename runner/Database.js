@@ -15,15 +15,15 @@ export function update(type, id, data, rev) {
 
 export async function retrieve(type, id, includeRev) {
     const document = await db.get(type + '/' + id)
-    if (includeRev) return Object.assign({ rev: document._rev }, document.data)
-    else return document.data
+    const withRev = includeRev ? { rev: document._rev } : {}
+    return Object.assign(withRev, document.data)
 }
 
 export async function retrieveAll(type, includeIDs) {
     const documents = await db.allDocs({ startkey: type + '/\uffff', endkey: type + '/', include_docs: true, descending: true })
     return documents.rows.map(row => {
-        if (includeIDs === true) return Object.assign({ id: row.id.replace(type + '/', '') }, row.doc.data)
-        else return row.doc.data
+        const withIDs = includeIDs ? { id: row.id.replace(type + '/', '') } : {}
+        return Object.assign(withIDs, row.doc.data)
     })
 }
 
