@@ -73,7 +73,7 @@ To shut down the machine it ran on:
 Development
 -----------
 
-In production Datastash runs Docker inside a Docker container. For development this is obviously madness, so we can run Datastash using your local Docker client.
+In production Datastash runs Docker inside a Docker container. For development this is obviously madness, so we can run Datastash using your local Docker client instead.
 
 You will need [Node] (https://nodejs.org/en/), [Docker] (https://www.docker.com/products/docker-engine), and [Docker Machine] (https://www.docker.com/products/docker-machine).
 
