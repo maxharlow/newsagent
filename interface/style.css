@@ -52,6 +52,7 @@ button:enabled:active {
 
 button:disabled {
     background: #a6504e;
+    cursor: not-allowed;
 }
 
 button.hollow {
