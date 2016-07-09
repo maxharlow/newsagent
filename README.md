@@ -11,7 +11,7 @@ Deploying
 
 Firstly you'll need to clone this repository. You will also need [Docker] (https://www.docker.com/products/docker-engine) and [Docker Machine] (https://www.docker.com/products/docker-machine).
 
-Next we need to create two configuration files based on existing example files. The first is for the Runner component which is responsible for each agent running periodically and sending emails when differences are detected. To do this first copy the example file:
+Next we need to create configuration files based on existing example files. The first is for the Runner component which is responsible for each agent running periodically and sending emails when differences are detected. To do this first copy the example file:
 
     $ cp runner/config.example.json runner/config.json
 
@@ -21,7 +21,11 @@ The second configuration file is for the Registry, which creates and manages the
 
     $ cp registry/config.example.json registry/config.json
 
-In this case nothing needs to be added to the file.
+The last configuration file is for the interface:
+
+    $ cp interface/config.example.json interface/config.json
+
+In these cases nothing needs to be added to the file.
 
 ### On your local machine
 

@@ -1,3 +1,5 @@
+import config from '/config.json'
+
 export default {
-    registry: 'http://' + window.location.hostname + ':' + 4001
+    registry: 'http://' + (config.domain || window.location.hostname) + ':' + config.port
 }
