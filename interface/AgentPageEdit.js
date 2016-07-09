@@ -4,7 +4,7 @@ import CronEntry from '/CronEntry.js'
 import CommandEntry from '/CommandEntry.js'
 import TriggerEntry from '/TriggerEntry.js'
 import HTTP from '/HTTP.js'
-import Config from '/config.js'
+import Config from '/Config.js'
 
 export default class AgentPageEdit extends React.Component {
 

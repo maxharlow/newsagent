@@ -6,7 +6,7 @@ import AgentPageRecipe from '/AgentPageRecipe.js'
 import AgentPageRuns from '/AgentPageRuns.js'
 import AgentPageBuild from '/AgentPageBuild.js'
 import HTTP from '/HTTP.js'
-import Config from '/config.js'
+import Config from '/Config.js'
 
 export default class AgentPage extends React.Component {
 

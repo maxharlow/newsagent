@@ -2,7 +2,7 @@ import React from 'react'
 import Moment from 'moment'
 import RunDataView from '/RunDataView.js'
 import HTTP from '/HTTP.js'
-import Config from '/config.js'
+import Config from '/Config.js'
 
 export default class AgentPageRuns extends React.Component {
 

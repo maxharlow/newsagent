@@ -1,6 +1,6 @@
 import React from 'react'
 import HTTP from '/HTTP.js'
-import Config from '/config.js'
+import Config from '/Config.js'
 
 export default class AgentPageBuild extends React.Component {
 

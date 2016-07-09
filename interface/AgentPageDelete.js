@@ -2,7 +2,7 @@ import React from 'react'
 import Page from 'page'
 import Dialog from '/Dialog.js'
 import HTTP from '/HTTP.js'
-import Config from '/config.js'
+import Config from '/Config.js'
 
 export default class AgentPageDelete extends React.Component {
 

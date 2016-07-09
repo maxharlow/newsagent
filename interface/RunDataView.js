@@ -1,7 +1,7 @@
 import React from 'react'
 import Moment from 'moment'
 import HTTP from '/HTTP.js'
-import Config from '/config.js'
+import Config from '/Config.js'
 
 export default class RunDataView extends React.Component {
 
