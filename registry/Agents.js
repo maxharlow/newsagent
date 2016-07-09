@@ -21,7 +21,7 @@ export async function create(recipe) {
         e.validation = validation
         throw e
     }
-    const id = recipe.name.replace(/ /g, '-').toLowerCase()
+    const id = recipe.name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '-').toLowerCase()
     const agent = { state: 'starting', recipe }
     const stored = await Database.add('agent', id, agent)
     build(Object.assign({}, stored, agent)) // runs in background
