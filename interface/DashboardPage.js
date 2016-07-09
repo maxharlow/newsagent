@@ -109,7 +109,7 @@ export default class AgentsPage extends React.Component {
                 return React.DOM.li({ className: agent.state }, React.DOM.a({ href: '/agents/' + agent.id }, ...fields))
             })
             const list = React.DOM.ol({}, ...agents)
-            return React.DOM.div({ className: 'dashboard-page' }, createButton, exportButton, importButton, filter, title, hr, list)
+            return React.DOM.div({ className: 'dashboard-page' }, createButton, importButton, exportButton, filter, title, hr, list)
         }
     }
 
