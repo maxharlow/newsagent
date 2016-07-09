@@ -114,8 +114,8 @@ export function listen() {
             })
     })
     app.get('/export', (request, response) => {
-        Database.retrieveAll('agent')
-            .then(agents => response.status(200).send(agents.map(agent => agent.recipe)))
+        Agents.recipies()
+            .then(agents => response.status(200).send(agents))
             .catch(e => response.status(500).send({ error: e.message }))
     })
     app.post('/import', (request, response) => {

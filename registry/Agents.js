@@ -77,6 +77,12 @@ export async function destroy(id) {
     return Database.remove('agent', id)
 }
 
+export async function recipes() {
+    const agents = await Database.retrieveAll('agent', true)
+    const descriptions = await Promise.all(agents.map(agent => fromContainer(agent.id, 'GET', '/')))
+    return descriptions.map(description => description.recipe)
+}
+
 export function run(agent) {
     return fromContainer(agent, 'POST', '/')
 }
