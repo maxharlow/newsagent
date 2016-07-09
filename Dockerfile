@@ -15,6 +15,7 @@ COPY registry/config.json  /registry/
 
 COPY interface/*.js        /interface/
 COPY interface/*.css       /interface/
+COPY interface/config.json /interface/
 COPY interface/index.html  /interface/
 COPY interface/nginx.conf  /interface/
 
