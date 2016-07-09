@@ -17,7 +17,7 @@ export default class AgentsPage extends React.Component {
         this.state = {
             filter: '',
             agentsFiltered: [],
-            agents: []
+            agents: null
         }
     }
 
@@ -88,7 +88,7 @@ export default class AgentsPage extends React.Component {
         const createButton = React.DOM.button({ onClick: this.create }, 'Create new agent')
         const importButton = React.DOM.button({ onClick: this.import }, 'Import')
         const exportButton = React.DOM.button({ onClick: this.export }, 'Export')
-        if (this.state === null) {
+        if (this.state.agents === null) {
             const loading = React.DOM.div({ className: 'loading' })
             return React.DOM.div({ className: 'dashboard-page' }, createButton, importButton, title, hr, loading)
         }
