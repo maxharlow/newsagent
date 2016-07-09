@@ -114,7 +114,7 @@ export function listen() {
             })
     })
     app.get('/export', (request, response) => {
-        Agents.recipies()
+        Agents.recipes()
             .then(agents => response.status(200).send(agents))
             .catch(e => response.status(500).send({ error: e.message }))
     })
