@@ -99,10 +99,10 @@ export default class AgentsPage extends React.Component {
         else {
             const filter = React.DOM.input({ placeholder: 'Filter agents...', className: 'filter', onInput: this.onFilter })
             const agents = this.state.agentsFiltered.map(agent => {
-                const schedule = agent.recipe.schedule === '' ? '' : PrettyCron.toString(agent.recipe.schedule).toLowerCase()
                 const fields = [
-                    React.DOM.div({ className: 'state ' + agent.state }, agent.state),
-                    React.DOM.div({ className: 'schedule' }, schedule),
+                    agent.state === 'started' && agent.recipe.schedule
+                        ? React.DOM.div({ className: 'schedule' }, 'runs at ' + PrettyCron.toString(agent.recipe.schedule).toLowerCase()) : '',
+                    agent.state === 'started' ? '' : React.DOM.div({ className: 'state ' + agent.state }, agent.state),
                     React.DOM.h5({}, agent.recipe.name),
                     React.DOM.div({ className: 'description' }, agent.recipe.description)
                 ]

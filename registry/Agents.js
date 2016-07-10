@@ -57,9 +57,18 @@ export async function modify(id, recipeChanges) {
     return fromContainer(id, 'PATCH', '/', recipe)
 }
 
-export async function getAll() {
+export async function list() {
     const entries = await Database.retrieveAll('agent', true)
-    return Promise.all(entries.map(entry => get(entry.id)))
+    const withDescriptions = entries.map(entry => {
+        if (entry.state !== 'started') return entry
+        else return fromContainer(entry.id, 'GET', '/').then(description => Object.assign(entry, description))
+    })
+    return Promise.all(withDescriptions)
+}
+
+export async function listRecipes() {
+    const agents = await list()
+    return agents.filter(agent => agent.state === 'started').map(agent => agent.recipe)
 }
 
 export async function destroy(id) {
@@ -75,12 +84,6 @@ export async function destroy(id) {
     }
     await Database.remove('build', id)
     return Database.remove('agent', id)
-}
-
-export async function recipes() {
-    const agents = await Database.retrieveAll('agent', true)
-    const descriptions = await Promise.all(agents.map(agent => fromContainer(agent.id, 'GET', '/')))
-    return descriptions.map(description => description.recipe)
 }
 
 export function run(agent) {

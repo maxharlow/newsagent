@@ -16,7 +16,7 @@ export function listen() {
         next()
     })
     app.get('/agents', (request, response) => {
-        Agents.getAll()
+        Agents.list()
             .then(agents => response.status(200).send(agents))
             .catch(e => response.status(500).send({ error: e.message }))
     })
@@ -114,7 +114,7 @@ export function listen() {
             })
     })
     app.get('/export', (request, response) => {
-        Agents.recipes()
+        Agents.listRecipes()
             .then(agents => response.status(200).send(agents))
             .catch(e => response.status(500).send({ error: e.message }))
     })

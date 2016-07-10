@@ -34,28 +34,25 @@
 
 .dashboard-page ol li a {
     display: block;
-    height: 42px;
-    padding: 15px;
     text-decoration: none;
-}
-
-.dashboard-page ol li a .state {
-    float: right;
-    clear: right;
-    border-radius: 5px;
-    padding: 0 5px;
-    color: white;
-    font-size: 12px;
 }
 
 .dashboard-page ol li a .schedule {
     float: right;
     clear: right;
+    max-width: 50%;
+    padding: 15px;
     font-size: 12px;
 }
 
-.dashboard-page ol li a .state.started {
-    background: #aaa;
+.dashboard-page ol li a .state {
+    float: right;
+    margin: 15px;
+    padding: 0 5px;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 .dashboard-page ol li a .state.starting {
@@ -68,10 +65,12 @@
 
 .dashboard-page ol li a h5 {
     margin: 0;
+    padding: 15px 0 0 15px;
     font-size: 16px;
     font-weight: normal;
 }
 
 .dashboard-page ol li a .description {
-    font-size: 12px;
+    padding: 0 0 15px 15px;
+    font-size: 13px;
 }
