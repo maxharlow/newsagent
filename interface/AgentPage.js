@@ -52,11 +52,13 @@ export default class AgentPage extends React.Component {
             return React.DOM.div({ className: 'agent-page' }, title, description, hr, message, recipe, build)
         }
         else if (this.state.state === 'failed') {
+            const buttons = React.DOM.div({ className: 'buttons' }, deleteButton)
             const message = React.DOM.div({ className: 'failed message' }, 'This agent failed to build.')
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page' }, deleteButton, title, description, hr, summaryBuiltDate, message, recipe, build)
+            return React.DOM.div({ className: 'agent-page' }, buttons, title, description, hr, summaryBuiltDate, message, recipe, build)
         }
         else {
+            const buttons = React.DOM.div({ className: 'buttons' }, deleteButton, editButton, runButton)
             const summary = [
                 summaryBuiltDate,
                 this.state.status.averageRunTime ? summarise('Average run time: ', Moment.duration(this.state.status.averageRunTime).humanize()) : '',
@@ -69,7 +71,7 @@ export default class AgentPage extends React.Component {
             const setRunDisabled = runDisabled => this.setState({ runDisabled })
             const runs = React.createElement(AgentPageRuns, { id: this.props.id, setRunDisabled })
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page' }, runButton, editButton, deleteButton, title, description, hr, ...summary, recipe, runs, build)
+            return React.DOM.div({ className: 'agent-page' }, title, description, buttons, hr, ...summary, recipe, runs, build)
         }
     }
 

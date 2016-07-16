@@ -1,6 +1,5 @@
 .agent-page-edit {
-    float: right;
-    margin-left: 5px;
+    display: inline;
 }
 
 .agent-page-edit .validation {

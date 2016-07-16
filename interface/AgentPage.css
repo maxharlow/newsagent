@@ -4,18 +4,25 @@
     padding: 0 10px;
 }
 
-.agent-page button.run {
-    float: right;
-    margin-left: 5px;
-}
-
 .agent-page h2 {
-    margin-bottom: 0;
+    display: inline-block;
+    width: calc(100% - 230px);
 }
 
 .agent-page .description {
+    display: inline-block;
     margin: 0 0 15px 0;
     font-size: 12px;
+}
+
+.agent-page .buttons {
+    display: inline-block;
+    width: 230px;
+    text-align: right;
+}
+
+.agent-page .buttons * + * {
+    margin-left: 5px;
 }
 
 .agent-page .summary {
@@ -42,4 +49,23 @@
 
 .agent-page .message.failed {
     background: #ed5c5c;
+}
+
+@media (max-width: 600px) {
+
+    .agent-page h2 {
+        width: 50%;
+    }
+
+    .agent-page .buttons {
+        display: block;
+        width: 100%;
+        margin-top: 5px;
+        text-align: left;
+    }
+
+    .agent-page .buttons button {
+        margin-top: 5px;
+    }
+
 }

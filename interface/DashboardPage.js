@@ -89,15 +89,19 @@ export default class AgentsPage extends React.Component {
         const importButton = React.DOM.button({ onClick: this.import }, 'Import')
         const exportButton = React.DOM.button({ onClick: this.export }, 'Export')
         if (this.state.agents === null) {
+            const buttons = React.DOM.div({ className: 'buttons' }, importButton, createButton)
             const loading = React.DOM.div({ className: 'loading' })
-            return React.DOM.div({ className: 'dashboard-page' }, createButton, importButton, title, hr, loading)
+            return React.DOM.div({ className: 'dashboard-page' }, title, buttons, hr, loading)
         }
         else if (this.state.agents.length === 0) {
+            const buttons = React.DOM.div({ className: 'buttons' }, importButton, createButton)
             const message = React.DOM.p({}, 'No agents have been created.')
-            return React.DOM.div({ className: 'dashboard-page' }, createButton, importButton, title, hr, message)
+            return React.DOM.div({ className: 'dashboard-page' }, title, buttons, hr, message)
         }
         else {
+            const count = React.DOM.span({ className: 'count' }, this.state.agentsFiltered.length === 1 ? '1 agent' : this.state.agentsFiltered.length + ' agents')
             const filter = React.DOM.input({ placeholder: 'Filter agents...', className: 'filter', onInput: this.onFilter })
+            const buttons = React.DOM.div({ className: 'buttons' }, exportButton, importButton, createButton)
             const agents = this.state.agentsFiltered.map(agent => {
                 const fields = [
                     agent.state === 'started' && agent.recipe.schedule
@@ -109,7 +113,7 @@ export default class AgentsPage extends React.Component {
                 return React.DOM.li({ className: agent.state }, React.DOM.a({ href: '/agents/' + agent.id }, ...fields))
             })
             const list = React.DOM.ol({}, ...agents)
-            return React.DOM.div({ className: 'dashboard-page' }, createButton, importButton, exportButton, filter, title, hr, list)
+            return React.DOM.div({ className: 'dashboard-page' }, title, buttons, hr, filter, count, list)
         }
     }
 
