@@ -38,6 +38,7 @@
 .agent-page-runs > ol > li .state {
     display: inline-block;
     width: 120px;
+    vertical-align: top;
     border-radius: 15px;
     padding: 4px 10px;
     color: white;
@@ -72,16 +73,17 @@
 
 .agent-page-runs > ol > li .info span {
     display: inline-block;
+    margin-left: 10px;
     padding: 3px 0;
-    width: calc(100% / 4);
-    text-align: center;
+    width: calc((100% - 40px) / 4);
+    white-space: nowrap;
 }
 
 .agent-page-runs > ol > li .info span::before {
     display: inline-block;
     height: 14px;
     margin-right: 8px;
-    vertical-align: middle;
+    vertical-align: text-top;
 }
 
 .agent-page-runs > ol > li .info span.initiator::before {
@@ -107,7 +109,7 @@
 }
 
 .agent-page-runs > ol > li button + button {
-    margin-left: 5px;
+    margin-left: 6px;
 }
 
 .agent-page-runs > ol > li .execution {
@@ -176,4 +178,48 @@
 
 .agent-page-runs .unhide {
     width: 100%;
+}
+
+@media (max-width: 850px) {
+
+    .agent-page-runs > ol > li .state {
+        width: 100px;
+    }
+
+    .agent-page-runs > ol > li > .info {
+        width: calc(100% - 265px);
+    }
+
+    .agent-page-runs > ol > li .info span {
+        width: calc((100% - 20px) / 2);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .agent-page-runs > ol > li > .info {
+        width: calc(100% - 130px);
+    }
+
+    .agent-page-runs > ol > li button {
+        width: calc(50% - 3px);
+    }
+
+}
+
+@media (max-width: 450px) {
+
+    .agent-page-runs > ol > li .state {
+        width: 80px
+    }
+
+    .agent-page-runs > ol > li > .info {
+        width: calc(100% - 120px);
+    }
+
+    .agent-page-runs > ol > li .info span {
+        width: 100%;
+    }
+
 }
