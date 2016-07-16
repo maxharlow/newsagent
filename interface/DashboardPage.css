@@ -22,13 +22,14 @@
 .dashboard-page .count {
     display: block;
     margin-bottom: 15px;
+    padding: 2px 0;
     font-weight : bold;
 }
 
 .dashboard-page .filter {
     float: right;
     width: 30%;
-    padding: 2px 10px;
+    padding: 4px 10px;
     border-radius: 15px;
 }
 
