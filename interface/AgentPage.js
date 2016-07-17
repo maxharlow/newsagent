@@ -55,7 +55,7 @@ export default class AgentPage extends React.Component {
             const buttons = React.DOM.div({ className: 'buttons' }, deleteButton)
             const message = React.DOM.div({ className: 'failed message' }, 'This agent failed to build.')
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page' }, buttons, title, description, hr, summaryBuiltDate, message, recipe, build)
+            return React.DOM.div({ className: 'agent-page' }, title, description, buttons, hr, summaryBuiltDate, message, recipe, build)
         }
         else {
             const buttons = React.DOM.div({ className: 'buttons' }, deleteButton, editButton, runButton)

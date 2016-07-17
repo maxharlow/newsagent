@@ -1,4 +1,5 @@
 .agent-page {
+    position: relative;
     max-width: 1200px;
     margin: 0 auto 50px auto;
     padding: 0 10px;
@@ -6,18 +7,17 @@
 
 .agent-page h2 {
     display: inline-block;
-    width: calc(100% - 230px);
 }
 
 .agent-page .description {
-    display: inline-block;
     margin: 0;
     font-size: 12px;
 }
 
 .agent-page .buttons {
-    display: inline-block;
-    width: 230px;
+    position: absolute;
+    top: 15px;
+    right: 10px;
     text-align: right;
 }
 
@@ -59,6 +59,7 @@
 
     .agent-page .buttons {
         display: block;
+        position: static;
         width: 100%;
         margin-top: 5px;
         text-align: left;
