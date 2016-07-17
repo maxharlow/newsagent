@@ -6,12 +6,12 @@
 
 .dashboard-page h2 {
     display: inline-block;
-    width: 50%;
+    width: 40%;
 }
 
 .dashboard-page .buttons {
     display: inline-block;
-    width: 50%;
+    width: 60%;
     text-align: right;
 }
 
@@ -90,7 +90,7 @@
     font-size: 13px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 550px) {
 
     .dashboard-page .buttons {
         display: block;
