@@ -81,7 +81,7 @@ In production Datastash runs Docker inside a Docker container. For development t
 
 You will need [Node] (https://nodejs.org/en/), [Docker] (https://www.docker.com/products/docker-engine), and [Docker Machine] (https://www.docker.com/products/docker-machine).
 
-Use Docker Machine to create a new machine with the Virtualbox driver as above, only use a different name -- `default` is recommended. You will need to open port 4000 and 4001 as above too.
+Use Docker Machine to create a new machine with the Virtualbox driver as above, only use a different name -- `'default'` is recommended. You will need to open port 4000 and 4001 as above too.
 
 As in the deployment instructions, you will need a `config.json` file for the Runner and the Registry. However, the Registry configuration needs to point to your local Docker machine. To do this, edit the `dockerHosts` portion to include something like this:
 
