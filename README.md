@@ -1,7 +1,7 @@
 Datastash
 =========
 
-An automated story lead generation tool.
+Automatically identify potential story leads.
 
 Datastash lets you easily create bots to periodically gather data that you are interested in, and then alert you to anything that changes.
 
