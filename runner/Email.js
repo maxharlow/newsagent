@@ -16,7 +16,7 @@ export function format(diff, name) {
 
 export async function send(recipient, name, text) {
     const message = {
-        from: 'Datastash <' + Config.email.from + '>',
+        from: 'Newsagent <' + Config.email.from + '>',
         to: recipient,
         subject: '[ALERT] ' + name,
         html: text

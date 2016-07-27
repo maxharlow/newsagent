@@ -1,5 +1,5 @@
 {
-    "name": "datastash-registry",
+    "name": "newsagent-registry",
     "private": true,
     "dependencies": {
         "babel-register": "6.8.x",

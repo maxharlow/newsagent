@@ -1,5 +1,5 @@
 {
-    "name": "datastash-runner",
+    "name": "newsagent-runner",
     "private": true,
     "dependencies": {
         "babel-register": "6.8.x",

@@ -36,7 +36,7 @@ export default class AgentPageRuns extends React.Component {
                 const blob = new Blob([response], { type: 'data:text/csv;charset=utf-8,' })
                 const anchor = document.createElement('a')
                 anchor.setAttribute('href', URL.createObjectURL(blob))
-                anchor.setAttribute('download', `datastash-${this.props.id}-${run}.csv`)
+                anchor.setAttribute('download', `${this.props.id}-${run}.csv`)
                 document.body.appendChild(anchor)
                 anchor.click()
             })

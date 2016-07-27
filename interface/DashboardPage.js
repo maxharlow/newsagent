@@ -65,7 +65,7 @@ export default class AgentsPage extends React.Component {
             const blob = new Blob([JSON.stringify(response)], { type: 'data:application/json;charset=utf-8,' })
             const anchor = document.createElement('a')
             anchor.setAttribute('href', URL.createObjectURL(blob))
-            anchor.setAttribute('download', 'datastash-export.json')
+            anchor.setAttribute('download', 'newsagent-export.json')
             document.body.appendChild(anchor)
             anchor.click()
         })

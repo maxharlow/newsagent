@@ -4,7 +4,7 @@
     "sourceLocation": "/source",
     "storedRuns": 25,
     "email": {
-        "from": "datastash@example.com",
+        "from": "newsagent@example.com",
         "service": "",
         "auth": {
             "user": "",

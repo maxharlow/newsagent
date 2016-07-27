@@ -1,9 +1,9 @@
-Datastash
+Newsagent
 =========
 
 Automatically identify potential story leads.
 
-Datastash lets you easily create bots to periodically gather data that you are interested in, and then alert you to anything that changes.
+Newsagent lets you easily create bots to periodically gather data that you are interested in, and then alert you to anything that changes.
 
 
 Deploying
@@ -31,10 +31,10 @@ In these cases nothing needs to be added to the file.
 
 This requires [Virtualbox] (https://www.virtualbox.org/). Create a new virtual machine, and open the necessary ports:
 
-    $ docker-machine create -d virtualbox datastash
-    $ eval "$(docker-machine env datastash)"
-    $ VBoxManage controlvm datastash natpf1 'registry,tcp,,4001,,4001'
-    $ VBoxManage controlvm datastash natpf1 'interface,tcp,,4000,,4000'
+    $ docker-machine create -d virtualbox newsagent
+    $ eval "$(docker-machine env newsagent)"
+    $ VBoxManage controlvm newsagent natpf1 'registry,tcp,,4001,,4001'
+    $ VBoxManage controlvm newsagent natpf1 'interface,tcp,,4000,,4000'
 
 ### On an AWS machine
 
@@ -43,41 +43,41 @@ This requires the [AWS CLI] (https://github.com/aws/aws-cli) to be installed and
     $ docker-machine create -d amazonec2 \
         --amazonec2-region 'eu-west-1' \
         --amazonec2-instance-type 't2.medium' \
-        datastash
-    $ eval "$(docker-machine env datastash)"
-    $ DATASTASH_GROUP=$(aws ec2 describe-instances --output text --query 'Reservations[].Instances[?Tags[?Value==`datastash`]] | [0][0].SecurityGroups[0].GroupId')
-    $ aws ec2 authorize-security-group-ingress --group-id $DATASTASH_GROUP --protocol tcp --port 4001 --cidr 0.0.0.0/0
-    $ aws ec2 authorize-security-group-ingress --group-id $DATASTASH_GROUP --protocol tcp --port 4000 --cidr 0.0.0.0/0
+        newsagent
+    $ eval "$(docker-machine env newsagent)"
+    $ NEWSAGENT_GROUP=$(aws ec2 describe-instances --output text --query 'Reservations[].Instances[?Tags[?Value==`newsagent`]] | [0][0].SecurityGroups[0].GroupId')
+    $ aws ec2 authorize-security-group-ingress --group-id $NEWSAGENT_GROUP --protocol tcp --port 4001 --cidr 0.0.0.0/0
+    $ aws ec2 authorize-security-group-ingress --group-id $NEWSAGENT_GROUP --protocol tcp --port 4000 --cidr 0.0.0.0/0
 
 This uses a `t2.medium` machine, which is pretty much the minimum. If you are expecting to use it a lot you may need [a more powerful/expensive machine] (https://aws.amazon.com/ec2/instance-types/).
 
 ### Building and running
 
-You can now build and run Datastash:
+You can now build and run Newsagent:
 
-    $ docker build -t datastash .
-    $ docker run --privileged --name datastash -dp 4000-4001:4000-4001 datastash
+    $ docker build -t newsagent .
+    $ docker run --privileged --name newsagent -dp 4000-4001:4000-4001 newsagent
 
 It should now be available on port 4000 of your machine.
 
 ### Terminating
 
-To stop Datastash running:
+To stop Newsagent running:
 
-    $ docker stop datastash
-    $ docker rm datastash
-    $ docker rmi datastash
+    $ docker stop newsagent
+    $ docker rm newsagent
+    $ docker rmi newsagent
 
 To shut down the machine it ran on:
 
-    $ docker-machine stop datastash
-    $ docker-machine rm datastash
+    $ docker-machine stop newsagent
+    $ docker-machine rm newsagent
 
 
 Development
 -----------
 
-In production Datastash runs Docker inside a Docker container. For development this is obviously madness, so we can run Datastash using your local Docker client instead.
+In production Newsagent runs Docker inside a Docker container. For development this is obviously madness, so we can run Newsagent using your local Docker client instead.
 
 You will need [Node] (https://nodejs.org/en/), [Docker] (https://www.docker.com/products/docker-engine), and [Docker Machine] (https://www.docker.com/products/docker-machine).
 
@@ -106,7 +106,7 @@ And from the `interface` directory the pages can just be served statically, such
 
     $ python -m SimpleHTTPServer 4000
 
-You then should be able to access the Datastash interface on port 4000, and the Registry API on port 4001.
+You then should be able to access the Newsagent interface on port 4000, and the Registry API on port 4001.
 
 
 Similar tools
