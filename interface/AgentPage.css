@@ -54,7 +54,7 @@
 @media (max-width: 600px) {
 
     .agent-page h2 {
-        width: 50%;
+        width: 100%;
     }
 
     .agent-page .buttons {
