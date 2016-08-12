@@ -1,13 +1,13 @@
 .agent-page-runs .not-yet {
     display: block;
-    box-shadow: 1px 1px 2px 1px #eee;
+    box-shadow: 0 0 1px 1px #eee;
     background: white;
     padding: 15px;
     font-size: 13px;
 }
 
 .agent-page-runs > ol {
-    box-shadow: 1px 1px 2px 1px #eee;
+    box-shadow: 0 0 1px 1px #eee;
     margin: 0;
     padding: 0;
     list-style-type: none;
@@ -15,8 +15,8 @@
 
 .agent-page-runs > ol > li {
     background: white;
+    box-shadow: 0 0 1px 1px #eee;
     margin-bottom: 6px;
-    padding: 6px;
 }
 
 .agent-page-runs > ol > li.queued {
@@ -37,15 +37,15 @@
 
 .agent-page-runs > ol > li .state {
     display: inline-block;
-    width: 120px;
+    width: 100px;
     vertical-align: top;
     border-radius: 15px;
-    padding: 4px 10px;
+    margin: 6px;
+    padding: 4px 15px;
     color: white;
     font-size: 11px;
     font-weight: bold;
     text-transform: uppercase;
-    text-align: center;
 }
 
 .agent-page-runs > ol > li .state.queued {
@@ -66,15 +66,14 @@
 
 .agent-page-runs > ol > li .info {
     display: inline-block;
-    width: calc(100% - 285px);
-    margin: 0 5px;
+    width: calc(100% - 281px);
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
     font-size: 12px;
 }
 
 .agent-page-runs > ol > li .info span {
     display: inline-block;
-    margin-left: 10px;
-    padding: 3px 0;
+    padding: 9px 0 9px 10px;
     width: calc((100% - 40px) / 4);
     white-space: nowrap;
 }
@@ -104,8 +103,16 @@
 
 .agent-page-runs > ol > li button {
     display: inline-block;
+    background: #ddd;
     padding: 3px 10px;
-    font-size: 12px;
+    color: inherit;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.agent-page-runs > ol > li button:hover {
+    background: #999;
+    color: white;
 }
 
 .agent-page-runs > ol > li button + button {
@@ -116,9 +123,9 @@
     max-height: 150px;
     display: block;
     overflow: scroll;
-    margin-top: 5px;
+    margin-right: 1px;
     padding: 5px;
-    border-radius: 2px;
+    border-radius: 0;
     background: #212121;
     white-space: pre;
     color: #e8e8e8;
@@ -183,43 +190,26 @@
 @media (max-width: 850px) {
 
     .agent-page-runs > ol > li .state {
-        width: 100px;
+        width: calc(100% - 42px);
     }
 
     .agent-page-runs > ol > li > .info {
-        width: calc(100% - 265px);
+        width: 100%;
+        border-left: none;
     }
 
     .agent-page-runs > ol > li .info span {
         width: calc((100% - 20px) / 2);
-    }
-
-}
-
-@media (max-width: 600px) {
-
-    .agent-page-runs > ol > li > .info {
-        width: calc(100% - 130px);
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     .agent-page-runs > ol > li button {
-        width: calc(50% - 3px);
+        width: 50%;
+        border-radius: 0;
     }
 
-}
-
-@media (max-width: 450px) {
-
-    .agent-page-runs > ol > li .state {
-        width: 80px
-    }
-
-    .agent-page-runs > ol > li > .info {
-        width: calc(100% - 120px);
-    }
-
-    .agent-page-runs > ol > li .info span {
-        width: 100%;
+    .agent-page-runs > ol > li button + button {
+        margin-left: 0;
     }
 
 }
