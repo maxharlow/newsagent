@@ -15,6 +15,7 @@
     padding: 20px;
     background: white;
     box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
+    overflow: auto;
 }
 
 .dialog > div * {
@@ -31,4 +32,15 @@
 
 .dialog > div .loading {
     margin: 5% auto;
+}
+
+@media (max-width: 400px) {
+
+    .dialog > div {
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+        margin: 0;
+        padding: 10px;
+    }
+
 }
