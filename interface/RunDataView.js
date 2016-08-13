@@ -48,7 +48,7 @@ export default class RunDataView extends React.Component {
     }
 
     render() {
-        const title = React.DOM.h3({}, Moment(this.props.date).format('LLL'))
+        const title = React.DOM.h3({}, Moment(this.props.run).format('LLL'))
         const modes = ['data', 'added', 'removed'].map(mode => {
             const input = React.DOM.input({ type: 'radio', name: mode, value: mode, checked: mode === this.state.mode, onChange: this.updateMode })
             const text = React.DOM.span({}, mode)

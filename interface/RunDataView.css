@@ -17,14 +17,21 @@
     box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
 }
 
+.run-data-view > div button {
+    width: 100px;
+}
+
 .run-data-view > div button.close {
     float: left;
     margin-left: 15px;
 }
 
 .run-data-view > div h3 {
-    margin: 2px 100px;
+    height: 27px;
+    margin: 2px 120px;
+    vertical-align: middle;
     text-align: center;
+    line-height: 27px;
 }
 
 .run-data-view > div .download {
@@ -112,6 +119,30 @@
 
 .run-data-view > div .count {
     float: right;
-    margin: 20px 15px;
+    margin: 20px 15px 20px 0;
     font-weight: bold;
+}
+
+@media (max-width: 500px) {
+
+    .run-data-view > div {
+        width: 100%;
+        height: calc(100% - 30px);
+        margin: 0;
+    }
+
+    .run-data-view > div h3 {
+        font-size: 11px;
+        line-height: 15px;
+    }
+
+    .run-data-view > div label span {
+        width: 65px;
+        font-size: 10px;
+    }
+
+    .run-data-view > div .count {
+        margin: 21px 15px 21px 0;
+        font-size: 12px;
+    }
 }
