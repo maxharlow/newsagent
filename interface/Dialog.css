@@ -34,6 +34,14 @@
     margin: 5% auto;
 }
 
+@media (max-width: 850px) {
+
+    .dialog > div {
+        width: 80%;
+    }
+
+}
+
 @media (max-width: 400px) {
 
     .dialog > div {
