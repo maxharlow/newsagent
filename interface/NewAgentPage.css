@@ -15,6 +15,10 @@
     margin: 15px 0;
 }
 
+.new-agent-page .filename {
+    font-family: monospace;
+}
+
 .new-agent-page .validation {
     float: right;
     padding-bottom: 5px;

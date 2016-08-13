@@ -30,6 +30,10 @@
     font-size: 12px;
 }
 
+.agent-page-recipe .field.filename {
+    font-family: monospace;
+}
+
 .agent-page-recipe .note {
     font-size: 12px;
 }

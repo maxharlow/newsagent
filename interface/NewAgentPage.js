@@ -75,7 +75,7 @@ export default class NewAgentPage extends React.Component {
             React.DOM.p({}, 'These commands will be executed every time the agent runs.'),
             this.state.validation['result'] ? React.DOM.span({ className: 'validation' }, 'You must give the name of the file that gets created by this agent') : null,
             React.DOM.h4({}, 'What file gets created?'),
-            React.DOM.input({ onChange: this.set('result') }),
+            React.DOM.input({ className: 'filename', onChange: this.set('result') }),
             React.DOM.hr({}),
             React.DOM.h4({}, 'What should happen next?'),
             React.createElement(TriggerEntry, { onChange: this.set('triggers') }),

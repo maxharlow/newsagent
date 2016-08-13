@@ -13,7 +13,7 @@ export default class AgentPageRecipe extends React.Component {
             React.DOM.h4({}, 'Run commands'),
             React.DOM.code({}, React.DOM.ol({}, ...this.props.recipe.run.map(step => React.DOM.li({}, step)))),
             React.DOM.h4({}, 'Result file'),
-            React.DOM.span({ className: 'field' }, this.props.recipe.result),
+            React.DOM.span({ className: 'field filename' }, this.props.recipe.result),
             React.DOM.h4({}, 'Triggers'),
             this.props.recipe.triggers.length > 0
                 ? React.DOM.ul({ className: 'triggers' }, ...this.props.recipe.triggers.map(trigger => React.DOM.li({}, trigger.recipient)))
