@@ -103,7 +103,7 @@
 
 .agent-page-runs > ol > li button {
     display: inline-block;
-    background: #ddd;
+    background: #ccc;
     padding: 3px 10px;
     color: inherit;
     font-size: 10px;
@@ -111,7 +111,7 @@
 }
 
 .agent-page-runs > ol > li button:hover {
-    background: #999;
+    background: #555;
     color: white;
 }
 
@@ -204,12 +204,14 @@
     }
 
     .agent-page-runs > ol > li button {
-        width: 50%;
-        border-radius: 0;
+        width: calc(50% - 6px);
+        margin-left: 6px;
+        margin-bottom: 6px;
     }
 
     .agent-page-runs > ol > li button + button {
-        margin-left: 0;
+        width: calc(50% - 12px);
+        margin-right: 6px;
     }
 
 }
