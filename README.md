@@ -45,7 +45,7 @@ This requires the [AWS CLI] (https://github.com/aws/aws-cli) to be installed and
         --amazonec2-instance-type 't2.medium' \
         newsagent
     $ eval "$(docker-machine env newsagent)"
-    $ NEWSAGENT_GROUP=$(aws ec2 describe-instances --output text --query 'Reservations[].Instances[?Tags[?Value==`newsagent`]] | [0][0].SecurityGroups[0].GroupId')
+    $ NEWSAGENT_GROUP=$(aws ec2 describe-instances --output text --query 'Reservations[].Instances[?Tags[?Value==`newsagent`]] | [][].SecurityGroups[0].GroupId')
     $ aws ec2 authorize-security-group-ingress --group-id $NEWSAGENT_GROUP --protocol tcp --port 4001 --cidr 0.0.0.0/0
     $ aws ec2 authorize-security-group-ingress --group-id $NEWSAGENT_GROUP --protocol tcp --port 4000 --cidr 0.0.0.0/0
 
