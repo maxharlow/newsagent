@@ -103,4 +103,8 @@
         margin-top: 5px;
     }
 
+    .dashboard-page .filter {
+        width: 50%;
+    }
+
 }
