@@ -4,7 +4,7 @@ import PrettyCron from 'prettycron'
 import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
-export default class AgentsPage extends React.Component {
+export default class DashboardPage extends React.Component {
 
     constructor() {
         super()
@@ -19,6 +19,10 @@ export default class AgentsPage extends React.Component {
             agentsFiltered: [],
             agents: null
         }
+    }
+
+    shouldComponentUpdate(_, nextState) {
+        return JSON.stringify(Object.assign(this.state, { timeout: null })) !== JSON.stringify(Object.assign(nextState, { timeout: null }))
     }
 
     componentWillMount() {

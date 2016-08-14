@@ -16,6 +16,10 @@ export default class AgentPage extends React.Component {
         this.run = this.run.bind(this)
     }
 
+    shouldComponentUpdate(_, nextState) {
+        return JSON.stringify(this.state) !== JSON.stringify(nextState)
+    }
+
     componentWillMount() {
         this.load()
     }

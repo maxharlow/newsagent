@@ -18,6 +18,18 @@ export default class RunDataView extends React.Component {
         }
     }
 
+    componentWillMount() {
+        this.load()
+    }
+
+    shouldComponentUpdate() {
+        return this.state[this.state.mode] === null
+    }
+
+    componentWillUpdate() {
+        this.load()
+    }
+
     updateMode(event) {
         this.setState({ mode: event.target.name })
     }
@@ -28,7 +40,7 @@ export default class RunDataView extends React.Component {
         const locationBase = Config.registry + '/agents/' + this.props.id + '/runs/' + this.props.run
         const location = mode === 'data' ? locationBase : locationBase + '/' + mode
         HTTP.get(location, []).then(response => {
-           this.setState({ [mode]: response })
+            this.setState({ [mode]: response })
         })
     }
 
@@ -41,10 +53,6 @@ export default class RunDataView extends React.Component {
             document.body.appendChild(anchor)
             anchor.click()
         })
-    }
-
-    componentWillUpdate() {
-        this.load()
     }
 
     render() {

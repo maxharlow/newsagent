@@ -13,6 +13,11 @@ export default class AgentPageRuns extends React.Component {
         this.unhide = this.unhide.bind(this)
     }
 
+    shouldComponentUpdate(_, nextState) {
+        return this.state === null
+            || JSON.stringify(Object.assign(this.state, { timeout: null })) !== JSON.stringify(Object.assign(nextState, { timeout: null }))
+    }
+
     componentWillMount() {
         this.load()
     }
