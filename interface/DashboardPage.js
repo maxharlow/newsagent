@@ -21,15 +21,7 @@ export default class DashboardPage extends React.Component {
         }
     }
 
-    shouldComponentUpdate(_, nextState) {
-        return JSON.stringify(Object.assign(this.state, { timeout: null })) !== JSON.stringify(Object.assign(nextState, { timeout: null }))
-    }
-
     componentWillMount() {
-        this.load()
-    }
-
-    componentWillReceiveProps() {
         this.load()
     }
 
