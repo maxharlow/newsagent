@@ -22,12 +22,12 @@ export default class RunDataView extends React.Component {
         this.load()
     }
 
-    shouldComponentUpdate() {
-        return this.state[this.state.mode] === null
+    shouldComponentUpdate(_, nextState) {
+        return this.state.mode !== nextState.mode || this.state[this.state.mode] !== nextState[nextState.mode]
     }
 
-    componentWillUpdate() {
-        this.load()
+    componentDidUpdate() {
+        if (this.state[this.state.mode] === null) this.load()
     }
 
     updateMode(event) {
