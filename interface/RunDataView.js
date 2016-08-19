@@ -1,5 +1,6 @@
 import React from 'react'
 import Moment from 'moment'
+import ScrollTable from '/ScrollTable.js'
 import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
@@ -76,12 +77,7 @@ export default class RunDataView extends React.Component {
             return React.DOM.div({ className: 'run-data-view', onClick: this.props.close }, box)
         }
         else {
-            const tableHeader = React.DOM.tr({}, ...Object.keys(this.state[this.state.mode][0]).map(column => React.DOM.th({}, column)))
-            const tableRows = this.state[this.state.mode].map(row => {
-                const columns = Object.keys(row).map(i => React.DOM.td({}, row[i]))
-                return React.DOM.tr({}, ...columns)
-            })
-            const table = React.DOM.table({}, React.DOM.thead({}, tableHeader), React.DOM.tbody({}, ...tableRows))
+            const table = React.createElement(ScrollTable, { data: this.state[this.state.mode] })
             const data = React.DOM.div({ className: 'data' }, table)
             const count = React.DOM.span({ className: 'count' }, this.state[this.state.mode].length.toLocaleString() + ' rows')
             const downloadButton = React.DOM.button({ className: 'download', onClick: this.download }, 'Download')

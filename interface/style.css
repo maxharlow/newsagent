@@ -12,6 +12,7 @@
 @import url('CommandEntry.css');
 @import url('CronEntry.css');
 @import url('TriggerEntry.css');
+@import url('ScrollTable.css');
 
 body {
     margin: 0;
