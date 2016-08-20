@@ -1,7 +1,6 @@
 FROM alpine:3.4
 
 VOLUME /data
-VOLUME /var/lib/docker
 
 RUN apk add --no-cache docker nodejs nginx
 
@@ -24,6 +23,5 @@ RUN cd registry && npm install
 EXPOSE 4001
 EXPOSE 4000
 
-CMD (docker daemon &); \
-    (cd registry && node Start &); \
+CMD (cd registry && node Start &); \
     nginx -c /interface/nginx.conf

@@ -56,7 +56,7 @@ This uses a `t2.medium` machine, which is pretty much the minimum. If you are ex
 You can now build and run Newsagent:
 
     $ docker build -t newsagent .
-    $ docker run --privileged --name newsagent -dp 4000-4001:4000-4001 newsagent
+    $ docker run -dv /var/run/docker.sock:/var/run/docker.sock --name newsagent -p 4000-4001:4000-4001 newsagent
 
 It should now be available on port 4000 of your machine.
 
@@ -77,7 +77,7 @@ To shut down the machine it ran on:
 Development
 -----------
 
-In production Newsagent runs Docker inside a Docker container. For development this is obviously madness, so we can run Newsagent using your local Docker client instead.
+For development it is much easier to run Newsagent outside of Docker.
 
 You will need [Node] (https://nodejs.org/en/), [Docker] (https://www.docker.com/products/docker-engine), and [Docker Machine] (https://www.docker.com/products/docker-machine).
 

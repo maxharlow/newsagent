@@ -149,6 +149,7 @@ async function build(agent) {
             builtDate,
             recipe: agent.recipe
         }
+        console.error(e.stack)
         Database.update('agent', agent.id, agentFailed, agent.rev)
     }
 }
