@@ -141,6 +141,7 @@ width: calc((100% - 40px) / 4 - 1px);
 .agent-page-runs > ol > li .execution div {
     display: block;
     border-radius: 2px;
+    overflow: auto;
 }
 
 .agent-page-runs > ol > li .execution div.failure {
