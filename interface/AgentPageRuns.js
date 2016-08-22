@@ -32,7 +32,7 @@ export default class AgentPageRuns extends React.Component {
 
     download(run) {
         return () => {
-            HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + run, [{ 'Accept': 'text/csv' }]).then(response => {
+            HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + run + '/data', [{ 'Accept': 'text/csv' }]).then(response => {
                 const blob = new Blob([response], { type: 'data:text/csv;charset=utf-8,' })
                 const anchor = document.createElement('a')
                 anchor.setAttribute('href', URL.createObjectURL(blob))
