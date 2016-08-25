@@ -8,6 +8,8 @@
 @import url('AgentPageRecipe.css');
 @import url('AgentPageRuns.css');
 @import url('AgentPageBuild.css');
+@import url('RunPage.css');
+@import url('RunPageExecution.css');
 @import url('RunDataView.css');
 @import url('CommandEntry.css');
 @import url('CronEntry.css');

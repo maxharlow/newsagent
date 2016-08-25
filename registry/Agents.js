@@ -94,8 +94,16 @@ export function getRuns(agent) {
     return fromContainer(agent, 'GET', '/runs')
 }
 
+export function getRun(agent, run) {
+    return fromContainer(agent, 'GET', '/runs/' + run)
+}
+
+export function getRunExecution(agent, run) {
+    return fromContainer(agent, 'GET', '/runs/' + run + '/execution')
+}
+
 export async function getRunData(agent, run, asCSV) {
-    const data = await fromContainer(agent, 'GET', '/runs/' + run)
+    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/data')
     return asCSV ? ToCSV(data) : data
 }
 
@@ -212,7 +220,7 @@ async function fromContainer(id, method, path, data) {
     const agent = await Database.retrieve('agent', id)
     const client = await Docker.client(agent.client)
     const container = await client.getContainer(id)
-    const command = ['curl', '-X', method, '-H', 'Content-Type: application/json']
+    const command = ['curl', '-X', method, '-H', 'Content-Type: application/json', '-m', '30']
           .concat(data ? ['-d', JSON.stringify(data)] : [])
           .concat(['localhost:3000' + path])
     const exec = await container.exec({ Cmd: command, AttachStdin: true, AttachStdout: true })

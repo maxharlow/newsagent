@@ -38,7 +38,7 @@ export default class RunDataView extends React.Component {
     load() {
         const mode = this.state.mode // copy it, as it might change during
         if (this.state[mode]) return
-        const locationBase = Config.registry + '/agents/' + this.props.id + '/runs/' + this.props.run
+        const locationBase = Config.registry + '/agents/' + this.props.id + '/runs/' + this.props.run + '/data'
         const location = mode === 'data' ? locationBase : locationBase + '/' + mode
         HTTP.get(location, []).then(response => {
             this.setState({ [mode]: response })

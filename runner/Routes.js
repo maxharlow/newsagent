@@ -33,8 +33,13 @@ export function listen() {
             .catch(e => response.status(500).send({ error: e.message }))
     })
     app.get('/runs/:id', (request, response) => {
-        Database.retrieve('run', request.params.id)
+        Runner.describeRun(request.params.id)
             .then(run => response.status(200).send(run))
+            .catch(e => response.status(500).send({ error: e.message }))
+    })
+    app.get('/runs/:id/execution', (request, response) => {
+        Database.retrieve('execution', request.params.id)
+            .then(execution => response.status(200).send(execution.results))
             .catch(e => response.status(500).send({ error: e.message }))
     })
     app.get('/runs/:id/data', (request, response) => {

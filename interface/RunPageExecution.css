@@ -1,0 +1,65 @@
+.run-page-execution .not-yet {
+    display: block;
+    box-shadow: 0 0 1px 1px #eee;
+    background: white;
+    padding: 15px;
+    font-size: 13px;
+}
+
+.run-page-execution .execution {
+    box-shadow: 0 0 1px 1px #eee;
+    margin-bottom: 6px;
+    padding: 6px;
+    background: white;
+}
+
+.run-page-execution .execution.success {
+    border-right: 2px solid #42c88a;
+}
+
+.run-page-execution .execution.failure {
+    border-right: 2px solid #ed5c5c;
+}
+
+.run-page-execution .execution.running {
+    border-right: 2px solid #da8f04;
+}
+
+.run-page-execution .execution code {
+    display: inline-block;
+    width: calc(100% - 60px);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.run-page-execution .execution.running code:before {
+    content: '';
+    float: right;
+    width: 8px;
+    height: 8px;
+    margin-top: 1px;
+    border: 4px solid #ccc;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: rotate 1s infinite linear;
+}
+
+.run-page-execution .execution code .exit {
+    float: right;
+    color: #999;
+}
+
+.run-page-execution .execution code .stdin:before {
+    content: '$';
+    margin-right: 8px;
+    color: #999;
+}
+
+.run-page-execution .execution .duration {
+    display: inline-block;
+    width: 40px;
+    padding: 5px 0;
+    vertical-align: top;
+    font-size: 12px;
+    text-align: right;
+}

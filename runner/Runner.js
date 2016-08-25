@@ -20,7 +20,7 @@ export async function setup(filename) {
     const recipe = JSON.parse(data.toString())
     await Database.add('system', 'recipe', recipe)
     await Promisify(FS.mkdir)(Config.sourceLocation)
-    const results = await sequentially(shell(Config.sourceLocation), recipe.setup)
+    const results = await sequentially(recipe.setup, shell(Config.sourceLocation))
     results.forEach(result => {
         result.log.forEach(message => {
             if (message.type === 'stderr') Process.stderr.write(message.value)
@@ -79,6 +79,12 @@ export async function describe() {
     return { recipe, status }
 }
 
+export async function describeRun(id) {
+    const recipe = await Database.retrieve('system', 'recipe')
+    const run = await Database.retrieve('run', id)
+    return { recipe, run }
+}
+
 export async function modify(recipeNew) {
     const recipeCurrent = await Database.retrieve('system', 'recipe', true)
     return Database.update('system', 'recipe', recipeNew, recipeCurrent.rev).then(schedule)
@@ -113,16 +119,40 @@ async function run(id) {
     }
     const running = await Database.update('run', id, runRunning, queued.rev)
     const recipe = await Database.retrieve('system', 'recipe')
-    const execution = await sequentially(shell(Config.sourceLocation), recipe.run)
-    const isFailure = execution.some(entry => entry.code > 0)
+    const runShell = shell(Config.sourceLocation)
+    const executionStart = await Database.add('execution', id, {
+        results: {
+            command: recipe.run[0],
+            dateStarted: new Date().toISOString()
+        }
+    })
+    const executionTotal = await sequentially(recipe.run, (command, previous) => {
+        const write = (result, failure) => {
+            const resultsBefore = previous.map(output => output.result).concat(result)
+            const results = previous.length + 1 === recipe.run.length || failure
+                  ? resultsBefore
+                  : resultsBefore.concat({
+                      command: recipe.run[previous.length + 1],
+                      dateStarted: new Date().toISOString()
+                  })
+            const rev = previous.length === 0 ? executionStart.rev : previous[previous.length - 1].rev
+            return Database.update('execution', id, { results }, rev).then(update => {
+                if (failure) throw { result }
+                else return { result, rev: update.rev }
+            })
+        }
+        const abort = result => write(result, true)
+        return runShell(command).then(write).catch(abort)
+    })
+    const execution = executionTotal.map(output => output.result)
+    const isFailure = execution.some(result => result.code > 0)
     if (isFailure) {
         const runFailure = {
             state: 'failure',
             initiator: queued.initiator,
             dateQueued: queued.dateQueued,
             dateStarted: dateStarted.toISOString(),
-            duration: new Date() - dateStarted,
-            execution
+            duration: new Date() - dateStarted
         }
         Database.update('run', id, runFailure, running.rev)
     }
@@ -140,7 +170,6 @@ async function run(id) {
             duration: new Date() - dateStarted,
             recordsAdded: diff.added.length,
             recordsRemoved: diff.removed.length,
-            execution,
             triggered
         }
         await Database.update('run', id, runSuccess, running.rev)
@@ -169,9 +198,9 @@ function trigger(diff, triggers, name) {
     return Promise.all(responses.filter(Boolean))
 }
 
-function sequentially(fn, array, a = []) {
-    return fn(array[0])
-        .then(data => array.length > 1 ? sequentially(fn, array.splice(1), a.concat(data)) : a.concat(data))
+function sequentially(array, fn, a = []) {
+    return fn(array[0], a)
+        .then(data => array.length > 1 ? sequentially(Array.from(array).splice(1), fn, a.concat(data)) : a.concat(data))
         .catch(data => a.concat(data))
 }
 
@@ -179,12 +208,15 @@ function shell(location) {
     const path = Path.resolve(location)
     return command => {
         var log = []
+        const date = new Date()
         const process = ChildProcess.exec(command, { cwd: path })
         process.stdout.on('data', data => log.push({ type: 'stdout', value: data }))
         process.stderr.on('data', data => log.push({ type: 'stderr', value: data }))
         return new Promise((resolve, reject) => {
             process.on('exit', code => {
-                const result = { command, code, log }
+                const dateStarted = date.toISOString()
+                const duration = new Date() - date
+                const result = { command, code, log, dateStarted, duration }
                 if (code > 0) reject(result)
                 else resolve(result)
             })

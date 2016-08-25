@@ -79,7 +79,7 @@ export default class DashboardPage extends React.Component {
     }
 
     render() {
-        const title = React.DOM.h2({}, 'Dashboard')
+        const title = React.DOM.h2({}, React.DOM.a({ href: '/' }, 'Agents'))
         const hr = React.DOM.hr({})
         const createButton = React.DOM.button({ onClick: this.create }, 'Create new agent')
         const importButton = React.DOM.button({ onClick: this.import }, 'Import')

@@ -66,7 +66,7 @@ export default class AgentPageRuns extends React.Component {
                         React.DOM.span({ className: 'initiator' }, run.initiator)
                     ]
                     const fields = [
-                        React.DOM.span({ className: 'state ' + run.state }, run.state),
+                        React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
                         React.DOM.div({ className: 'info' }, ...info)
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)
@@ -77,27 +77,20 @@ export default class AgentPageRuns extends React.Component {
                         React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'started ' + Moment(run.dateStarted).fromNow())
                     ]
                     const fields = [
-                        React.DOM.span({ className: 'state ' + run.state }, run.state),
+                        React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
                         React.DOM.div({ className: 'info' }, ...info)
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)
                 }
                 else if (run.state === 'failure') {
-                    const execution = run.execution.map(line => {
-                        const state = line.code === 0 ? 'success' : 'failure'
-                        const command = React.DOM.span({ className: 'stdin' }, line.command + '\n')
-                        const outputs = line.log.map(entry => React.DOM.span({ className: entry.type }, entry.value))
-                        return React.DOM.div({ className: state }, command, ...outputs)
-                    })
                     const info = [
                         React.DOM.span({ className: 'initiator' }, run.initiator),
                         React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'ran ' + Moment(run.dateStarted).fromNow()),
                         React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize())
                     ]
                     const fields = [
-                        React.DOM.span({ className: 'state ' + run.state }, run.state),
-                        React.DOM.div({ className: 'info' }, ...info),
-                        React.DOM.code({ className: 'execution' }, execution)
+                        React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
+                        React.DOM.div({ className: 'info' }, ...info)
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)
                 }
@@ -105,11 +98,6 @@ export default class AgentPageRuns extends React.Component {
                     const records = run.recordsAdded === 0 && run.recordsRemoved === 0
                           ? 'nothing changed'
                           : 'added ' + run.recordsAdded.toLocaleString() + ', removed ' + run.recordsRemoved.toLocaleString()
-                    const execution = run.execution.map(line => {
-                        const command = React.DOM.span({ className: 'stdin' }, line.command + '\n')
-                        const outputs = line.log.map(entry => React.DOM.span({ className: entry.type }, entry.value))
-                        return React.DOM.div({}, command, ...outputs)
-                    })
                     const triggered = run.triggered.map(trigger => {
                         const status = [
                             React.DOM.span({ className: 'type' }, trigger.type),
@@ -125,11 +113,10 @@ export default class AgentPageRuns extends React.Component {
                         React.DOM.span({ className: 'records' }, records)
                     ]
                     const fields = [
-                        React.DOM.span({ className: 'state ' + run.state }, run.state),
+                        React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
                         React.DOM.div({ className: 'info' }, ...info),
                         React.DOM.button({ onClick: () => this.setState({ viewing: run }) }, 'View'),
                         React.DOM.button({ onClick: this.download(run.id) }, 'Download'),
-                        React.DOM.code({ className: 'execution' }, execution),
                         React.DOM.ol({ className: 'triggered' }, triggered)
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)

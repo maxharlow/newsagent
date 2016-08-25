@@ -22,8 +22,8 @@
 .dashboard-page .count {
     display: block;
     margin-bottom: 15px;
-    padding: 2px 0;
-    font-weight : bold;
+    padding: 3px 0;
+    font-size: 13px;
 }
 
 .dashboard-page .filter {

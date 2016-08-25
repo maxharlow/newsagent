@@ -78,6 +78,22 @@ export function listen() {
             })
     })
     app.get('/agents/:agent/runs/:run', (request, response) => {
+        Agents.getRun(request.params.agent, request.params.run)
+            .then(run => response.status(200).send(run))
+            .catch(e => {
+                if (e.message === 'missing') response.status(404).send({ error: 'agent run not found' })
+                else response.status(500).send({ error: e.message })
+            })
+    })
+    app.get('/agents/:agent/runs/:run/execution', (request, response) => {
+        Agents.getRunExecution(request.params.agent, request.params.run)
+            .then(execution => response.status(200).send(execution))
+            .catch(e => {
+                if (e.message === 'missing') response.status(404).send({ error: 'agent execution not found' })
+                else response.status(500).send({ error: e.message })
+            })
+    })
+    app.get('/agents/:agent/runs/:run/data', (request, response) => {
         const asCSV = request.accepts(['application/json', 'text/csv']) === 'text/csv'
         Agents.getRunData(request.params.agent, request.params.run, asCSV)
             .then(data => {
@@ -89,7 +105,7 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
-    app.get('/agents/:agent/runs/:run/added', (request, response) => {
+    app.get('/agents/:agent/runs/:run/data/added', (request, response) => {
         const asCSV = request.accepts(['application/json', 'text/csv']) === 'text/csv'
         Agents.getDiffAdded(request.params.agent, request.params.run, asCSV)
             .then(data => {
@@ -101,7 +117,7 @@ export function listen() {
                 else response.status(500).send({ error: e.message })
             })
     })
-    app.get('/agents/:agent/runs/:run/removed', (request, response) => {
+    app.get('/agents/:agent/runs/:run/data/removed', (request, response) => {
         const asCSV = request.accepts(['application/json', 'text/csv']) === 'text/csv'
         Agents.getDiffRemoved(request.params.agent, request.params.run, asCSV)
             .then(data => {
