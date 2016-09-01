@@ -121,10 +121,9 @@ async function run(id) {
     const recipe = await Database.retrieve('system', 'recipe')
     const runShell = shell(Config.sourceLocation)
     const executionStart = await Database.add('execution', id, {
-        results: {
-            command: recipe.run[0],
-            dateStarted: new Date().toISOString()
-        }
+        results: [
+            { command: recipe.run[0], dateStarted: new Date().toISOString() }
+        ]
     })
     const executionTotal = await sequentially(recipe.run, (command, previous) => {
         const write = (result, failure) => {
