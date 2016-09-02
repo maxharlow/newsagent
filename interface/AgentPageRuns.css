@@ -125,6 +125,11 @@ width: calc((100% - 40px) / 4 - 1px);
     color: white;
 }
 
+.agent-page-runs > ol > li button:active {
+    background: #212121;
+    color: white;
+}
+
 .agent-page-runs > ol > li button + button {
     margin-left: 6px;
 }
