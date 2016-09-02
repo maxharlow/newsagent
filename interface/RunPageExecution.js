@@ -46,17 +46,16 @@ export default class RunPageExecution extends React.Component {
             const execution = this.state.execution.map(line => {
                 if (line.code !== undefined) {
                     const state = line.code === 0 ? 'success' : 'failure'
-                    const exit = line.code !== 0 ? React.DOM.span({ className: 'exit' }, 'Code ' + line.code) : ''
+                    const exit = line.code > 0 ? React.DOM.span({ className: 'exit' }, 'Code ' + line.code) : ''
                     const command = React.DOM.span({ className: 'stdin' }, line.command + '\n')
                     const outputs = line.log.map(entry => React.DOM.span({ className: entry.type }, entry.value))
-                    const duration = React.DOM.span({ className: 'duration' }, Moment(line.duration).format('s[s]'))
+                    const duration = React.DOM.span({ className: 'duration' }, Math.round(Moment.duration(line.duration).asSeconds()) + 's')
                     return React.DOM.div({ className: 'execution ' + state }, React.DOM.code({}, exit, command, ...outputs), duration)
                 }
                 else { // line still running
                     const command = React.DOM.span({ className: 'stdin' }, line.command + '\n')
                     const durationNow = new Date() - new Date(line.dateStarted)
-                    console.log('dn',line,line.dateStarted,new Date() - new Date(line.dateStarted)) /////
-                    const duration = React.DOM.span({ className: 'duration' }, Moment(durationNow).format('s[s]'))
+                    const duration = React.DOM.span({ className: 'duration' }, Math.round(Moment.duration(durationNow).asSeconds()) + 's')
                     return React.DOM.div({ className: 'execution running' }, React.DOM.code({}, command), duration)
                 }
             })

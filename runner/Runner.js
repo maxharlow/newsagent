@@ -144,7 +144,7 @@ async function run(id) {
         return runShell(command).then(write).catch(abort)
     })
     const execution = executionTotal.map(output => output.result)
-    const isFailure = execution.some(result => result.code > 0)
+    const isFailure = execution.some(result => result.code !== 0)
     if (isFailure) {
         const runFailure = {
             state: 'failure',
@@ -204,19 +204,25 @@ function sequentially(array, fn, a = []) {
 }
 
 function shell(location) {
-    const path = Path.resolve(location)
+    const options = {
+        cwd: Path.resolve(location)
+    }
     return command => {
         var log = []
         const date = new Date()
-        const process = ChildProcess.exec(command, { cwd: path })
+        const process = ChildProcess.exec(command, options)
         process.stdout.on('data', data => log.push({ type: 'stdout', value: data }))
         process.stderr.on('data', data => log.push({ type: 'stderr', value: data }))
         return new Promise((resolve, reject) => {
             process.on('exit', code => {
-                const dateStarted = date.toISOString()
-                const duration = new Date() - date
-                const result = { command, code, log, dateStarted, duration }
-                if (code > 0) reject(result)
+                const result = {
+                    command,
+                    code: code === null ? -1 : code, // null code means process was killed
+                    dateStarted: date.toISOString(),
+                    duration: new Date() - date,
+                    log
+                }
+                if (code > 0 || code === null) reject(result)
                 else resolve(result)
             })
         })
