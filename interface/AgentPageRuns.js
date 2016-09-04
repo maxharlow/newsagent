@@ -117,7 +117,7 @@ export default class AgentPageRuns extends React.Component {
                         React.DOM.div({ className: 'info' }, ...info),
                         React.DOM.button({ onClick: () => this.setState({ viewing: run }) }, 'View'),
                         React.DOM.button({ onClick: this.download(run.id) }, 'Download'),
-                        React.DOM.ol({ className: 'triggered' }, triggered)
+                        run.triggered.length > 0 ? React.DOM.ol({ className: 'triggered' }, triggered) : ''
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)
                 }
