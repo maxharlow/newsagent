@@ -119,31 +119,7 @@ async function run(id) {
     }
     const running = await Database.update('run', id, runRunning, queued.rev)
     const recipe = await Database.retrieve('system', 'recipe')
-    const runShell = shell(Config.sourceLocation)
-    const executionStart = await Database.add('execution', id, {
-        results: [
-            { command: recipe.run[0], dateStarted: new Date().toISOString() }
-        ]
-    })
-    const executionTotal = await sequentially(recipe.run, (command, previous) => {
-        const write = (result, failure) => {
-            const resultsBefore = previous.map(output => output.result).concat(result)
-            const results = previous.length + 1 === recipe.run.length || failure
-                  ? resultsBefore
-                  : resultsBefore.concat({
-                      command: recipe.run[previous.length + 1],
-                      dateStarted: new Date().toISOString()
-                  })
-            const rev = previous.length === 0 ? executionStart.rev : previous[previous.length - 1].rev
-            return Database.update('execution', id, { results }, rev).then(update => {
-                if (failure) throw { result }
-                else return { result, rev: update.rev }
-            })
-        }
-        const abort = result => write(result, true)
-        return runShell(command).then(write).catch(abort)
-    })
-    const execution = executionTotal.map(output => output.result)
+    const execution = await execute(id, recipe.run)
     const isFailure = execution.some(result => result.code !== 0)
     if (isFailure) {
         const runFailure = {
@@ -174,6 +150,34 @@ async function run(id) {
         await Database.update('run', id, runSuccess, running.rev)
         removeOldRuns()
     }
+}
+
+async function execute(id, commands) {
+    const invoke = shell(Config.sourceLocation)
+    const start = await Database.add('execution', id, {
+        results: [
+            { command: commands[0], dateStarted: new Date().toISOString() }
+        ]
+    })
+    const outputs = await sequentially(commands, (command, previous) => {
+        const write = (result, failure) => {
+            const resultsBefore = previous.map(output => output.result).concat(result)
+            const results = previous.length + 1 === commands.length || failure
+                  ? resultsBefore
+                  : resultsBefore.concat({
+                      command: commands[previous.length + 1],
+                      dateStarted: new Date().toISOString()
+                  })
+            const rev = previous.length === 0 ? start.rev : previous[previous.length - 1].rev
+            return Database.update('execution', id, { results }, rev).then(update => {
+                if (failure) throw { result }
+                else return { result, rev: update.rev }
+            })
+        }
+        const abort = result => write(result, true)
+        return invoke(command).then(write).catch(abort)
+    })
+    return outputs.map(output => output.result)
 }
 
 async function removeOldRuns() {
