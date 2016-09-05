@@ -69,7 +69,8 @@ export default class DashboardPage extends React.Component {
 
     doFilter(agents, value) {
         return agents.filter(agent => {
-            return agent.recipe.name.toLowerCase().indexOf(value.toLowerCase()) >= 0
+            return (value === '' && agent.state === 'unresponsive')
+                || agent.recipe && agent.recipe.name.toLowerCase().indexOf(value.toLowerCase()) >= 0
         })
     }
 
@@ -102,11 +103,13 @@ export default class DashboardPage extends React.Component {
                 const fields = [
                     agent.state === 'started' && agent.recipe.schedule
                         ? React.DOM.div({ className: 'schedule' }, 'runs at ' + PrettyCron.toString(agent.recipe.schedule).toLowerCase()) : '',
-                    agent.state === 'started' ? '' : React.DOM.div({ className: 'state ' + agent.state }, agent.state),
-                    React.DOM.h5({}, agent.recipe.name),
-                    React.DOM.div({ className: 'description' }, agent.recipe.description)
+                    agent.state !== 'started'
+                        ? React.DOM.div({ className: 'state ' + agent.state }, agent.state) : '',
+                    React.DOM.h5({}, agent.recipe ? agent.recipe.name : 'ID: ' + agent.id),
+                    React.DOM.div({ className: 'description' }, agent.recipe ? agent.recipe.description : '')
                 ]
-                return React.DOM.li({ className: agent.state }, React.DOM.a({ href: '/agents/' + agent.id }, ...fields))
+                const inner = agent.state !== 'unresponsive' ? React.DOM.a({ href: '/agents/' + agent.id }, ...fields) : fields
+                return React.DOM.li({ className: agent.state }, inner)
             })
             const list = React.DOM.ol({}, ...agents)
             return React.DOM.div({ className: 'dashboard-page' }, title, buttons, hr, filter, count, list)

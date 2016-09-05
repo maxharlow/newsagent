@@ -50,7 +50,7 @@
     text-decoration: none;
 }
 
-.dashboard-page ol li a .schedule {
+.dashboard-page ol li .schedule {
     float: right;
     clear: right;
     max-width: 50%;
@@ -59,7 +59,7 @@
     font-style: italic;
 }
 
-.dashboard-page ol li a .state {
+.dashboard-page ol li .state {
     float: right;
     margin: 10px 15px;
     padding: 0 5px;
@@ -69,22 +69,26 @@
     text-transform: uppercase;
 }
 
-.dashboard-page ol li a .state.starting {
+.dashboard-page ol li .state.starting {
     background: #51a7e8;
 }
 
-.dashboard-page ol li a .state.failed {
+.dashboard-page ol li .state.failed {
     background: #ed5c5c;
 }
 
-.dashboard-page ol li a h5 {
+.dashboard-page ol li .state.unresponsive {
+    background: #555;
+}
+
+.dashboard-page ol li h5 {
     margin: 0;
     padding: 10px 0 0 15px;
     font-size: 16px;
     font-weight: normal;
 }
 
-.dashboard-page ol li a .description {
+.dashboard-page ol li .description {
     height: 19px;
     padding: 0 0 10px 15px;
     font-size: 13px;

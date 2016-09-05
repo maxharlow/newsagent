@@ -61,7 +61,9 @@ export async function list() {
     const entries = await Database.retrieveAll('agent', true)
     const withDescriptions = entries.map(entry => {
         if (entry.state !== 'started') return entry
-        else return fromContainer(entry.id, 'GET', '/').then(description => Object.assign(entry, description))
+        else return fromContainer(entry.id, 'GET', '/')
+            .then(description => Object.assign(entry, description))
+            .catch(e => Object.assign(entry, { state: 'unresponsive' }))
     })
     return Promise.all(withDescriptions)
 }
