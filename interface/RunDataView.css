@@ -85,7 +85,7 @@
     font-weight: bold;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 675px) {
 
     .run-data-view > div {
         width: 100%;
