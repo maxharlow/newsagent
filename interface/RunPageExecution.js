@@ -48,7 +48,9 @@ export default class RunPageExecution extends React.Component {
                     const state = line.code === 0 ? 'success' : 'failure'
                     const exit = line.code > 0 ? React.DOM.span({ className: 'exit' }, 'Code ' + line.code) : ''
                     const command = React.DOM.span({ className: 'stdin' }, line.command + '\n')
-                    const outputs = line.log.map(entry => React.DOM.span({ className: entry.type }, entry.value))
+                    const outputs = line.log.length > 5000
+                          ? '(this output is too large to display)'
+                          : line.log.map(entry => React.DOM.span({ className: entry.type }, entry.value))
                     const duration = React.DOM.span({ className: 'duration' }, Math.round(Moment.duration(line.duration).asSeconds()) + 's')
                     return React.DOM.div({ className: 'execution ' + state }, React.DOM.code({}, exit, command, ...outputs), duration)
                 }

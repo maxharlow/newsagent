@@ -209,7 +209,8 @@ function sequentially(array, fn, a = []) {
 
 function shell(location) {
     const options = {
-        cwd: Path.resolve(location)
+        cwd: Path.resolve(location),
+        maxBuffer: 8000 * 1024 // largest amount of bytes allows on stdout/stderr before process killed
     }
     return command => {
         var log = []
