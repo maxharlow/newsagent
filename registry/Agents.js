@@ -234,7 +234,8 @@ async function fromContainer(id, method, path, data) {
         parser.on('error', reject)
         container.modem.demuxStream(stream, parser, parser)
         stream.on('end', () => {
-            if (response === '') resolve()
+            if (response === '' && method === 'GET') reject()
+            else if (response === '') resolve()
             else {
                 const data = JSON.parse(response)
                 if (data.error) reject(new Error(data.error))
