@@ -112,11 +112,14 @@ export default class AgentPageRuns extends React.Component {
                         React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize()),
                         React.DOM.span({ className: 'records' }, records)
                     ]
+                    const buttons = [
+                        React.DOM.button({ onClick: () => this.setState({ viewing: run }) }, 'View'),
+                        React.DOM.button({ onClick: this.download(run.id) }, 'Download')
+                    ]
                     const fields = [
                         React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
                         React.DOM.div({ className: 'info' }, ...info),
-                        React.DOM.button({ onClick: () => this.setState({ viewing: run }) }, 'View'),
-                        React.DOM.button({ onClick: this.download(run.id) }, 'Download'),
+                        React.DOM.div({ className: 'buttons' }, ...buttons),
                         run.triggered.length > 0 ? React.DOM.ol({ className: 'triggered' }, triggered) : ''
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)

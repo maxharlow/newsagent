@@ -111,7 +111,11 @@ width: calc((100% - 40px) / 4 - 1px);
     content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 8 8"><path fill="#ccc" d="M.75 0c-.41 0-.75.34-.75.75v5.5c0 .41.34.75.75.75h6.5c.41 0 .75-.34.75-.75v-5.5c0-.41-.34-.75-.75-.75h-6.5zm.25 1h1v1h-1v-1zm2 0h4v1h-4v-1zm-2 2h1v1h-1v-1zm2 0h4v1h-4v-1zm-2 2h1v1h-1v-1zm2 0h4v1h-4v-1z"/></svg>');
 }
 
-.agent-page-runs > ol > li button {
+.agent-page-runs > ol > li .buttons {
+    display: inline-block;
+}
+
+.agent-page-runs > ol > li .buttons button {
     display: inline-block;
     background: #ccc;
     padding: 3px 10px;
@@ -120,17 +124,17 @@ width: calc((100% - 40px) / 4 - 1px);
     text-transform: uppercase;
 }
 
-.agent-page-runs > ol > li button:hover {
+.agent-page-runs > ol > li .buttons button:hover {
     background: #555;
     color: white;
 }
 
-.agent-page-runs > ol > li button:active {
+.agent-page-runs > ol > li .buttons button:active {
     background: #212121;
     color: white;
 }
 
-.agent-page-runs > ol > li button + button {
+.agent-page-runs > ol > li .buttons button + button {
     margin-left: 6px;
 }
 
@@ -177,22 +181,28 @@ width: calc((100% - 40px) / 4 - 1px);
     .agent-page-runs > ol > li > .info {
         width: 100%;
         border-left: none;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     .agent-page-runs > ol > li .info span,
     .agent-page-runs > ol > li .info span:nth-of-type(4) {
         width: calc((100% - 20px) / 2);
-        border-top: 1px solid rgba(0, 0, 0, 0.05);
         border-right: none;
+        padding: 6px 0 6px 10px;
     }
 
-    .agent-page-runs > ol > li button {
+    .agent-page-runs > ol > li .buttons {
+        width: 100%;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        padding-top: 6px;
+    }
+
+    .agent-page-runs > ol > li .buttons button {
         width: calc(50% - 6px);
-        margin-left: 6px;
-        margin-bottom: 6px;
+        margin: 0 0 6px 6px;
     }
 
-    .agent-page-runs > ol > li button + button {
+    .agent-page-runs > ol > li .buttons button + button {
         width: calc(50% - 12px);
         margin-right: 6px;
     }

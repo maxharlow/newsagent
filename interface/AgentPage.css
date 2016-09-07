@@ -5,38 +5,38 @@
     padding: 0 10px;
 }
 
-.agent-page h2 {
+.agent-page > h2 {
     display: inline-block;
 }
 
-.agent-page .description {
+.agent-page > .description {
     margin: 0;
     font-size: 12px;
 }
 
-.agent-page .buttons {
+.agent-page > .buttons {
     position: absolute;
     top: 15px;
     right: 10px;
     text-align: right;
 }
 
-.agent-page .buttons > * + * {
+.agent-page > .buttons > * + * {
     margin-left: 5px;
 }
 
-.agent-page .summary {
+.agent-page > .summary {
     display: inline-block;
     margin: 0 15px 15px 0;
     white-space: pre;
     font-size: 13px;
 }
 
-.agent-page .summary .title {
+.agent-page > .summary .title {
     color: #555;
 }
 
-.agent-page .message {
+.agent-page > .message {
     margin-bottom: 15px;
     box-shadow: 1px 1px 2px 1px #eee;
     padding: 15px;
@@ -44,21 +44,21 @@
     font-weight: bold;
 }
 
-.agent-page .message.starting {
+.agent-page > .message.starting {
     background: #51a7e8;
 }
 
-.agent-page .message.failed {
+.agent-page > .message.failed {
     background: #ed5c5c;
 }
 
 @media (max-width: 600px) {
 
-    .agent-page h2 {
+    .agent-page > h2 {
         width: 100%;
     }
 
-    .agent-page .buttons {
+    .agent-page > .buttons {
         display: block;
         position: static;
         width: 100%;
@@ -66,7 +66,7 @@
         text-align: left;
     }
 
-    .agent-page .buttons button {
+    .agent-page > .buttons button {
         margin-top: 5px;
     }
 
