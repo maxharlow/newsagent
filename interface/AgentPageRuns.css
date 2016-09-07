@@ -171,7 +171,7 @@ width: calc((100% - 40px) / 4 - 1px);
 @media (max-width: 850px) {
 
     .agent-page-runs > ol > li .state {
-        width: calc(100% - 42px);
+        width: calc(100% - 12px);
     }
 
     .agent-page-runs > ol > li > .info {
