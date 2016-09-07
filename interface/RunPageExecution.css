@@ -1,4 +1,4 @@
-.run-page-execution .not-yet {
+.run-page-execution > .not-yet {
     display: block;
     box-shadow: 0 0 1px 1px #eee;
     background: white;
@@ -6,33 +6,33 @@
     font-size: 13px;
 }
 
-.run-page-execution .execution {
+.run-page-execution > .execution {
     box-shadow: 0 0 1px 1px #eee;
     margin-bottom: 6px;
     padding: 6px;
     background: white;
 }
 
-.run-page-execution .execution.success {
+.run-page-execution > .execution.success {
     border-right: 2px solid #42c88a;
 }
 
-.run-page-execution .execution.failure {
+.run-page-execution > .execution.failure {
     border-right: 2px solid #ed5c5c;
 }
 
-.run-page-execution .execution.running {
+.run-page-execution > .execution.running {
     border-right: 2px solid #da8f04;
 }
 
-.run-page-execution .execution code {
+.run-page-execution > .execution code {
     display: inline-block;
     width: calc(100% - 60px);
     padding-left: 10px;
     padding-right: 10px;
 }
 
-.run-page-execution .execution.running code:before {
+.run-page-execution > .execution.running code:before {
     content: '';
     float: right;
     width: 8px;
@@ -44,18 +44,18 @@
     animation: rotate 1s infinite linear;
 }
 
-.run-page-execution .execution code .exit {
+.run-page-execution > .execution code .exit {
     float: right;
     color: #999;
 }
 
-.run-page-execution .execution code .stdin:before {
+.run-page-execution > .execution code .stdin:before {
     content: '$';
     margin-right: 8px;
     color: #999;
 }
 
-.run-page-execution .execution .duration {
+.run-page-execution > .execution .duration {
     display: inline-block;
     width: 40px;
     padding: 5px 0;

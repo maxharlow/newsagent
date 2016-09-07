@@ -1,4 +1,4 @@
-.agent-page-runs .not-yet {
+.agent-page-runs > .not-yet {
     display: block;
     box-shadow: 0 0 1px 1px #eee;
     background: white;
@@ -168,7 +168,7 @@ width: calc((100% - 40px) / 4 - 1px);
     text-align: right;
 }
 
-.agent-page-runs .unhide {
+.agent-page-runs > .unhide {
     width: 100%;
 }
 

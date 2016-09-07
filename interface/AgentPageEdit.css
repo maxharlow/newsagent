@@ -2,7 +2,7 @@
     display: inline;
 }
 
-.agent-page-edit .validation {
+.agent-page-edit > .validation {
     float: right;
     padding-bottom: 5px;
     color: #a60000;

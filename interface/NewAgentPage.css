@@ -7,32 +7,32 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.new-agent-page h2 {
+.new-agent-page > h2 {
     margin-top: 0
 }
 
-.new-agent-page p {
+.new-agent-page > p {
     margin: 15px 0;
 }
 
-.new-agent-page .filename {
+.new-agent-page > .filename {
     font-family: monospace;
 }
 
-.new-agent-page .validation {
+.new-agent-page > .validation {
     float: right;
     padding-bottom: 5px;
     color: #a60000;
     font-size: 11px;
 }
 
-.new-agent-page .error {
+.new-agent-page > .error {
     background: #ed5c5c;
     border-radius: 3px;
     padding: 15px;
     color: white;
 }
 
-.new-agent-page .error p {
+.new-agent-page > .error p {
     margin: 10px 0 0 0;
 }

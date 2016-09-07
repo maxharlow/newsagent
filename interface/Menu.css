@@ -3,7 +3,7 @@
     width: 100%;
 }
 
-.menu h1 {
+.menu > h1 {
     margin: 0;
     padding: 3px 0;
     color: white;

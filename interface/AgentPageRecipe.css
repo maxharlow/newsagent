@@ -4,24 +4,24 @@
     background: white;
 }
 
-.agent-page-recipe p {
+.agent-page-recipe > p {
     margin: 0;
     font-size: 13px;
 }
 
-.agent-page-recipe code ol {
+.agent-page-recipe > code ol {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 
-.agent-page-recipe code ol li:before {
+.agent-page-recipe > code ol li:before {
     content: '$';
     margin: 0 8px 0 5px;
     color: #999;
 }
 
-.agent-page-recipe .field {
+.agent-page-recipe > .field {
     display: block;
     margin: 2px 0;
     border-radius: 3px;
@@ -30,27 +30,27 @@
     font-size: 12px;
 }
 
-.agent-page-recipe .field.filename {
+.agent-page-recipe > .field.filename {
     font-family: monospace;
 }
 
-.agent-page-recipe .note {
+.agent-page-recipe > .note {
     font-size: 12px;
 }
 
-.agent-page-recipe ul.triggers {
+.agent-page-recipe > ul.triggers {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 
-.agent-page-recipe ul.triggers li {
+.agent-page-recipe > ul.triggers li {
     background: #dfdfdf;
     border-radius: 3px;
     padding: 5px;
     font-size: 12px;
 }
 
-.agent-page-recipe ul.triggers li + .agent-page-recipe ul.triggers li {
+.agent-page-recipe > ul.triggers li + .agent-page-recipe > ul.triggers li {
     margin: 5px 0;
 }

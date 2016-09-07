@@ -5,22 +5,22 @@
     padding: 0 10px;
 }
 
-.run-page h2 {
+.run-page > h2 {
     display: inline-block;
     width: 65%;
 }
 
-.run-page .buttons {
+.run-page > .buttons {
     display: inline-block;
     width: 35%;
     text-align: right;
 }
 
-.run-page .buttons > button + button {
+.run-page > .buttons > button + button {
     margin-left: 5px;
 }
 
-.run-page .state {
+.run-page > .state {
     display: inline-block;
     width: 100px;
     vertical-align: top;
@@ -33,33 +33,33 @@
     text-transform: uppercase;
 }
 
-.run-page .state.queued {
+.run-page > .state.queued {
     background: #5d005d;
 }
 
-.run-page .state.running {
+.run-page > .state.running {
     background: #da8f04;
 }
 
-.run-page .state.success {
+.run-page > .state.success {
     background: #42c88a;
 }
 
-.run-page .state.failure {
+.run-page > .state.failure {
     background: #ed5c5c;
 }
 
 
 @media (max-width: 550px) {
 
-    .run-page .buttons {
+    .run-page > .buttons {
         display: block;
         width: 100%;
         margin-top: 5px;
         text-align: left;
     }
 
-    .run-page .buttons button {
+    .run-page > .buttons button {
         margin-top: 5px;
     }
 
