@@ -40,7 +40,7 @@
 }
 
 .run-data-view > div .data {
-    height: calc(100% - 74px);
+    height: calc(100% - 73px);
     margin-top: 15px;
     border-top: 1px solid #999;
     border-bottom: 1px solid #999;
@@ -89,13 +89,27 @@
 
     .run-data-view > div {
         width: 100%;
-        height: calc(100% - 15px);
+        height: calc(100% - 10px);
         margin: 0;
+        padding-top: 10px;
+    }
+
+    .run-data-view > div button.close {
+        margin-left: 10px;
     }
 
     .run-data-view > div h3 {
         font-size: 11px;
         line-height: 15px;
+    }
+
+    .run-data-view > div button.download {
+        margin-right: 10px;
+    }
+
+    .run-data-view > div .data {
+        height: calc(100% - 68px);
+        margin-top: 10px;
     }
 
     .run-data-view > div label span {
