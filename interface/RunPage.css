@@ -5,21 +5,6 @@
     padding: 0 10px;
 }
 
-.run-page > h2 {
-    display: inline-block;
-    width: 65%;
-}
-
-.run-page > .buttons {
-    display: inline-block;
-    width: 35%;
-    text-align: right;
-}
-
-.run-page > .buttons > button + button {
-    margin-left: 5px;
-}
-
 .run-page > .state {
     display: inline-block;
     width: 100px;
