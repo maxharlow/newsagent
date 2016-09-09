@@ -141,7 +141,7 @@ width: calc((100% - 40px) / 4 - 1px);
 .agent-page-runs > ol > li .triggered {
     margin: 0;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
-    padding: 0 6px 6px 6px;
+    padding: 6px;
     list-style-type: none;
     font-size: 12px;
 }
@@ -149,6 +149,10 @@ width: calc((100% - 40px) / 4 - 1px);
 .agent-page-runs > ol > li .triggered li {
     background: yellow;
     padding: 6px;
+}
+
+.agent-page-runs > ol > li .triggered li + li {
+    margin-top: 6px;
 }
 
 .agent-page-runs > ol > li .triggered li span {
