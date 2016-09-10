@@ -222,7 +222,7 @@ async function fromContainer(id, method, path, data) {
     const agent = await Database.retrieve('agent', id)
     const client = await Docker.client(agent.client)
     const container = await client.getContainer(id)
-    const command = ['curl', '-X', method, '-H', 'Content-Type: application/json', '-m', '30']
+    const command = ['curl', '-X', method, '-H', 'Content-Type: application/json', '-m', '10']
           .concat(data ? ['-d', JSON.stringify(data)] : [])
           .concat(['localhost:3000' + path])
     const exec = await container.exec({ Cmd: command, AttachStdin: true, AttachStdout: true })
