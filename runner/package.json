@@ -11,7 +11,6 @@
         "node-schedule": "1.1.x",
         "neat-csv": "2.1.x",
         "pouchdb": "5.4.x",
-        "deep-equal": "1.0.x",
         "nodemailer": "2.4.x"
     }
 }

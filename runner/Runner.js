@@ -7,7 +7,6 @@ import Process from 'process'
 import ChildProcess from 'child_process'
 import Schedule from 'node-schedule'
 import NeatCSV from 'neat-csv'
-import DeepEqual from 'deep-equal'
 import Nodemailer from 'nodemailer'
 import * as Database from './Database'
 import * as Email from './Email'
@@ -93,18 +92,15 @@ export async function modify(recipeNew) {
 export async function difference(id) {
     const data = await Database.retrieveAll('data', true) // note only successful runs store data
     const index = data.findIndex(d => d.id === id)
-    if (index === data.length - 1) return { added: [], removed: [] } // it's the first set of data we have
-    const current = data[index].rows.map((item, _i) => Object.assign({ _i }, item))
-    const previous = data[index + 1].rows.map((item, _i) => Object.assign({ _i }, item))
-    const added = current.filter(currentItem => { // current items not in previous
-        return !previous.some(previousItem => DeepEqual(currentItem, previousItem))
-    })
-    const removed = previous.filter(previousItem => { // previous items not in current
-        return !current.some(currentItem => DeepEqual(previousItem, currentItem))
-    })
+    if (index === data.length - 1) return { added: [], removed: [] } // it's the first set of data
+    const current = data[index].rows
+    const previous = data[index + 1].rows
+    const toHash = item => Object.keys(item).map(key => item[key]).sort().join('-')
+    const currentHash = current.map(toHash)
+    const previousHash = previous.map(toHash)
     return {
-        added: added.map(item => { delete item._i; return item }),
-        removed: removed.map(item => { delete item._i; return item })
+        added: current.filter(item => previousHash.indexOf(toHash(item)) < 0),
+        removed: previous.filter(item => currentHash.indexOf(toHash(item)) < 0)
     }
 }
 
