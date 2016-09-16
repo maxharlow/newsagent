@@ -33,8 +33,8 @@ export default class ScrollTable extends React.Component {
         clearTimeout(this.state.timeout)
     }
 
-    shouldComponentUpdate(_, nextState) {
-        return this.state.scroll !== nextState.scroll
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props !== nextProps || this.state.scroll !== nextState.scroll
     }
 
     render() {
