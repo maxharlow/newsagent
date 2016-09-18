@@ -11,3 +11,11 @@
 .agent-page-build > .log code {
     height: 400px;
 }
+
+@media (max-width: 850px) {
+
+    .agent-page-build > .log {
+        padding: 6px;
+    }
+
+}
