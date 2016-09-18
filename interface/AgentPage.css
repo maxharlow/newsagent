@@ -52,7 +52,7 @@
     background: #ed5c5c;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 850px) {
 
     .agent-page > h2 {
         width: 100%;
@@ -68,6 +68,10 @@
 
     .agent-page > .buttons button {
         margin-top: 5px;
+    }
+
+    .agent-page > .message {
+        padding: 6px;
     }
 
 }
