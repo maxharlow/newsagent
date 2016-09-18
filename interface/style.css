@@ -85,6 +85,11 @@ input {
     font-size: 12px;
 }
 
+input[type=text] {
+    appearance: none;
+    -webkit-appearance: none;
+}
+
 input:focus {
     outline: none;
     background: white;
