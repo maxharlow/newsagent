@@ -128,7 +128,7 @@ export default class AgentPageRuns extends React.Component {
             const list = React.DOM.ol({}, ...items)
             const unhide = this.state.hidden === 0
                   ? ''
-                  : React.DOM.button({ onClick: this.unhide, className: 'hollow unhide' }, `Show ${this.state.hidden.toLocaleString()} more...`)
+                  : React.DOM.button({ onClick: this.unhide, className: 'secondary unhide' }, `Show ${this.state.hidden.toLocaleString()} more...`)
             const view = !this.state.viewing ? '' : React.createElement(RunDataView, {
                 id: this.props.id,
                 run: this.state.viewing.id,

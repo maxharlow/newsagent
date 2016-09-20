@@ -46,7 +46,7 @@ export default class AgentPageBuild extends React.Component {
             return React.DOM.div({ className: 'agent-page-build' }, React.DOM.h3({}, 'Build'), loading)
         }
         else {
-            const loadButton = React.DOM.button({ className: 'hollow', onClick: this.load }, 'Load build...')
+            const loadButton = React.DOM.button({ className: 'secondary', onClick: this.load }, 'Load build...')
             return React.DOM.div({ className: 'agent-page-build' }, React.DOM.h3({}, 'Build'), loadButton)
         }
     }

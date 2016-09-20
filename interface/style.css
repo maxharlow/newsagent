@@ -60,21 +60,20 @@ button:disabled {
     cursor: not-allowed;
 }
 
-button.hollow {
+button.secondary {
+    height: 36px;
     background: none;
-    border: 1px solid #888;
-    color: #888;
+    border: 1px solid #ccc;
+    color: inherit;
+    font-weight: normal;
 }
 
-button.hollow:hover {
-    background: #888;
-    color: white;
+button.secondary:hover {
+    background: white;
 }
 
-button.hollow:active {
-    background: #555;
-    border-color: #555;
-    color: white;
+button.secondary:active {
+    background: #ccc;
 }
 
 input {
