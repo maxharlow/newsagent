@@ -54,11 +54,3 @@
 .agent-page-recipe > ul.triggers li + .agent-page-recipe > ul.triggers li {
     margin: 5px 0;
 }
-
-@media (max-width: 850px) {
-
-    .agent-page-recipe {
-        padding: 6px;
-    }
-
-}
