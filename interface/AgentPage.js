@@ -36,6 +36,7 @@ export default class AgentPage extends React.Component {
     }
 
     run() {
+        this.setState({ runDisabled: true })
         HTTP.post(Config.registry + '/agents/' + this.props.id)
     }
 
