@@ -22,6 +22,8 @@ body {
     color: #212121;
     font: 14px 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     line-height: 1.5;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
 }
 
 a {
@@ -85,7 +87,7 @@ input {
     font-size: 12px;
 }
 
-input[type=text] {
+input:not([type=checkbox]):not([type=radio]) {
     appearance: none;
     -webkit-appearance: none;
 }
