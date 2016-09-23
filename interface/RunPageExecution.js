@@ -25,9 +25,9 @@ export default class RunPageExecution extends React.Component {
     load() {
         const retry = () => setTimeout(this.load, 1 * 1000)
         const update = response => {
-            // should scroll if (page not scrolling at at top) or (page scrolling and at bottom)
+            // should scroll if (page not scrolling and at top) or (page scrolling and at bottom)
             const shouldScroll = (document.body.scrollHeight === window.innerHeight && document.body.scrollTop === 0)
-                  || (document.body.scrollHeight > window.innerHeight && window.innerHeight + document.body.scrollTop >= document.body.offsetHeight)
+                  || (document.body.scrollHeight > window.innerHeight && document.body.offsetHeight - (window.innerHeight + document.body.scrollTop) < 2)
             if (this.props.state === 'success' || this.props.state === 'failure') this.setState({ execution: response })
             else {
                 const timeout = setTimeout(this.load, 1 * 1000) // in seconds
