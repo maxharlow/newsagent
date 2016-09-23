@@ -21,7 +21,10 @@ export default class AgentPageBuild extends React.Component {
     load() {
         this.setState({ loading: true })
         const since = this.state.log ? this.state.log.length : 0
-        const retry = () => setTimeout(this.load, 1 * 1000)
+        const retry = () => {
+            const timeout = setTimeout(this.load, 1 * 1000)
+            this.setState({ timeout })
+        }
         const update = response => {
             const timeout = this.props.state === 'starting' ? setTimeout(this.load, 1 * 1000) : null // in seconds
             const shouldScroll = this.refs['build']
