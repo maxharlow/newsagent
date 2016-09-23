@@ -24,11 +24,11 @@ export default class AgentPageBuild extends React.Component {
         const retry = () => setTimeout(this.load, 1 * 1000)
         const update = response => {
             const timeout = this.props.state === 'starting' ? setTimeout(this.load, 1 * 1000) : null // in seconds
-            const atBottom = this.refs['build']
+            const shouldScroll = this.refs['build']
                   ? this.refs['build'].scrollHeight === this.refs['build'].scrollTop + this.refs['build'].clientHeight
                   : true
             this.setState({ log: this.state.log ? this.state.log.concat(response.log) : response.log, loading: false, timeout })
-            if (atBottom && this.refs['build']) this.refs['build'].scrollTop = this.refs['build'].scrollHeight
+            if (shouldScroll && this.refs['build']) this.refs['build'].scrollTop = this.refs['build'].scrollHeight
         }
         HTTP.get(Config.registry + '/agents/' + this.props.id + '/build?since=' + since).then(update).catch(retry)
     }

@@ -25,11 +25,15 @@ export default class RunPageExecution extends React.Component {
     load() {
         const retry = () => setTimeout(this.load, 1 * 1000)
         const update = response => {
+            // should scroll if (page not scrolling at at top) or (page scrolling and at bottom)
+            const shouldScroll = (document.body.scrollHeight === window.innerHeight && document.body.scrollTop === 0)
+                  || (document.body.scrollHeight > window.innerHeight && window.innerHeight + document.body.scrollTop >= document.body.offsetHeight)
             if (this.props.state === 'success' || this.props.state === 'failure') this.setState({ execution: response })
             else {
                 const timeout = setTimeout(this.load, 1 * 1000) // in seconds
                 this.setState({ timeout, execution: response })
             }
+            if (shouldScroll) document.body.scrollTop = document.body.scrollHeight - window.innerHeight
         }
         HTTP.get(Config.registry + '/agents/' + this.props.agent + '/runs/' + this.props.run + '/execution').then(update).catch(retry)
     }
@@ -64,7 +68,7 @@ export default class RunPageExecution extends React.Component {
             const finishing = this.props.state === 'running'
                   && this.state.execution[this.state.execution.length - 1].code !== undefined
                   ? React.DOM.div({ className: 'finishing' }, 'Finishing up...') : ''
-            return React.DOM.div({ className: 'run-page-execution' }, ...execution, finishing)
+            return React.DOM.div({ className: 'run-page-execution', ref: 'execution' }, ...execution, finishing)
         }
     }
 
