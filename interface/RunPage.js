@@ -37,6 +37,14 @@ export default class RunPage extends React.Component {
 
     render() {
         if (this.state === null) return React.DOM.div({ className: 'loading' }, '')
+        const summarise = (title, value) => React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, title), value)
+        const summary = [
+            summarise('Initiator: ', this.state.run.initiator),
+            this.state.run.duration ? summarise('Duration: ', Moment.duration(this.state.run.duration).humanize()) : '',
+            this.state.run.recordsAdded !== undefined ? summarise('Records added: ', this.state.run.recordsAdded) : '',
+            this.state.run.recordsRemoved !== undefined ? summarise('Records removed: ', this.state.run.recordsRemoved) : '',
+            this.state.run.triggered !== undefined ? summarise('Triggers fired: ', this.state.run.triggered.length) : ''
+        ]
         const date = this.state.run.dateStarted ? this.state.run.dateStarted : this.state.run.dateQueued
         const breadcrumbs = React.DOM.div({ className: 'breadcrumbs' },
                                           React.DOM.a({ href: '/' }, 'Agents'), ' ▸ ',
@@ -45,7 +53,7 @@ export default class RunPage extends React.Component {
         const hr = React.DOM.hr({})
         const state = React.DOM.span({ className: 'state ' + this.state.run.state }, this.state.run.state)
         const execution = React.createElement(RunPageExecution, { agent: this.props.agent, run: this.props.run, state: this.state.run.state })
-        return React.DOM.div({ className: 'run-page' }, breadcrumbs, title, hr, state, execution)
+        return React.DOM.div({ className: 'run-page' }, breadcrumbs, title, hr, state, summary, execution)
     }
 
 }

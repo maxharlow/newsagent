@@ -39,6 +39,17 @@
     background: #ed5c5c;
 }
 
+.run-page > .summary {
+    display: inline-block;
+    margin: 0 15px 15px 0;
+    padding: 3px 0 2px 0;
+    white-space: pre;
+    font-size: 13px;
+}
+
+.run-page > .summary .title {
+    color: #555;
+}
 
 @media (max-width: 550px) {
 
