@@ -28,9 +28,11 @@ export default class RunPageExecution extends React.Component {
             this.setState({ timeout })
         }
         const update = response => {
-            // should scroll if (running and page not scrolling and at top) or (page scrolling and at bottom)
-            const shouldScroll = (this.props.state === 'running' && document.body.scrollHeight === window.innerHeight && document.body.scrollTop === 0)
-                  || (document.body.scrollHeight > window.innerHeight && document.body.offsetHeight - (window.innerHeight + document.body.scrollTop) < 2)
+            const isRunning = this.state.execution && this.state.execution[this.state.execution.length - 1].code === undefined
+            const isScrollable = document.body.scrollHeight > window.innerHeight
+            const atTop = document.body.scrollTop === 0
+            const atBottom = document.body.offsetHeight - (window.innerHeight + document.body.scrollTop) < 2
+            const shouldScroll = isRunning && ((!isScrollable && atTop) || (isScrollable && atBottom))
             if (this.props.state === 'success' || this.props.state === 'failure') this.setState({ execution: response })
             else {
                 const timeout = setTimeout(this.load, 1 * 1000) // in seconds
@@ -42,12 +44,12 @@ export default class RunPageExecution extends React.Component {
     }
 
     render() {
-        if (this.props.state === 'queued') {
-            return React.DOM.div({ className: 'run-page-execution' }, React.DOM.span({ className: 'not-yet' }, 'Waiting to run...'))
-        }
-        else if (this.state === null) {
+        if (this.state === null || this.state.execution === undefined) {
             const loading = React.DOM.div({ className: 'loading' })
             return React.DOM.div({ className: 'run-page-execution' }, loading)
+        }
+        else if (this.props.state === 'queued') {
+            return React.DOM.div({ className: 'run-page-execution' }, React.DOM.span({ className: 'not-yet' }, 'Waiting to run...'))
         }
         else {
             const execution = this.state.execution.map(line => {
