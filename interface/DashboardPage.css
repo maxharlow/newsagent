@@ -7,6 +7,7 @@
 .dashboard-page > h2 {
     display: inline-block;
     width: 40%;
+    margin-top: 15px;
 }
 
 .dashboard-page > .buttons {

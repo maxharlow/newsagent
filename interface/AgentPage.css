@@ -5,6 +5,11 @@
     padding: 0 10px;
 }
 
+.agent-page > .breadcrumbs {
+    margin-top: 15px;
+    font-size: 12px;
+}
+
 .agent-page > h2 {
     display: inline-block;
 }

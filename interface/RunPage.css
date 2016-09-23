@@ -5,6 +5,11 @@
     padding: 0 10px;
 }
 
+.run-page > .breadcrumbs {
+    margin-top: 15px;
+    font-size: 12px;
+}
+
 .run-page > .state {
     display: inline-block;
     width: 100px;

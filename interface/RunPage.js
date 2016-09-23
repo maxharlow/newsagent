@@ -38,13 +38,14 @@ export default class RunPage extends React.Component {
     render() {
         if (this.state === null) return React.DOM.div({ className: 'loading' }, '')
         const date = this.state.run.dateStarted ? this.state.run.dateStarted : this.state.run.dateQueued
-        const title = React.DOM.h2({}, React.DOM.a({ href: '/' }, 'Agents'),
-                                   ' ▸ ', React.DOM.a({ href: `/agents/${this.props.agent}` }, this.state.recipe.name),
-                                   ' ▸ ', React.DOM.a({ href: `/agents/${this.props.agent}/runs/${date}` }, Moment(date).format('LLL')))
+        const breadcrumbs = React.DOM.div({ className: 'breadcrumbs' },
+                                          React.DOM.a({ href: '/' }, 'Agents'), ' ▸ ',
+                                          React.DOM.a({ href: `/agents/${this.props.agent}` }, this.state.recipe.name), ' ▸ ')
+        const title = React.DOM.h2({}, Moment(date).format('LLL'))
         const hr = React.DOM.hr({})
         const state = React.DOM.span({ className: 'state ' + this.state.run.state }, this.state.run.state)
         const execution = React.createElement(RunPageExecution, { agent: this.props.agent, run: this.props.run, state: this.state.run.state })
-        return React.DOM.div({ className: 'run-page' }, title, hr, state, execution)
+        return React.DOM.div({ className: 'run-page' }, breadcrumbs, title, hr, state, execution)
     }
 
 }
