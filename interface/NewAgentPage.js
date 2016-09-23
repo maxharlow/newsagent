@@ -65,7 +65,7 @@ export default class NewAgentPage extends React.Component {
             React.DOM.hr({}),
             React.DOM.h4({}, 'Setup commands'),
             React.createElement(CommandEntry, { onChange: this.set('setup') }),
-            React.DOM.p({}, 'These commands will only be executed once, when the agent is being built.'),
+            React.DOM.p({}, 'These commands will only be executed once, when the agent is being built. Python, Ruby, Node, and other common tools are already installed, but you can use ', React.DOM.code({}, 'require'), ' to install anything else here.'),
             React.DOM.hr({}),
             React.DOM.h4({}, 'When should this agent run?'),
             React.createElement(CronEntry, { defaultValue: this.state.recipe.schedule, onChange: this.set('schedule') }),
