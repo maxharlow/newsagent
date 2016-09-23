@@ -40,6 +40,8 @@ export default class RunPage extends React.Component {
         const summarise = (title, value) => React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, title), value)
         const summary = [
             summarise('Initiator: ', this.state.run.initiator),
+            this.state.run.duration === undefined && this.state.run.dateStarted
+                ? summarise('Duration: ', Math.round(Moment.duration(new Date() - new Date(this.state.run.dateStarted)).asSeconds()) + 's') : '',
             this.state.run.duration ? summarise('Duration: ', Moment.duration(this.state.run.duration).humanize()) : '',
             this.state.run.recordsAdded !== undefined ? summarise('Records added: ', this.state.run.recordsAdded) : '',
             this.state.run.recordsRemoved !== undefined ? summarise('Records removed: ', this.state.run.recordsRemoved) : '',
