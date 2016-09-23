@@ -28,7 +28,7 @@ export default class RunPageExecution extends React.Component {
             this.setState({ timeout })
         }
         const update = response => {
-            const isRunning = this.state.execution && this.state.execution[this.state.execution.length - 1].code === undefined
+            const isRunning = response[response.length - 1].code === undefined
             const isScrollable = document.body.scrollHeight > window.innerHeight
             const atTop = document.body.scrollTop === 0
             const atBottom = document.body.offsetHeight - (window.innerHeight + document.body.scrollTop) < 2
@@ -44,12 +44,12 @@ export default class RunPageExecution extends React.Component {
     }
 
     render() {
-        if (this.state === null || this.state.execution === undefined) {
+        if (this.props.state === 'queued') {
+            return React.DOM.div({ className: 'run-page-execution' }, React.DOM.span({ className: 'not-yet' }, 'Waiting to run...'))
+        }
+        else if (this.state === null || this.state.execution === undefined) {
             const loading = React.DOM.div({ className: 'loading' })
             return React.DOM.div({ className: 'run-page-execution' }, loading)
-        }
-        else if (this.props.state === 'queued') {
-            return React.DOM.div({ className: 'run-page-execution' }, React.DOM.span({ className: 'not-yet' }, 'Waiting to run...'))
         }
         else {
             const execution = this.state.execution.map(line => {
