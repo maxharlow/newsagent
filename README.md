@@ -42,14 +42,14 @@ This requires the [AWS CLI] (https://github.com/aws/aws-cli) to be installed and
 
     $ docker-machine create -d amazonec2 \
         --amazonec2-region 'eu-west-1' \
-        --amazonec2-instance-type 't2.large' \
+        --amazonec2-instance-type 't2.medium' \
         newsagent
     $ eval "$(docker-machine env newsagent)"
     $ NEWSAGENT_GROUP=$(aws ec2 describe-instances --output text --query 'Reservations[].Instances[?Tags[?Value==`newsagent`]] | [][].SecurityGroups[0].GroupId')
     $ aws ec2 authorize-security-group-ingress --group-id $NEWSAGENT_GROUP --protocol tcp --port 4001 --cidr 0.0.0.0/0
     $ aws ec2 authorize-security-group-ingress --group-id $NEWSAGENT_GROUP --protocol tcp --port 4000 --cidr 0.0.0.0/0
 
-This uses a `t2.large` machine, which is pretty much the minimum. If you are expecting to use it a lot you may need [a more powerful/expensive machine] (https://aws.amazon.com/ec2/instance-types/).
+This uses a `t2.medium` machine, which is pretty much the minimum. If you are expecting to have many long-running agents you may need [a more powerful/expensive machine] (https://aws.amazon.com/ec2/instance-types/).
 
 ### Building and running
 
