@@ -11,7 +11,8 @@
 
 .dialog > div {
     width: 50%;
-    margin: 5% auto;
+    max-height: calc(90% - 80px);
+    margin: 20px auto;
     padding: 20px;
     background: white;
     box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
@@ -34,11 +35,12 @@
     margin: 5% auto;
 }
 
-@media (max-width: 675px) {
+@media (max-width: 850px) {
 
     .dialog > div {
         width: calc(100% - 20px);
         height: calc(100% - 20px);
+        max-height: none;
         margin: 0;
         padding: 10px;
     }
