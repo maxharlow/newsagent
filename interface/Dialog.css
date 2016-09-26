@@ -11,7 +11,7 @@
 
 .dialog > div {
     width: 50%;
-    max-height: calc(90% - 80px);
+    max-height: calc(100% - 80px);
     margin: 20px auto;
     padding: 20px;
     background: white;
