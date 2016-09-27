@@ -36,3 +36,11 @@
 .new-agent-page > .error p {
     margin: 10px 0 0 0;
 }
+
+@media (max-width: 800px) {
+
+    .new-agent-page {
+        margin: 0 auto;
+    }
+
+}
