@@ -10,11 +10,11 @@
 
 .run-data-view > div {
     width: 90%;
-    height: calc(90% - 40px);
+    height: calc(100% - 80px);
     margin: 35px auto;
     padding-top: 15px;
     background: white;
-    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.4);
 }
 
 .run-data-view > div button {
