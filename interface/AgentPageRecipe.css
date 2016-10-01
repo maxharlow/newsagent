@@ -51,6 +51,6 @@
     font-size: 12px;
 }
 
-.agent-page-recipe > ul.triggers li + .agent-page-recipe > ul.triggers li {
-    margin: 5px 0;
+.agent-page-recipe > ul.triggers li + li {
+    margin-top: 5px;
 }
