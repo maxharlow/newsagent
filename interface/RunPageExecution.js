@@ -54,14 +54,16 @@ export default class RunPageExecution extends React.Component {
         else {
             const execution = this.state.execution.map(line => {
                 if (line.code !== undefined) {
-                    const state = line.code === 0 ? 'success' : 'failure'
-                    const exit = line.code > 0 ? React.DOM.span({ className: 'exit' }, 'Code ' + line.code) : ''
+                    const maxLogLength = 500
                     const command = React.DOM.span({ className: 'stdin' }, line.command + '\n')
-                    const outputs = line.log.length > 5000
-                          ? '(this output is too large to display)'
-                          : line.log.map(entry => React.DOM.span({ className: entry.type }, entry.value))
+                    const outputs = line.log.slice(0, maxLogLength).map(entry => React.DOM.span({ className: entry.type }, entry.value))
+                    const unseen = line.log.length > maxLogLength
+                          ? React.DOM.span({ className: 'unseen' }, 'Output too large to display: ' + (line.log.length - maxLogLength).toLocaleString() + ' rows hidden.')
+                          : ''
+                    const exit = line.code > 0 ? React.DOM.span({ className: 'exit' }, 'Exited with code ' + line.code + '.') : ''
                     const duration = React.DOM.span({ className: 'duration' }, Math.round(Moment.duration(line.duration).asSeconds()) + 's')
-                    return React.DOM.div({ className: 'execution ' + state }, React.DOM.code({}, exit, command, ...outputs), duration)
+                    const state = line.code === 0 ? 'success' : 'failure'
+                    return React.DOM.div({ className: 'execution ' + state }, React.DOM.code({}, command, ...outputs), duration, unseen, exit)
                 }
                 else { // line still running
                     const command = React.DOM.span({ className: 'stdin' }, line.command + '\n')
@@ -70,9 +72,9 @@ export default class RunPageExecution extends React.Component {
                     return React.DOM.div({ className: 'execution running' }, React.DOM.code({}, command), duration)
                 }
             })
-            const finishing = this.props.state === 'running'
-                  && this.state.execution[this.state.execution.length - 1].code !== undefined
-                  ? React.DOM.div({ className: 'finishing' }, 'Finishing up...') : ''
+            const finishing = this.props.state === 'running' && this.state.execution[this.state.execution.length - 1].code !== undefined
+                  ? React.DOM.div({ className: 'finishing' }, 'Finishing up...')
+                  : ''
             return React.DOM.div({ className: 'run-page-execution', ref: 'execution' }, ...execution, finishing)
         }
     }

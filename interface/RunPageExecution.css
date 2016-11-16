@@ -44,11 +44,6 @@
     animation: rotate 1s infinite linear;
 }
 
-.run-page-execution > .execution code .exit {
-    float: right;
-    color: #999;
-}
-
 .run-page-execution > .execution code .stdin:before {
     content: '$';
     margin-right: 8px;
@@ -62,6 +57,18 @@
     vertical-align: top;
     font-size: 12px;
     text-align: right;
+}
+
+.run-page-execution > .execution .unseen {
+    display: block;
+    padding-top: 6px;
+    font-size: 12px;
+}
+
+.run-page-execution > .execution .exit {
+    display: block;
+    padding-top: 6px;
+    font-size: 12px;
 }
 
 .run-page-execution > .finishing {
