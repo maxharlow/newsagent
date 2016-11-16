@@ -2,20 +2,20 @@
     "name": "newsagent-registry",
     "private": true,
     "dependencies": {
-        "babel-register": "6.8.x",
-        "babel-plugin-transform-async-to-generator": "6.8.x",
-        "babel-plugin-transform-es2015-modules-commonjs": "6.8.x",
+        "babel-register": "6.16.x",
+        "babel-plugin-transform-async-to-generator": "6.16.x",
+        "babel-plugin-transform-es2015-modules-commonjs": "6.16.x",
         "promisify-node": "0.4.x",
         "express": "4.14.x",
         "body-parser": "1.15.x",
         "jsonschema": "1.1.x",
-        "glob": "7.0.x",
+        "glob": "7.1.x",
         "tar-stream": "1.5.x",
-        "dockerode": "2.2.x",
-        "dockerode-promise": "0.1.x",
+        "dockerode": "2.3.x",
+        "dockerode-promise-es6": "1.1.x",
         "json-stream": "1.0.x",
         "to-csv": "0.1.x",
         "strip-ansi": "3.0.x",
-        "pouchdb": "5.4.x"
+        "pouchdb": "6.0.x"
     }
 }
