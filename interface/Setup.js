@@ -1,6 +1,6 @@
 System.transpiler = 'babel'
 
-System.meta['*.json'] = { loader: '//cdn.rawgit.com/systemjs/plugin-json/master/json.js' }
+System.meta['*.json'] = { loader: '//cdnjs.cloudflare.com/ajax/libs/systemjs-plugin-json/0.2.2/json.min.js' }
 
 System.paths['page'] = '//cdnjs.cloudflare.com/ajax/libs/page.js/1.7.1/page.min.js'
 System.paths['react'] = '//cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js'

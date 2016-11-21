@@ -2,7 +2,7 @@
 
 import FS from 'fs'
 import Path from 'path'
-import Dockerode from 'dockerode-promise'
+import Dockerode from 'dockerode-promise-es6'
 import Config from './config.json'
 
 var dockers
