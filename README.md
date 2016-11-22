@@ -27,7 +27,7 @@ The last configuration file is for the interface:
 
 In these cases nothing needs to be added to the file.
 
-### On your local machine
+### Running on your local machine
 
 This requires [Virtualbox] (https://www.virtualbox.org/). Create a new virtual machine, and open the necessary ports:
 
@@ -36,7 +36,14 @@ This requires [Virtualbox] (https://www.virtualbox.org/). Create a new virtual m
     $ VBoxManage controlvm newsagent natpf1 'registry,tcp,,4001,,4001'
     $ VBoxManage controlvm newsagent natpf1 'interface,tcp,,4000,,4000'
 
-### On an AWS machine
+You can now build and run Newsagent:
+
+    $ docker build -t newsagent .
+    $ docker run -dv /var/run/docker.sock:/var/run/docker.sock --name newsagent -p 4001:4001 -p 4000:4000 newsagent
+
+Newsagent should now be available at http://localhost:4000/.
+
+### Running on an AWS machine
 
 This requires the [AWS CLI] (https://github.com/aws/aws-cli) to be installed and configured. Create a new AWS EC2 machine, and open the necessary ports:
 
@@ -51,18 +58,30 @@ This requires the [AWS CLI] (https://github.com/aws/aws-cli) to be installed and
 
 This uses a `t2.medium` machine, which is pretty much the minimum. If you are expecting to have many long-running agents you may need [a more powerful/expensive machine] (https://aws.amazon.com/ec2/instance-types/).
 
-### Building and running
-
 You can now build and run Newsagent:
 
     $ docker build -t newsagent .
-    $ docker run -dv /var/run/docker.sock:/var/run/docker.sock --name newsagent -p 4000-4001:4000-4001 newsagent
+    $ docker run -dv /var/run/docker.sock:/var/run/docker.sock --name newsagent -p 4001:4001 -p 4000:4000 newsagent
 
-It should now be available on port 4000 of your machine.
+Newsagent should now be available at your AWS machine on port 4000.
+
+### Upgrading
+
+To update to a new version, first select our Newsagent stack:
+
+    $ eval "$(docker-machine env newsagent)"
+
+Then wipe out all existing containers and images:
+
+    $ docker stop $(docker ps -aq)
+    $ docker rm $(docker ps -aq)
+    $ docker rmi $(docker images -aq)
+
+Now just follow the respective instructions above to build and run the new version.
 
 ### Terminating
 
-To stop Newsagent running:
+To stop Newsagent run:
 
     $ docker stop newsagent
     $ docker rm newsagent
@@ -77,7 +96,7 @@ To shut down the machine it ran on:
 Development
 -----------
 
-For development it is much easier to run Newsagent outside of Docker.
+If you are developing Newsagent it is much easier to run it outside of Docker.
 
 You will need [Node] (https://nodejs.org/en/), [Docker] (https://www.docker.com/products/docker-engine), and [Docker Machine] (https://www.docker.com/products/docker-machine).
 
