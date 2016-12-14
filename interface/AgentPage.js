@@ -41,7 +41,7 @@ export default class AgentPage extends React.Component {
     }
 
     render() {
-        if (this.state === null) return React.DOM.div({ className: 'loading' }, '')
+        if (this.state === null) return React.DOM.div({ className: 'loading' })
         const summarise = (title, value) => React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, title), value)
         const breadcrumbs = React.DOM.div({ className: 'breadcrumbs' }, React.DOM.a({ href: '/' }, 'Agents'), ' ▸ ')
         const title = React.DOM.h2({}, this.state.recipe.name)
@@ -67,12 +67,12 @@ export default class AgentPage extends React.Component {
             const buttons = React.DOM.div({ className: 'buttons' }, deleteButton, editButton, runButton)
             const summary = [
                 summaryBuiltDate,
-                this.state.status.averageRunTime ? summarise('Average run time: ', Moment.duration(this.state.status.averageRunTime).humanize()) : '',
+                this.state.status.averageRunTime ? summarise('Average run time: ', Moment.duration(this.state.status.averageRunTime).humanize()) : null,
                 summarise('Total runs: ', this.state.status.numberRuns || 0),
-                this.state.status.numberRuns > 0 ? summarise('Successful runs: ', this.state.status.numberRunsSuccessful || 0) : '',
-                this.state.status.numberRuns > 0 ? summarise('Success rate: ', (this.state.status.successRate || 0) + '%') : '',
-                this.state.status.dateLastSuccessfulRun ? summarise('Last successful run: ', Moment(this.state.status.dateLastSuccessfulRun).fromNow()) : '',
-                this.state.spaceUsed ? summarise('Space used: ', this.state.spaceUsed + ' MB') : ''
+                this.state.status.numberRuns > 0 ? summarise('Successful runs: ', this.state.status.numberRunsSuccessful || 0) : null,
+                this.state.status.numberRuns > 0 ? summarise('Success rate: ', (this.state.status.successRate || 0) + '%') : null,
+                this.state.status.dateLastSuccessfulRun ? summarise('Last successful run: ', Moment(this.state.status.dateLastSuccessfulRun).fromNow()) : null,
+                this.state.spaceUsed ? summarise('Space used: ', this.state.spaceUsed + ' MB') : null
             ]
             const setRunDisabled = runDisabled => this.setState({ runDisabled })
             const runs = React.createElement(AgentPageRuns, { id: this.props.id, setRunDisabled })

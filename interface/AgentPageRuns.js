@@ -120,7 +120,7 @@ export default class AgentPageRuns extends React.Component {
                         React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
                         React.DOM.div({ className: 'info' }, ...info),
                         React.DOM.div({ className: 'buttons' }, ...buttons),
-                        run.triggered.length > 0 ? React.DOM.ol({ className: 'triggered' }, triggered) : ''
+                        run.triggered.length > 0 ? React.DOM.ol({ className: 'triggered' }, triggered) : null
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)
                 }
@@ -129,7 +129,7 @@ export default class AgentPageRuns extends React.Component {
             const unhide = this.state.hidden === 0
                   ? ''
                   : React.DOM.button({ onClick: this.unhide, className: 'secondary unhide' }, `Show ${this.state.hidden.toLocaleString()} more...`)
-            const view = !this.state.viewing ? '' : React.createElement(RunDataView, {
+            const view = !this.state.viewing ? null : React.createElement(RunDataView, {
                 id: this.props.id,
                 run: this.state.viewing.id,
                 date: this.state.viewing.date,

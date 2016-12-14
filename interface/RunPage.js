@@ -41,11 +41,11 @@ export default class RunPage extends React.Component {
         const summary = [
             summarise('Initiator: ', this.state.run.initiator),
             this.state.run.duration === undefined && this.state.run.dateStarted
-                ? summarise('Duration: ', Math.round(Moment.duration(new Date() - new Date(this.state.run.dateStarted)).asSeconds()) + 's') : '',
-            this.state.run.duration ? summarise('Duration: ', Moment.duration(this.state.run.duration).humanize()) : '',
-            this.state.run.recordsAdded !== undefined ? summarise('Records added: ', this.state.run.recordsAdded) : '',
-            this.state.run.recordsRemoved !== undefined ? summarise('Records removed: ', this.state.run.recordsRemoved) : '',
-            this.state.run.triggered !== undefined ? summarise('Triggers fired: ', this.state.run.triggered.length) : ''
+                ? summarise('Duration: ', Math.round(Moment.duration(new Date() - new Date(this.state.run.dateStarted)).asSeconds()) + 's') : null,
+            this.state.run.duration ? summarise('Duration: ', Moment.duration(this.state.run.duration).humanize()) : null,
+            this.state.run.recordsAdded !== undefined ? summarise('Records added: ', this.state.run.recordsAdded) : null,
+            this.state.run.recordsRemoved !== undefined ? summarise('Records removed: ', this.state.run.recordsRemoved) : null,
+            this.state.run.triggered !== undefined ? summarise('Triggers fired: ', this.state.run.triggered.length) : null
         ]
         const date = this.state.run.dateStarted ? this.state.run.dateStarted : this.state.run.dateQueued
         const breadcrumbs = React.DOM.div({ className: 'breadcrumbs' },

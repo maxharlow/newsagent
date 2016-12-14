@@ -59,8 +59,8 @@ export default class RunPageExecution extends React.Component {
                     const outputs = line.log.slice(0, maxLogLength).map(entry => React.DOM.span({ className: entry.type }, entry.value))
                     const unseen = line.log.length > maxLogLength
                           ? React.DOM.span({ className: 'unseen' }, 'Output too large to display: ' + (line.log.length - maxLogLength).toLocaleString() + ' rows hidden.')
-                          : ''
-                    const exit = line.code > 0 ? React.DOM.span({ className: 'exit' }, 'Exited with code ' + line.code + '.') : ''
+                          : null
+                    const exit = line.code > 0 ? React.DOM.span({ className: 'exit' }, 'Exited with code ' + line.code + '.') : null
                     const duration = React.DOM.span({ className: 'duration' }, Math.round(Moment.duration(line.duration).asSeconds()) + 's')
                     const state = line.code === 0 ? 'success' : 'failure'
                     return React.DOM.div({ className: 'execution ' + state }, React.DOM.code({}, command, ...outputs), duration, unseen, exit)
@@ -74,7 +74,7 @@ export default class RunPageExecution extends React.Component {
             })
             const finishing = this.props.state === 'running' && this.state.execution[this.state.execution.length - 1].code !== undefined
                   ? React.DOM.div({ className: 'finishing' }, 'Finishing up...')
-                  : ''
+                  : null
             return React.DOM.div({ className: 'run-page-execution', ref: 'execution' }, ...execution, finishing)
         }
     }
