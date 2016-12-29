@@ -1,8 +1,8 @@
-FROM alpine:3.4
+FROM alpine:3.5
 
 VOLUME /data
 
-RUN apk add --no-cache docker nodejs nginx
+RUN apk add --no-cache docker nodejs-current nginx
 
 COPY runner/*.js           /runner/
 COPY runner/package.json   /runner/
