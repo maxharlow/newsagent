@@ -145,7 +145,7 @@ async function build(agent) {
         const context = await buildContext(client, agent.id, agent.recipe)
         const image = await buildImage(client, agent.id, context)
         const container = await client.createContainer({ name: agent.id, Image: image.id })
-        await container.start()
+        await container.start({ 'max-old-space-size': Config.agentMemory + 'm' })
         const agentStarted = {
             state: 'started',
             builtDate,
@@ -171,8 +171,8 @@ async function buildContext(client, id, recipe) {
           + '\n' + 'COPY runner /runner'
           + '\n' + 'WORKDIR /runner'
           + '\n' + 'RUN npm install --silent'
-          + '\n' + `RUN node Start setup ${id}.json`
-          + '\n' + `CMD node Start serve ${id}.json`
+          + '\n' + `RUN node --max-old-space-size=${Config.agentMemory} Start setup ${id}.json`
+          + '\n' + `CMD node --max-old-space-size=${Config.agentMemory} Start serve ${id}.json`
     const tar = Promisify(TarStream.pack())
     const files = await Promisify(Glob)('../runner/*(package.json|config.json|**.js)')
     const entries = files.map(filename => {
