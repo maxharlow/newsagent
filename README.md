@@ -27,7 +27,7 @@ The last configuration file is for the interface:
 
 In these cases nothing needs to be added to the file.
 
-### Running on your local machine
+### On your local machine
 
 This requires [Virtualbox] (https://www.virtualbox.org/). Create a new virtual machine, and open the necessary ports:
 
@@ -43,7 +43,7 @@ You can now build and run Newsagent:
 
 Newsagent should now be available at http://localhost:4000/.
 
-### Running on an AWS machine
+### On an AWS machine
 
 This requires the [AWS CLI] (https://github.com/aws/aws-cli) to be installed and configured. Create a new AWS EC2 machine, and open the necessary ports:
 
