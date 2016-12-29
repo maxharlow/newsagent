@@ -144,8 +144,12 @@ async function build(agent) {
         const clientInfo = await client.info()
         const context = await buildContext(client, agent.id, agent.recipe)
         const image = await buildImage(client, agent.id, context)
-        const container = await client.createContainer({ name: agent.id, Image: image.id })
-        await container.start({ 'max-old-space-size': Config.agentMemory + 'm' })
+        const container = await client.createContainer({
+            name: agent.id,
+            Image: image.id,
+            HostConfig: { Memory: Config.agentMemory * 1000000 } // megabytes to bytes
+        })
+        await container.start()
         const agentStarted = {
             state: 'started',
             builtDate,
