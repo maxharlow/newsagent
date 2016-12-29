@@ -27,7 +27,7 @@ export async function setup(filename) {
             else if (message.type == 'stdout') Process.stdout.write(message.value)
         })
     })
-    const isFailure = messages.some(message => message.type === 'failure')
+    const isFailure = results.some(message => message.type === 'failure')
     Process.exit(isFailure ? 1 : 0)
 }
 
