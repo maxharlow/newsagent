@@ -1,6 +1,7 @@
 {
     "port": 4001,
     "pouchLocation": "data",
+    "agentMaxMemory": 1024,
     "dockerHosts": [
         {
             "socketPath": "/var/run/docker.sock"
