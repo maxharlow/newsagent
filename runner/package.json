@@ -10,7 +10,7 @@
         "body-parser": "1.15.x",
         "node-schedule": "1.2.x",
         "neat-csv": "2.1.x",
-        "pouchdb": "6.0.x",
+        "pouchdb": "6.1.x",
         "nodemailer": "2.6.x"
     }
 }
