@@ -38,8 +38,8 @@ This requires [Virtualbox] (https://www.virtualbox.org/). Create a new virtual m
 
 You can now build and run Newsagent:
 
-    $ docker build -t newsagent .
-    $ docker run -dv /var/run/docker.sock:/var/run/docker.sock --name newsagent -p 4001:4001 -p 4000:4000 newsagent
+    $ docker image build -t newsagent .
+    $ docker container run -dv /var/run/docker.sock:/var/run/docker.sock --name newsagent -p 4001:4001 -p 4000:4000 newsagent
 
 Newsagent should now be available at http://localhost:4000/.
 
@@ -60,8 +60,8 @@ This uses a `t2.medium` machine, which is pretty much the minimum. If you are ex
 
 You can now build and run Newsagent:
 
-    $ docker build -t newsagent .
-    $ docker run -dv /var/run/docker.sock:/var/run/docker.sock --name newsagent -p 4001:4001 -p 4000:4000 newsagent
+    $ docker image build -t newsagent .
+    $ docker container run -dv /var/run/docker.sock:/var/run/docker.sock --name newsagent -p 4001:4001 -p 4000:4000 newsagent
 
 Newsagent should now be available at your AWS machine on port 4000.
 
@@ -73,9 +73,7 @@ To update to a new version, first select our Newsagent stack:
 
 Then wipe out all existing containers and images:
 
-    $ docker stop $(docker ps -aq)
-    $ docker rm $(docker ps -aq)
-    $ docker rmi $(docker images -aq)
+    $ docker system prune --all
 
 Now just follow the respective instructions above to build and run the new version.
 
@@ -83,9 +81,9 @@ Now just follow the respective instructions above to build and run the new versi
 
 To stop Newsagent run:
 
-    $ docker stop newsagent
-    $ docker rm newsagent
-    $ docker rmi newsagent
+    $ docker container stop newsagent
+    $ docker container rm newsagent
+    $ docker image rm newsagent
 
 To shut down the machine it ran on:
 
