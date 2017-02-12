@@ -171,8 +171,8 @@ async function buildContext(client, id, recipe) {
           + '\n' + 'COPY runner /runner'
           + '\n' + 'WORKDIR /runner'
           + '\n' + 'RUN npm install --silent'
-          + '\n' + `RUN node --max-old-space-size=${Config.agentMaxMemory} Start setup ${id}.json`
-          + '\n' + `CMD node --max-old-space-size=${Config.agentMaxMemory} Start serve ${id}.json`
+          + '\n' + `RUN node Start setup ${id}.json`
+          + '\n' + `CMD node Start serve ${id}.json`
     const tar = Promisify(TarStream.pack())
     const files = await Promisify(Glob)('../runner/*(package.json|config.json|**.js)')
     const entries = files.map(filename => {
