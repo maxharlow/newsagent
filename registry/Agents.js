@@ -159,7 +159,7 @@ async function build(agent) {
             builtDate,
             recipe: agent.recipe
         }
-        console.error(e.stack)
+        console.error(e.stack ? e.stack : e)
         Database.update('agent', agent.id, agentFailed, agent.rev)
     }
 }
