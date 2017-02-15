@@ -43,8 +43,8 @@ export function listen() {
             .catch(e => response.status(500).send({ error: e.message }))
     })
     app.get('/runs/:id/data', (request, response) => {
-        Database.retrieve('data', request.params.id)
-            .then(data => response.status(200).send(data.rows))
+        Database.retrieveSet('data', request.params.id)
+            .then(data => response.status(200).send(data))
             .catch(e => response.status(500).send({ error: e.message }))
     })
     app.get('/runs/:id/diff', (request, response) => {

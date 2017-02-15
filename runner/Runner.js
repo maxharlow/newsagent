@@ -91,18 +91,20 @@ export async function modify(recipeNew) {
 }
 
 export async function difference(id) {
-    const data = await Database.retrieveAll('data', true) // note only successful runs store data
-    const index = data.findIndex(d => d.id === id)
-    if (index === data.length - 1) return { added: [], removed: [] } // it's the first set of data
-    const current = data[index].rows
-    const previous = data[index + 1].rows
+    const runs = await Database.retrieveAll('run', true)
+    const runsCurrent = runs.filter(run => run.id === id || run.state === 'success')
+    const index = runsCurrent.findIndex(run => run.id === id)
+    if (index === runsCurrent.length - 1) return { added: [], removed: [] } // it's the first set of data
+    const current = await Database.retrieveSet('data', runsCurrent[index].id)
+    const previous = await Database.retrieveSet('data', runsCurrent[index + 1].id)
     const toHash = item => Object.keys(item).map(key => item[key]).sort().join('-')
     const currentHash = current.map(toHash)
     const previousHash = previous.map(toHash)
-    return {
+    const diff = {
         added: current.filter(item => previousHash.indexOf(toHash(item)) < 0),
         removed: previous.filter(item => currentHash.indexOf(toHash(item)) < 0)
     }
+    return diff
 }
 
 async function run(id) {
@@ -130,8 +132,7 @@ async function run(id) {
     }
     else {
         const rows = await csv(Config.sourceLocation + '/' + recipe.result)
-        const data = { rows }
-        await Database.add('data', id, data)
+        await Database.addSet('data', id, rows)
         const diff = await difference(id)
         const triggered = await trigger(diff, recipe.triggers, recipe.name)
         const runSuccess = {
@@ -182,7 +183,7 @@ async function removeOldRuns() {
     if (runs.length <= Config.storedRuns) return
     runs.slice(Config.storedRuns).forEach(run => {
         Database.remove('run', run.id)
-        if (run.state === 'success') Database.remove('data', run.id)
+        if (run.state === 'success') Database.removeSet('data', run.id)
     })
 }
 
