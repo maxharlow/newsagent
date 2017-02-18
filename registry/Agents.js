@@ -191,7 +191,9 @@ async function buildImage(client, id, tar) {
     const logCreation = await Database.add('build', id, { log })
     var   logRevision = logCreation.rev
     const logUpdate = () => {
-        Database.update('build', id, { log }, logRevision).then(update => logRevision = update.rev)
+        Database.update('build', id, { log }, logRevision)
+            .then(update => logRevision = update.rev)
+            .catch(e => {}) // ignore conflicts
     }
     const logUpdater = setInterval(logUpdate, 1 * 1000) // in milliseconds
     return new Promise((resolve, reject) => {
@@ -203,10 +205,14 @@ async function buildImage(client, id, tar) {
                 logUpdate()
                 resolve({ id: event.stream.match(/built (.*)\n/)[1], log })
             }
-            else if (event.error || event.timeout) {
+            else if (event.timeout) {
                 clearInterval(logUpdater)
                 logUpdate()
-                event.error ? reject(event.error) : reject()
+                reject('Timed out')
+            }
+            else {
+                clearInterval(logUpdater)
+                logUpdate()
             }
         }
         const parser = new JsonStream() // deals with (large) json objects split over multiple events
