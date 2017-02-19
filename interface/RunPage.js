@@ -55,7 +55,7 @@ export default class RunPage extends React.Component {
         const hr = React.DOM.hr({})
         const state = React.DOM.span({ className: 'state ' + this.state.run.state }, this.state.run.state)
         const execution = React.createElement(RunPageExecution, { agent: this.props.agent, run: this.props.run, state: this.state.run.state })
-        return React.DOM.div({ className: 'run-page' }, breadcrumbs, title, hr, state, summary, execution)
+        return React.DOM.div({ className: 'run-page' }, breadcrumbs, title, hr, state, ...summary, execution)
     }
 
 }
