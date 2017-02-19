@@ -170,7 +170,7 @@ async function buildContext(client, id, recipe) {
           + '\n' + 'RUN apk add -q --no-cache ' + packages.join(' ')
           + '\n' + 'COPY runner /runner'
           + '\n' + 'WORKDIR /runner'
-          + '\n' + 'RUN npm install --silent'
+          + '\n' + 'RUN npm install --depth 0'
           + '\n' + `RUN node Start setup ${id}.json`
           + '\n' + `CMD node Start serve ${id}.json`
     const tar = Promisify(TarStream.pack())
