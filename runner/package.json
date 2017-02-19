@@ -2,9 +2,9 @@
     "name": "newsagent-runner",
     "private": true,
     "dependencies": {
-        "babel-register": "6.16.x",
-        "babel-plugin-transform-async-to-generator": "6.16.x",
-        "babel-plugin-transform-es2015-modules-commonjs": "6.16.x",
+        "babel-register": "6.22.x",
+        "babel-plugin-transform-async-generator-functions": "6.22.x",
+        "babel-plugin-transform-es2015-modules-commonjs": "6.22.x",
         "promisify-node": "0.4.x",
         "express": "4.14.x",
         "body-parser": "1.15.x",
