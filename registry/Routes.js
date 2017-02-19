@@ -36,7 +36,7 @@ export function listen() {
         Agents.get(request.params.id)
             .then(agent => response.status(200).send(agent))
             .catch(e => {
-                if (e && e.message && e.message.contains('404')) response.status(404).send({ error: 'agent not found' })
+                if (e && e.message && e.message.includes('404')) response.status(404).send({ error: 'agent not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -45,7 +45,7 @@ export function listen() {
         Agents.run(request.params.id)
             .then(() => response.status(202).send())
             .catch(e => {
-                if (e && e.message && e.message.contains('404')) response.status(404).send({ error: 'agent not found' })
+                if (e && e.message && e.message.includes('404')) response.status(404).send({ error: 'agent not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -54,7 +54,7 @@ export function listen() {
         Agents.modify(request.params.id, request.body)
             .then(agent => response.status(204).send(agent))
             .catch(e => {
-                if (e && e.message && e.message.contains('404')) response.status(404).send({ error: 'agent not found' })
+                if (e && e.message && e.message.includes('404')) response.status(404).send({ error: 'agent not found' })
                 else if (e && e.message && e.validation) response.status(400).send({ error: e.message, detail: e.validation })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
@@ -64,7 +64,7 @@ export function listen() {
         Agents.destroy(request.params.id)
             .then(() => response.status(204).send())
             .catch(e => {
-                if (e && e.message && e.message.contains('404')) response.status(404).send({ error: 'agent not found' })
+                if (e && e.message && e.message.includes('404')) response.status(404).send({ error: 'agent not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -73,7 +73,7 @@ export function listen() {
         Database.retrieve('build', request.params.id)
             .then(build => response.status(200).send({ id: build.id, log: build.log.slice(request.query.since || 0) }))
             .catch(e => {
-                if (e && e.message && e.message.contains('404')) response.status(404).send({ error: 'agent build not found' })
+                if (e && e.message && e.message.includes('404')) response.status(404).send({ error: 'agent build not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -82,7 +82,7 @@ export function listen() {
         Agents.getRuns(request.params.agent)
             .then(runs => response.status(200).send(runs))
             .catch(e => {
-                if (e && e.message && e.message.contains('404')) response.status(404).send({ error: 'agent runs not found' })
+                if (e && e.message && e.message.includes('404')) response.status(404).send({ error: 'agent runs not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -91,7 +91,7 @@ export function listen() {
         Agents.getRun(request.params.agent, request.params.run)
             .then(run => response.status(200).send(run))
             .catch(e => {
-                if (e && e.message && e.message.contains('404')) response.status(404).send({ error: 'agent run not found' })
+                if (e && e.message && e.message.includes('404')) response.status(404).send({ error: 'agent run not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -100,7 +100,7 @@ export function listen() {
         Agents.getRunExecution(request.params.agent, request.params.run)
             .then(execution => response.status(200).send(execution))
             .catch(e => {
-                if (e && e.message && e.message.contains('404')) response.status(404).send({ error: 'agent execution not found' })
+                if (e && e.message && e.message.includes('404')) response.status(404).send({ error: 'agent execution not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -113,7 +113,7 @@ export function listen() {
                 response.status(200).send(data)
             })
             .catch(e => {
-                if (e && e.message && e.message.contains('404')) response.status(404).send({ error: 'agent data not found' })
+                if (e && e.message && e.message.includes('404')) response.status(404).send({ error: 'agent data not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -126,7 +126,7 @@ export function listen() {
                 response.status(200).send(data)
             })
             .catch(e => {
-                if (e && e.message && e.message.contains('404')) response.status(404).send({ error: 'agent diff not found' })
+                if (e && e.message && e.message.includes('404')) response.status(404).send({ error: 'agent diff not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -139,7 +139,7 @@ export function listen() {
                 response.status(200).send(data)
             })
             .catch(e => {
-                if (e && e.message && e.message.contains('404')) response.status(404).send({ error: 'agent diff not found' })
+                if (e && e.message && e.message.includes('404')) response.status(404).send({ error: 'agent diff not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
