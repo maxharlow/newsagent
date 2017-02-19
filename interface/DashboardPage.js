@@ -105,10 +105,12 @@ export default class DashboardPage extends React.Component {
                         ? React.DOM.div({ className: 'schedule' }, 'runs at ' + PrettyCron.toString(agent.recipe.schedule).toLowerCase()) : null,
                     agent.state !== 'started'
                         ? React.DOM.div({ className: 'state ' + agent.state }, agent.state) : null,
-                    React.DOM.h5({}, agent.recipe ? agent.recipe.name : 'ID: ' + agent.id),
+                    React.DOM.h5({}, agent.recipe ? agent.recipe.name : '(ID: ' + agent.id + ')'),
                     React.DOM.div({ className: 'description' }, agent.recipe ? agent.recipe.description : null)
                 ]
-                const inner = agent.state !== 'unresponsive' ? React.DOM.a({ href: '/agents/' + agent.id }, ...fields) : fields
+                const inner = agent.state !== 'unresponsive'
+                      ? React.DOM.a({ href: '/agents/' + agent.id }, ...fields)
+                      : React.DOM.span({}, ...fields)
                 return React.DOM.li({ className: agent.state }, inner)
             })
             const list = React.DOM.ol({}, ...agents)
