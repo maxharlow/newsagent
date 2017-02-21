@@ -11,7 +11,15 @@ export function add(type, id, data) {
 
 export function addSet(type, id, data) {
     const documents = data.map((item, i) => ({ _id: type + '/' + id + '/' + i, data: item }))
-    return db.bulkDocs(documents)
+    const size = 10000 // larger values mean more speed, more memory used
+    const chunks = documents.reduce((a, each) => {
+        if (a.length === 0 || a[a.length - 1].length === size) a.push([each])
+        else a[a.length - 1].push(each)
+        return a
+    }, [])
+    return chunks.reduce((a, command) => {
+        return a.then(() => db.bulkDocs(command))
+    }, Promise.resolve())
 }
 
 export function update(type, id, data, rev) {
