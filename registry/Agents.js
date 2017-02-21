@@ -240,7 +240,7 @@ async function fromContainer(id, method, path, data) {
         parser.on('error', reject)
         container.modem.demuxStream(stream, parser, parser)
         stream.on('end', () => {
-            if (response === '' && method === 'GET') reject(new Error('no response'))
+            if (response === '' && method === 'GET') reject(new Error('no response')) // probably timed out
             else if (response === '') resolve()
             else {
                 const data = JSON.parse(response)
