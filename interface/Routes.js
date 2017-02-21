@@ -16,25 +16,30 @@ export default class Routes {
             const page = React.createElement(DashboardPage, {})
             main.classList.remove('loading')
             ReactDOM.render(React.DOM.div({}, menu, page), main)
+            window.scrollTo(0, 0)
         })
         Page('/agents/:agent', context => {
             const page = React.createElement(AgentPage, { id: context.params.agent })
             main.classList.remove('loading')
             ReactDOM.render(React.DOM.div({}, menu, page), main)
+            window.scrollTo(0, 0)
         })
         Page('/agents/:agent/runs/:run', context => {
             const page = React.createElement(RunPage, { agent: context.params.agent, run: context.params.run })
             main.classList.remove('loading')
             ReactDOM.render(React.DOM.div({}, menu, page), main)
+            window.scrollTo(0, 0)
         })
         Page('/new-agent', context => {
             const page = React.createElement(NewAgentPage, {})
             main.classList.remove('loading')
             ReactDOM.render(React.DOM.div({}, menu, page), main)
+            window.scrollTo(0, 0)
         })
         Page('*', context => {
             main.classList.remove('loading')
             ReactDOM.render(React.DOM.div({}, menu, 'Not found'), main)
+            window.scrollTo(0, 0)
         })
         Page()
     }
