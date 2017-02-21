@@ -31,7 +31,7 @@ export default class DashboardPage extends React.Component {
 
     load() {
         HTTP.get(Config.registry + '/agents').then(response => {
-            const timeout = setTimeout(this.load, 1 * 1000) // in seconds
+            const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState({ agents: response, agentsFiltered: this.doFilter(response, this.state.filter), timeout })
         })
     }

@@ -26,7 +26,7 @@ export default class AgentPageBuild extends React.Component {
             this.setState({ timeout })
         }
         const update = response => {
-            const timeout = this.props.state === 'starting' ? setTimeout(this.load, 1 * 1000) : null // in seconds
+            const timeout = this.props.state === 'starting' ? setTimeout(this.load, 1 * 1000) : null // in milliseconds
             const shouldScroll = this.refs['build']
                   ? this.refs['build'].scrollHeight === this.refs['build'].scrollTop + this.refs['build'].clientHeight
                   : true

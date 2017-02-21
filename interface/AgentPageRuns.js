@@ -24,7 +24,7 @@ export default class AgentPageRuns extends React.Component {
     load() {
         HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs').then(response => {
             const hidden = (this.state !== null && this.state.hidden === 0) || response.length <= 12 ? 0 : response.length - 10
-            const timeout = setTimeout(this.load, 1 * 1000) // in seconds
+            const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState({ runs: response, hidden, timeout })
             this.props.setRunDisabled(response.find(run => run.state === 'queued' && run.initiator === 'manual'))
         })

@@ -25,11 +25,11 @@ export default class RunPage extends React.Component {
 
     load() {
         const retry = () => {
-            const timeout = setTimeout(this.load, 1 * 1000)
+            const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState({ timeout })
         }
         const update = response => {
-            const timeout = setTimeout(this.load, 1 * 1000) // in seconds
+            const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState(Object.assign({ timeout }, response))
         }
         HTTP.get(Config.registry + '/agents/' + this.props.agent + '/runs/' + this.props.run).then(update).catch(retry)
