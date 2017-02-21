@@ -34,7 +34,10 @@ export default class AgentPageEdit extends React.Component {
     }
 
     send() {
-        HTTP.patch(Config.registry + '/agents/' + this.props.id, [], this.state.recipe).then(() => this.setState({ confirming: false }))
+        HTTP.patch(Config.registry + '/agents/' + this.props.id, [], this.state.recipe).then(() => {
+            if (!this.node) return
+            this.setState({ confirming: false })
+        })
     }
 
     render() {
@@ -64,7 +67,7 @@ export default class AgentPageEdit extends React.Component {
             cancel: () => this.setState({ confirming: false })
         })
         const editButton = React.DOM.button({ onClick: () => this.setState({ confirming: true }) }, 'Edit')
-        return React.DOM.div({ className: 'agent-page-edit' }, editButton, dialog)
+        return React.DOM.div({ className: 'agent-page-edit', ref: node => this.node = node }, editButton, dialog)
     }
 
 }

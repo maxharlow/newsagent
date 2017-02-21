@@ -31,6 +31,7 @@ export default class DashboardPage extends React.Component {
 
     load() {
         HTTP.get(Config.registry + '/agents').then(response => {
+            if (!this.node) return
             const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState({ agents: response, agentsFiltered: this.doFilter(response, this.state.filter), timeout })
         })
@@ -88,12 +89,12 @@ export default class DashboardPage extends React.Component {
         if (this.state.agents === null) {
             const buttons = React.DOM.div({ className: 'buttons' }, importButton, createButton)
             const loading = React.DOM.div({ className: 'loading' })
-            return React.DOM.div({ className: 'dashboard-page' }, title, buttons, hr, loading)
+            return React.DOM.div({ className: 'dashboard-page', ref: node => this.node = node }, title, buttons, hr, loading)
         }
         else if (this.state.agents.length === 0) {
             const buttons = React.DOM.div({ className: 'buttons' }, importButton, createButton)
             const message = React.DOM.p({}, 'No agents have been created.')
-            return React.DOM.div({ className: 'dashboard-page' }, title, buttons, hr, message)
+            return React.DOM.div({ className: 'dashboard-page', ref: node => this.node = node }, title, buttons, hr, message)
         }
         else {
             const count = React.DOM.span({ className: 'count' }, this.state.agentsFiltered.length === 1 ? '1 agent' : this.state.agentsFiltered.length + ' agents')
@@ -114,7 +115,14 @@ export default class DashboardPage extends React.Component {
                 return React.DOM.li({ className: agent.state }, inner)
             })
             const list = React.DOM.ol({}, ...agents)
-            return React.DOM.div({ className: 'dashboard-page' }, title, buttons, hr, filter, count, list)
+            return React.DOM.div({ className: 'dashboard-page', ref: node => this.node = node }, ...[
+                title,
+                buttons,
+                hr,
+                filter,
+                count,
+                list
+            ])
         }
     }
 

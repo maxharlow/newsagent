@@ -41,6 +41,7 @@ export default class RunDataView extends React.Component {
         const locationBase = Config.registry + '/agents/' + this.props.id + '/runs/' + this.props.run + '/data'
         const location = mode === 'data' ? locationBase : locationBase + '/' + mode
         HTTP.get(location, []).then(response => {
+            if (!this.node) return
             this.setState({ [mode]: response })
         })
     }
@@ -68,13 +69,13 @@ export default class RunDataView extends React.Component {
             const loading = React.DOM.div({ className: 'loading' })
             const data = React.DOM.div({ className: 'data' }, loading)
             const box = React.DOM.div({ onClick: e => e.stopPropagation() }, closeButton, title, data, ...modes)
-            return React.DOM.div({ className: 'run-data-view', onClick: this.props.close }, box)
+            return React.DOM.div({ className: 'run-data-view', ref: node => this.node = node, onClick: this.props.close }, box)
         }
         else if (this.state[this.state.mode].length === 0) {
             const message = React.DOM.span({ className: 'no-data' }, 'No data found.')
             const data = React.DOM.div({ className: 'data' }, message)
             const box = React.DOM.div({ onClick: e => e.stopPropagation() }, closeButton, title, data, ...modes)
-            return React.DOM.div({ className: 'run-data-view', onClick: this.props.close }, box)
+            return React.DOM.div({ className: 'run-data-view', ref: node => this.node = node, onClick: this.props.close }, box)
         }
         else {
             const table = React.createElement(ScrollTable, { data: this.state[this.state.mode] })
@@ -82,7 +83,7 @@ export default class RunDataView extends React.Component {
             const count = React.DOM.span({ className: 'count' }, this.state[this.state.mode].length.toLocaleString() + ' rows')
             const downloadButton = React.DOM.button({ className: 'download', onClick: this.download }, 'Download')
             const box = React.DOM.div({ onClick: e => e.stopPropagation() }, closeButton, downloadButton, title, data, ...modes, count)
-            return React.DOM.div({ className: 'run-data-view', onClick: this.props.close }, box)
+            return React.DOM.div({ className: 'run-data-view', ref: node => this.node = node, onClick: this.props.close }, box)
         }
     }
 

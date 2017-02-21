@@ -25,10 +25,12 @@ export default class RunPage extends React.Component {
 
     load() {
         const retry = () => {
+            if (!this.node) return
             const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState({ timeout })
         }
         const update = response => {
+            if (!this.node) return
             const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState(Object.assign({ timeout }, response))
         }
@@ -36,12 +38,15 @@ export default class RunPage extends React.Component {
     }
 
     render() {
-        if (this.state === null) return React.DOM.div({ className: 'loading' }, '')
+        if (this.state === null) return React.DOM.div({ className: 'run-page', ref: node => this.node = node }, ...[
+            React.DOM.div({ className: 'loading' })
+        ])
         const summarise = (title, value) => React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, title), value)
         const summary = [
             summarise('Initiator: ', this.state.run.initiator),
             this.state.run.duration === undefined && this.state.run.dateStarted
-                ? summarise('Duration: ', Math.round(Moment.duration(new Date() - new Date(this.state.run.dateStarted)).asSeconds()) + 's') : null,
+                ? summarise('Duration: ', Math.round(Moment.duration(new Date() - new Date(this.state.run.dateStarted)).asSeconds()) + 's')
+                : null,
             this.state.run.duration ? summarise('Duration: ', Moment.duration(this.state.run.duration).humanize()) : null,
             this.state.run.recordsAdded !== undefined ? summarise('Records added: ', this.state.run.recordsAdded) : null,
             this.state.run.recordsRemoved !== undefined ? summarise('Records removed: ', this.state.run.recordsRemoved) : null,
@@ -55,7 +60,14 @@ export default class RunPage extends React.Component {
         const hr = React.DOM.hr({})
         const state = React.DOM.span({ className: 'state ' + this.state.run.state }, this.state.run.state)
         const execution = React.createElement(RunPageExecution, { agent: this.props.agent, run: this.props.run, state: this.state.run.state })
-        return React.DOM.div({ className: 'run-page' }, breadcrumbs, title, hr, state, ...summary, execution)
+        return React.DOM.div({ className: 'run-page', ref: node => this.node = node }, ...[
+            breadcrumbs,
+            title,
+            hr,
+            state,
+            ...summary,
+            execution
+        ])
     }
 
 }

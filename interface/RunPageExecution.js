@@ -24,10 +24,12 @@ export default class RunPageExecution extends React.Component {
 
     load() {
         const retry = () => {
+            if (!this.node) return
             const timeout = setTimeout(this.load, 1 * 1000)
             this.setState({ timeout })
         }
         const update = response => {
+            if (!this.node) return
             const isRunning = response[response.length - 1].code === undefined
             const isScrollable = document.body.scrollHeight > window.innerHeight
             const atTop = document.body.scrollTop === 0
@@ -35,7 +37,7 @@ export default class RunPageExecution extends React.Component {
             const shouldScroll = isRunning && ((!isScrollable && atTop) || (isScrollable && atBottom))
             if (this.props.state === 'success' || this.props.state === 'failure') this.setState({ execution: response })
             else {
-                const timeout = setTimeout(this.load, 1 * 1000) // in seconds
+                const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
                 this.setState({ timeout, execution: response })
             }
             if (shouldScroll) document.body.scrollTop = document.body.scrollHeight - window.innerHeight
@@ -45,11 +47,12 @@ export default class RunPageExecution extends React.Component {
 
     render() {
         if (this.props.state === 'queued') {
-            return React.DOM.div({ className: 'run-page-execution' }, React.DOM.span({ className: 'not-yet' }, 'Waiting to run...'))
+            const waiting = React.DOM.span({ className: 'not-yet' }, 'Waiting to run...')
+            return React.DOM.div({ className: 'run-page-execution', ref: node => this.node = node }, waiting)
         }
         else if (this.state === null || this.state.execution === undefined) {
             const loading = React.DOM.div({ className: 'loading' })
-            return React.DOM.div({ className: 'run-page-execution' }, loading)
+            return React.DOM.div({ className: 'run-page-execution', ref: node => this.node = node }, loading)
         }
         else {
             const execution = this.state.execution.map(line => {
@@ -75,7 +78,7 @@ export default class RunPageExecution extends React.Component {
             const finishing = this.props.state === 'running' && this.state.execution[this.state.execution.length - 1].code !== undefined
                   ? React.DOM.div({ className: 'finishing' }, 'Finishing up...')
                   : null
-            return React.DOM.div({ className: 'run-page-execution', ref: 'execution' }, ...execution, finishing)
+            return React.DOM.div({ className: 'run-page-execution', ref: node => this.node = node, ref: 'execution' }, ...execution, finishing)
         }
     }
 

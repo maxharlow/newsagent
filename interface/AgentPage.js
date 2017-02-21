@@ -30,6 +30,7 @@ export default class AgentPage extends React.Component {
 
     load() {
         HTTP.get(Config.registry + '/agents/' + this.props.id).then(response => {
+            if (!this.node) return
             const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState(Object.assign({ timeout }, response))
         })
@@ -41,7 +42,9 @@ export default class AgentPage extends React.Component {
     }
 
     render() {
-        if (this.state === null) return React.DOM.div({ className: 'loading' })
+        if (this.state === null) return React.DOM.div({ className: 'agent-page', ref: node => this.node = node }, ...[
+            React.DOM.div({ className: 'loading' })
+        ])
         const summarise = (title, value) => React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, title), value)
         const breadcrumbs = React.DOM.div({ className: 'breadcrumbs' }, React.DOM.a({ href: '/' }, 'Agents'), ' ▸ ')
         const title = React.DOM.h2({}, this.state.recipe.name)
@@ -55,13 +58,31 @@ export default class AgentPage extends React.Component {
         if (this.state.state === 'starting') {
             const message = React.DOM.div({ className: 'starting message' }, 'This agent is starting up...')
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page' }, breadcrumbs, title, description, hr, message, recipe, build)
+            return React.DOM.div({ className: 'agent-page', ref: node => this.node = node }, ...[
+                breadcrumbs,
+                title,
+                description,
+                hr,
+                message,
+                recipe,
+                build
+            ])
         }
         else if (this.state.state === 'failed') {
             const buttons = React.DOM.div({ className: 'buttons' }, deleteButton)
             const message = React.DOM.div({ className: 'failed message' }, 'This agent failed to build.')
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page' }, breadcrumbs, title, description, buttons, hr, summaryBuiltDate, message, recipe, build)
+            return React.DOM.div({ className: 'agent-page', ref: node => this.node = node }, ...[
+                breadcrumbs,
+                title,
+                description,
+                buttons,
+                hr,
+                summaryBuiltDate,
+                message,
+                recipe,
+                build
+            ])
         }
         else {
             const buttons = React.DOM.div({ className: 'buttons' }, deleteButton, editButton, runButton)
@@ -77,7 +98,17 @@ export default class AgentPage extends React.Component {
             const setRunDisabled = runDisabled => this.setState({ runDisabled })
             const runs = React.createElement(AgentPageRuns, { id: this.props.id, setRunDisabled })
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page' }, breadcrumbs, title, description, buttons, hr, ...summary, recipe, runs, build)
+            return React.DOM.div({ className: 'agent-page', ref: node => this.node = node }, ...[
+                breadcrumbs,
+                title,
+                description,
+                buttons,
+                hr,
+                ...summary,
+                recipe,
+                runs,
+                build
+            ])
         }
     }
 

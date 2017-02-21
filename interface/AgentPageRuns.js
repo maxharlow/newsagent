@@ -23,6 +23,7 @@ export default class AgentPageRuns extends React.Component {
 
     load() {
         HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs').then(response => {
+            if (!this.node) return
             const hidden = (this.state !== null && this.state.hidden === 0) || response.length <= 12 ? 0 : response.length - 10
             const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState({ runs: response, hidden, timeout })
@@ -50,11 +51,11 @@ export default class AgentPageRuns extends React.Component {
     render() {
         if (this.state === null) {
             const loading = React.DOM.div({ className: 'loading' })
-            return React.DOM.div({ className: 'agent-page-runs' }, React.DOM.h3({}, 'Runs'), loading)
+            return React.DOM.div({ className: 'agent-page-runs', ref: node => this.node = node }, React.DOM.h3({}, 'Runs'), loading)
         }
         else if (this.state.runs === undefined || this.state.runs.length === 0) {
             const message = React.DOM.span({ className: 'not-yet' }, 'This agent has not run yet.')
-            return React.DOM.div({ className: 'agent-page-runs' }, React.DOM.h3({}, 'Runs'), message)
+            return React.DOM.div({ className: 'agent-page-runs', ref: node => this.node = node }, React.DOM.h3({}, 'Runs'), message)
         }
         else {
             const keys = Object.keys(this.state.runs)
@@ -135,7 +136,12 @@ export default class AgentPageRuns extends React.Component {
                 date: this.state.viewing.date,
                 close: () => this.setState({ viewing: null })
             })
-            return React.DOM.div({ className: 'agent-page-runs' }, React.DOM.h3({}, 'Runs'), list, unhide, view)
+            return React.DOM.div({ className: 'agent-page-runs', ref: node => this.node = node }, ...[
+                React.DOM.h3({}, 'Runs'),
+                list,
+                unhide,
+                view
+            ])
         }
     }
 

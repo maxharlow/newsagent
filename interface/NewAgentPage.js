@@ -43,7 +43,10 @@ export default class NewAgentPage extends React.Component {
         this.setState({ loading: true })
         HTTP.post(Config.registry + '/agents', [], this.state.recipe)
             .then(response => Page('/agents/' + response.id))
-            .catch(e => this.setState({ error: e.error }))
+            .catch(e => {
+                if (!this.node) return
+                this.setState({ error: e.error })
+            })
     }
 
     render() {
@@ -53,9 +56,15 @@ export default class NewAgentPage extends React.Component {
             const error = React.DOM.h2({}, 'Something went wrong')
             const info = React.DOM.p({}, 'An error occured whilst creating this agent.')
             const message = React.DOM.p({}, this.state.error)
-            return React.DOM.div({ className: 'new-agent-page' }, title, hr, React.DOM.div({ className: 'error' }, error, info, message))
+            return React.DOM.div({ className: 'new-agent-page', ref: node => this.node = node }, ...[
+                title,
+                hr,
+                React.DOM.div({ className: 'error' }, error, info, message)
+            ])
         }
-        if (this.state.loading) return React.DOM.div({ className: 'new-agent-page' }, React.DOM.div({ className: 'loading' }))
+        if (this.state.loading) return React.DOM.div({ className: 'new-agent-page', ref: node => this.node = node }, ...[
+            React.DOM.div({ className: 'loading' })
+        ])
         const elements = [
             this.state.validation['name'] ? React.DOM.span({ className: 'validation' }, 'You must give this agent a name') : null,
             React.DOM.h4({}, 'Agent name'),
@@ -82,7 +91,11 @@ export default class NewAgentPage extends React.Component {
             React.DOM.hr({}),
             React.DOM.button({ onClick: this.create }, 'Create agent')
         ]
-        return React.DOM.div({ className: 'new-agent-page' }, title, hr, React.DOM.div({}, ...elements))
+        return React.DOM.div({ className: 'new-agent-page', ref: node => this.node = node }, ...[
+            title,
+            hr,
+            React.DOM.div({}, ...elements)
+        ])
     }
 
 }
