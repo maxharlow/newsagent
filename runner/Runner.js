@@ -32,7 +32,18 @@ export async function setup(filename) {
 }
 
 export async function schedule() {
-    Object.keys(Schedule.scheduledJobs).forEach(Schedule.cancelJob)
+    const runs = await Database.retrieveAll('run', true, true)
+    const zombie = runs.find(run => run.state === 'running')
+    if (zombie) {
+        const runFailure = {
+            state: 'failure',
+            initiator: zombie.initiator,
+            dateQueued: zombie.dateQueued,
+            dateStarted: zombie.dateStarted,
+            duration: new Date() - new Date(zombie.dateStarted)
+        }
+        Database.update('run', zombie.id, runFailure, zombie.rev)
+    }
     const recipe = await Database.retrieve('system', 'recipe')
     if (recipe.schedule) {
         const job = Schedule.scheduleJob(recipe.schedule, () => enqueue('scheduled'))

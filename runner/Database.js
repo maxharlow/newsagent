@@ -37,11 +37,12 @@ export async function retrieveSet(type, id) {
     return documents.rows.map(row => row.doc.data)
 }
 
-export async function retrieveAll(type, includeIDs) {
+export async function retrieveAll(type, includeIDs, includeRevs) {
     const documents = await db.allDocs({ startkey: type + '/\uffff', endkey: type + '/', include_docs: true, descending: true })
     return documents.rows.map(row => {
         const withIDs = includeIDs ? { id: row.id.replace(type + '/', '') } : {}
-        return Object.assign(withIDs, row.doc.data)
+        const withRevs = includeRevs ? { rev: row.doc._rev } : {}
+        return Object.assign(withIDs, withRevs, row.doc.data)
     })
 }
 
