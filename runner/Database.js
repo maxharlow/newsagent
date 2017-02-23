@@ -11,7 +11,7 @@ export function add(type, id, data) {
 
 export function addSet(type, id, data) {
     const documents = data.map((item, i) => ({ _id: type + '/' + id + '/' + i, data: item }))
-    const size = 10000 // larger values mean more speed, more memory used
+    const size = 1000 // larger values mean more speed, more memory used
     const chunks = documents.reduce((a, each) => {
         if (a.length === 0 || a[a.length - 1].length === size) a.push([each])
         else a[a.length - 1].push(each)
