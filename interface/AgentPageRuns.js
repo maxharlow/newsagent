@@ -17,10 +17,6 @@ export default class AgentPageRuns extends React.Component {
         this.load()
     }
 
-    componentWillUnmount() {
-        if (this.state && this.state.timeout) clearTimeout(this.state.timeout)
-    }
-
     load() {
         HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs').then(response => {
             if (!this.node) return

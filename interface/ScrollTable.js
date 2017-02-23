@@ -14,7 +14,8 @@ export default class ScrollTable extends React.Component {
     }
 
     update() {
-        const container = this.table.parentElement
+        if (!this.node) return
+        const container = this.node.parentElement
         const scroll = container.scrollTop < 0 ? 0 : container.scrollTop
         const spacesAboveCalc = Math.floor(scroll / this.state.rowHeight) - this.props.rowsAbove
         const spacesAbove = spacesAboveCalc < 0 ? 0 : spacesAboveCalc
@@ -27,10 +28,6 @@ export default class ScrollTable extends React.Component {
     componentDidMount() {
         this.setState({ rowHeight: this.rowHeight })
         this.update()
-    }
-
-    componentWillUnmount() {
-        clearTimeout(this.state.timeout)
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -50,7 +47,7 @@ export default class ScrollTable extends React.Component {
         const spaceAbove = React.DOM.tr({ style: { height: this.state.spacesAbove * this.state.rowHeight } }, spacer)
         const spaceBelow = React.DOM.tr({ style: { height: this.state.spacesBelow * this.state.rowHeight } }, spacer)
         const body = React.DOM.tbody({}, spaceAbove, ...rows, spaceBelow)
-        return React.DOM.table({ className: 'scroll-table', ref: table => this.table = table }, head, body)
+        return React.DOM.table({ className: 'scroll-table', ref: node => this.node = node }, head, body)
     }
 
 }

@@ -18,10 +18,6 @@ export default class RunPageExecution extends React.Component {
         this.load()
     }
 
-    componentWillUnmount() {
-        if (this.state && this.state.timeout) clearTimeout(this.state.timeout)
-    }
-
     load() {
         const retry = () => {
             if (!this.node) return
