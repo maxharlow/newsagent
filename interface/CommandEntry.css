@@ -1,6 +1,5 @@
 .command-entry {
     display: block;
-    overflow: scroll;
     border-radius: 2px;
     padding: 8px;
     background: #212121;
@@ -10,6 +9,9 @@
 }
 
 .command-entry > ol {
+    display: inline-block;
+    width: 100%;
+    overflow-x: auto;
     margin: 0;
     padding: 0;
     list-style-type: none;

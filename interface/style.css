@@ -129,7 +129,6 @@ hr {
 
 code {
     display: block;
-    overflow: scroll;
     padding: 5px;
     border-radius: 2px;
     background: #212121;

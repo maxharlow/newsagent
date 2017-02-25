@@ -30,6 +30,7 @@
     width: calc(100% - 100px);
     padding-left: 10px;
     padding-right: 10px;
+    vertical-align: top;
 }
 
 .run-page-execution > .execution.running code:before {
@@ -42,6 +43,13 @@
     border-right-color: transparent;
     border-radius: 50%;
     animation: rotate 1s infinite linear;
+}
+
+.run-page-execution > .execution code .stdin {
+    display: inline-block;
+    width: calc(100% - 25px);
+    overflow-y: auto;
+    vertical-align: top;
 }
 
 .run-page-execution > .execution code .stdin:before {
