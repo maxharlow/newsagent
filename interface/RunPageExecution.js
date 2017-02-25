@@ -79,7 +79,7 @@ export default class RunPageExecution extends React.Component {
             const finishing = this.props.state === 'running' && this.state.execution[this.state.execution.length - 1].code !== undefined
                   ? React.DOM.div({ className: 'finishing' }, 'Finishing up...')
                   : null
-            return React.DOM.div({ className: 'run-page-execution', ref: node => this.node = node, ref: 'execution' }, ...execution, finishing)
+            return React.DOM.div({ className: 'run-page-execution', ref: node => this.node = node }, ...execution, finishing)
         }
     }
 

@@ -13,11 +13,11 @@ export default class CommandEntry extends React.Component {
     press(number) {
         return event => {
             if (event.key === 'ArrowUp' && number > 0) { // up arrow and not at top
-                const focus = { number: number - 1, selectionStart: this.refs[number - 1].value.length, selectionEnd: this.refs[number - 1].value.length  }
+                const focus = { number: number - 1, selectionStart: this.commands[number - 1].value.length, selectionEnd: this.commands[number - 1].value.length  }
                 this.setState({ focus })
             }
             else if (event.key === 'ArrowDown' && number < this.state.commands.length - 1) { // down arrow and not at bottom
-                const focus = { number: number + 1, selectionStart: this.refs[number + 1].value.length, selectionEnd: this.refs[number + 1].value.length  }
+                const focus = { number: number + 1, selectionStart: this.commands[number + 1].value.length, selectionEnd: this.commands[number + 1].value.length  }
                 this.setState({ focus })
             }
             else if (event.key === 'Enter'
@@ -26,15 +26,15 @@ export default class CommandEntry extends React.Component {
                      && (number === this.state.commands.length - 1 || this.state.commands[number + 1] !== '')) { // enter and command not blank
                 const focus = { number: number + 1, selectionStart: 0, selectionEnd: 0 }
                 var commands = Array.from(this.state.commands)
-                const textBefore = this.refs[number].value.slice(0, this.refs[number].selectionEnd)
-                const textAfter = this.refs[number].value.slice(this.refs[number].selectionEnd)
+                const textBefore = this.commands[number].value.slice(0, this.commands[number].selectionEnd)
+                const textAfter = this.commands[number].value.slice(this.commands[number].selectionEnd)
                 commands[number] = textBefore
                 commands.splice(number + 1, 0, textAfter)
                 this.setState({ focus, commands })
             }
             else {
-                const focus = { number, selectionStart: this.refs[number].selectionStart, selectionEnd: this.refs[number].selectionEnd }
-                const commands = Object.assign(this.state.commands, { [number]: this.refs[number].value })
+                const focus = { number, selectionStart: this.commands[number].selectionStart, selectionEnd: this.commands[number].selectionEnd }
+                const commands = Object.assign(this.state.commands, { [number]: this.commands[number].value })
                 this.setState({ focus, commands })
             }
             this.props.onChange({ target: { value: this.state.commands.filter(command => command !== '') } })
@@ -42,19 +42,23 @@ export default class CommandEntry extends React.Component {
     }
 
     leave(event) {
-        const external = Object.keys(this.refs).find(key => this.refs[key] === event.relatedTarget) === undefined
+        const external = Object.keys(this.commands).find(key => this.commands[key] === event.relatedTarget) === undefined
         if (external) this.setState({ commands: this.state.commands.filter(command => command !== ''), focus: undefined })
     }
 
     render() {
         const lines = this.state.commands.length === 0 ? this.state.commands.concat(['']) : this.state.commands
-        const commands = lines.map((line, i) => React.DOM.input({ key: line, ref: i, defaultValue: line, onKeyUp: this.press(i), onBlur: this.leave }))
+        this.commands = {}
+        const commands = lines.map((line, i) => {
+            const add = input => this.commands[i] = input
+            return React.DOM.input({ key: line, ref: add, defaultValue: line, onKeyUp: this.press(i), onBlur: this.leave })
+        })
         return React.DOM.code({ className: 'command-entry' }, React.DOM.ol({}, commands.map((command, i) => React.DOM.li({ key: i }, command))))
     }
 
     componentDidUpdate() {
         if (this.state.focus !== undefined) {
-            const element = this.refs[this.state.focus.number]
+            const element = this.commands[this.state.focus.number]
             if (element.setSelectionRange) {
                 element.focus()
                 element.setSelectionRange(this.state.focus.selectionStart, this.state.focus.selectionEnd)

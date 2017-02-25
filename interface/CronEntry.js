@@ -31,7 +31,7 @@ export default class CronEntry extends React.Component {
             return React.DOM.label({}, input, text)
         })
         const customRadio = React.DOM.input({ type: 'radio', name: 'Custom', value: this.state.value, checked: this.state.name === 'Custom', onChange: this.update })
-        const customInput = React.DOM.input({ ref: 'custom', name: 'Custom', value: this.state.value, disabled: this.state.name !== 'Custom', onChange: this.update })
+        const customInput = React.DOM.input({ ref: input => this.custom = input, name: 'Custom', value: this.state.value, disabled: this.state.name !== 'Custom', onChange: this.update })
         const customText = React.DOM.span({}, 'Custom...', customInput)
         const custom = React.DOM.label({}, customRadio, customText)
         const description = React.DOM.p({}, this.state.value === '' ? 'Never runs.' : 'Run at ' + PrettyCron.toString(this.state.value).toLowerCase() + '.')
@@ -39,7 +39,7 @@ export default class CronEntry extends React.Component {
     }
 
     componentDidUpdate(_, prevState) {
-        if (this.state.name === 'Custom' && this.state !== prevState) this.refs.custom.focus()
+        if (this.state.name === 'Custom' && this.state !== prevState) this.custom.focus()
     }
 
 }
