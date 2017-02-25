@@ -26,11 +26,15 @@ export default class DashboardPage extends React.Component {
     }
 
     load() {
-        HTTP.get(Config.registry + '/agents').then(response => {
+        const abort = error => {
+            console.error('Could not load agents', error)
+        }
+        const update = response => {
             if (!this.node) return
             const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState({ agents: response, agentsFiltered: this.doFilter(response, this.state.filter), timeout })
-        })
+        }
+        HTTP.get(Config.registry + '/agents').then(update).catch(abort)
     }
 
     create() {
@@ -46,7 +50,10 @@ export default class DashboardPage extends React.Component {
             const fileReader = new FileReader()
             fileReader.addEventListener('load', eventRead => {
                 const data = JSON.parse(eventRead.target.result)
-                HTTP.post(Config.registry + '/import', [], data)
+                const abort = error => {
+                    console.error('Could not import agents', error)
+                }
+                HTTP.post(Config.registry + '/import', [], data).catch(abort)
             })
             fileReader.readAsText(file)
         })
@@ -54,14 +61,18 @@ export default class DashboardPage extends React.Component {
     }
 
     export() {
-        HTTP.get(Config.registry + '/export').then(response => {
+        const abort = error => {
+            console.error('Could not export agents', error)
+        }
+        const get = response => {
             const blob = new Blob([JSON.stringify(response)], { type: 'data:application/json;charset=utf-8,' })
             const anchor = document.createElement('a')
             anchor.setAttribute('href', URL.createObjectURL(blob))
             anchor.setAttribute('download', 'newsagent-export.json')
             document.body.appendChild(anchor)
             anchor.click()
-        })
+        }
+        HTTP.get(Config.registry + '/export').then(get).catch(abort)
     }
 
     doFilter(agents, value) {

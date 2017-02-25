@@ -34,10 +34,14 @@ export default class AgentPageEdit extends React.Component {
     }
 
     send() {
-        HTTP.patch(Config.registry + '/agents/' + this.props.id, [], this.state.recipe).then(() => {
+        const abort = error => {
+            console.error('Could not update agent', error)
+        }
+        const update = () => {
             if (!this.node) return
             this.setState({ confirming: false })
-        })
+        }
+        HTTP.patch(Config.registry + '/agents/' + this.props.id, [], this.state.recipe).then(update).catch(abort)
     }
 
     render() {

@@ -25,16 +25,24 @@ export default class AgentPage extends React.Component {
     }
 
     load() {
-        HTTP.get(Config.registry + '/agents/' + this.props.id).then(response => {
+        const abort = error => {
+            console.error('Could not load agents', error)
+        }
+        const update = response => {
             if (!this.node) return
             const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState(Object.assign({ timeout }, response))
-        })
+        }
+        HTTP.get(Config.registry + '/agents/' + this.props.id).then(update).catch(abort)
     }
 
     run() {
         this.setState({ runDisabled: true })
-        HTTP.post(Config.registry + '/agents/' + this.props.id)
+        const abort = error => {
+            this.setState({ runDisabled: false })
+            console.error('Could not run agent', error)
+        }
+        HTTP.post(Config.registry + '/agents/' + this.props.id).catch(abort)
     }
 
     render() {

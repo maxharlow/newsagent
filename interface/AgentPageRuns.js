@@ -18,25 +18,33 @@ export default class AgentPageRuns extends React.Component {
     }
 
     load() {
-        HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs').then(response => {
+        const abort = error => {
+            console.error('Could not load runs', error)
+        }
+        const update = response => {
             if (!this.node) return
             const hidden = (this.state !== null && this.state.hidden === 0) || response.length <= 12 ? 0 : response.length - 10
             const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState({ runs: response, hidden, timeout })
             this.props.setRunDisabled(response.find(run => run.state === 'queued' && run.initiator === 'manual'))
-        })
+        }
+        HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs').then(update).catch(abort)
     }
 
     download(run) {
-        return () => {
-            HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + run + '/data', [{ 'Accept': 'text/csv' }]).then(response => {
+        return error => {
+            const abort = error => {
+                console.error('Could not download data', error)
+            }
+            const send = response => {
                 const blob = new Blob([response], { type: 'data:text/csv;charset=utf-8,' })
                 const anchor = document.createElement('a')
                 anchor.setAttribute('href', URL.createObjectURL(blob))
                 anchor.setAttribute('download', `${this.props.id}-${run}.csv`)
                 document.body.appendChild(anchor)
                 anchor.click()
-            })
+            }
+            HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + run + '/data', [{ 'Accept': 'text/csv' }]).then(send).catch(abort)
         }
     }
 

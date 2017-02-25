@@ -40,21 +40,29 @@ export default class RunDataView extends React.Component {
         if (this.state[mode]) return
         const locationBase = Config.registry + '/agents/' + this.props.id + '/runs/' + this.props.run + '/data'
         const location = mode === 'data' ? locationBase : locationBase + '/' + mode
-        HTTP.get(location, []).then(response => {
+        const abort = error => {
+            console.error('Could not load data', error)
+        }
+        const update = response => {
             if (!this.node) return
             this.setState({ [mode]: response })
-        })
+        }
+        HTTP.get(location, []).then(update).catch(abort)
     }
 
     download() {
-        HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + this.props.run + '/data', [{ 'Accept': 'text/csv' }]).then(response => {
+        const abort = error => {
+            console.error('Could not download data', error)
+        }
+        const get = response => {
             const blob = new Blob([response], { type: 'data:text/csv;charset=utf-8,' })
             const anchor = document.createElement('a')
             anchor.setAttribute('href', URL.createObjectURL(blob))
             anchor.setAttribute('download', `${this.props.id}-${this.props.run}.csv`)
             document.body.appendChild(anchor)
             anchor.click()
-        })
+        }
+        HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + this.props.run + '/data', [{ 'Accept': 'text/csv' }]).then(get).catch(abort)
     }
 
     render() {
