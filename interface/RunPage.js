@@ -1,5 +1,6 @@
 import React from 'react'
 import Moment from 'moment'
+import MomentDurationFormat from 'moment-duration-format'
 import RunPageExecution from '/RunPageExecution.js'
 import HTTP from '/HTTP.js'
 import Config from '/Config.js'
@@ -41,9 +42,9 @@ export default class RunPage extends React.Component {
         const summary = [
             summarise('Initiator: ', this.state.run.initiator),
             this.state.run.duration === undefined && this.state.run.dateStarted
-                ? summarise('Duration: ', Math.round(Moment.duration(new Date() - new Date(this.state.run.dateStarted)).asSeconds()) + 's')
+                ? summarise('Duration: ', Moment.duration(new Date() - new Date(this.state.run.dateStarted), 'ms').format('h[h] m[m] s[s]'))
                 : null,
-            this.state.run.duration ? summarise('Duration: ', Moment.duration(this.state.run.duration).humanize()) : null,
+            this.state.run.duration ? summarise('Duration: ', Moment.duration(this.state.run.duration, 'ms').format('h[h] m[m] s[s]')) : null,
             this.state.run.recordsAdded !== undefined ? summarise('Records added: ', this.state.run.recordsAdded) : null,
             this.state.run.recordsRemoved !== undefined ? summarise('Records removed: ', this.state.run.recordsRemoved) : null,
             this.state.run.triggered !== undefined ? summarise('Triggers fired: ', this.state.run.triggered.length) : null

@@ -1,5 +1,6 @@
 import React from 'react'
 import Moment from 'moment'
+import MomentDurationFormat from 'moment-duration-format'
 import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
@@ -60,7 +61,8 @@ export default class RunPageExecution extends React.Component {
                           ? React.DOM.span({ className: 'unseen' }, 'Output too large to display: ' + (line.log.length - maxLogLength).toLocaleString() + ' rows hidden.')
                           : null
                     const exit = line.code > 0 ? React.DOM.span({ className: 'exit' }, 'Exited with code ' + line.code + '.') : null
-                    const duration = React.DOM.span({ className: 'duration' }, Math.round(Moment.duration(line.duration).asSeconds()) + 's')
+                    const durationText = Moment.duration(line.duration, 'ms').format('h[h] m[m] s[s]')
+                    const duration = React.DOM.span({ className: 'duration' }, durationText)
                     const state = line.code === 0 ? 'success' : 'failure'
                     return React.DOM.div({ className: 'execution ' + state }, React.DOM.code({}, command, ...outputs), duration, unseen, exit)
                 }
@@ -69,7 +71,8 @@ export default class RunPageExecution extends React.Component {
                 }
                 else { // line still running
                     const durationNow = new Date() - new Date(line.dateStarted)
-                    const duration = React.DOM.span({ className: 'duration' }, Math.round(Moment.duration(durationNow).asSeconds()) + 's')
+                    const durationText = Moment.duration(durationNow, 'ms').format('h[h] m[m] s[s]')
+                    const duration = React.DOM.span({ className: 'duration' }, durationText)
                     return React.DOM.div({ className: 'execution running' }, React.DOM.code({}, command), duration)
                 }
             })

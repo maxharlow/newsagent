@@ -27,7 +27,7 @@
 
 .run-page-execution > .execution code {
     display: inline-block;
-    width: calc(100% - 60px);
+    width: calc(100% - 100px);
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -52,7 +52,7 @@
 
 .run-page-execution > .execution .duration {
     display: inline-block;
-    width: 40px;
+    width: 80px;
     padding: 5px 0;
     vertical-align: top;
     font-size: 12px;
