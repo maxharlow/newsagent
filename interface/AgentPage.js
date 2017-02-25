@@ -89,7 +89,7 @@ export default class AgentPage extends React.Component {
                 this.state.status.numberRuns > 0 ? summarise('Successful runs: ', this.state.status.numberRunsSuccessful || 0) : null,
                 this.state.status.numberRuns > 0 ? summarise('Success rate: ', (this.state.status.successRate || 0) + '%') : null,
                 this.state.status.dateLastSuccessfulRun ? summarise('Last successful run: ', Moment(this.state.status.dateLastSuccessfulRun).fromNow()) : null,
-                this.state.spaceUsed ? summarise('Space used: ', this.state.spaceUsed + ' MB') : null
+                this.state.spaceUsed ? summarise('Space used: ', Math.round(this.state.spaceUsed) + ' MB') : null
             ]
             const setRunDisabled = runDisabled => this.setState({ runDisabled })
             const runs = React.createElement(AgentPageRuns, { id: this.props.id, setRunDisabled })
