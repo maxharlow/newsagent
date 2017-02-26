@@ -11,3 +11,7 @@
 .agent-page-build > .log code {
     height: 400px;
 }
+
+.agent-page-build > .log code span {
+    padding: 0 5px;
+}
