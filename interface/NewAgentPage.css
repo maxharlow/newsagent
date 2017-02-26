@@ -15,7 +15,7 @@
     margin: 15px 0;
 }
 
-.new-agent-page > .filename {
+.new-agent-page > div .filename {
     font-family: monospace;
 }
 
