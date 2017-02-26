@@ -22,34 +22,34 @@
 }
 
 .run-page-execution > .execution.running {
+    position: relative;
     border-right: 2px solid #da8f04;
 }
 
 .run-page-execution > .execution code {
     display: inline-block;
-    width: calc(100% - 100px);
+    width: calc(100% - 95px);
     padding-left: 10px;
     padding-right: 10px;
     vertical-align: top;
 }
 
-.run-page-execution > .execution.running code:before {
+.run-page-execution > .execution.running code {
+    width: calc(100% - 120px);
+    border-right: 25px solid #212121;
+}
+
+.run-page-execution > .execution.running:after {
     content: '';
-    float: right;
+    position: absolute;
+    top: 12px;
+    right: 85px;
     width: 8px;
     height: 8px;
-    margin-top: 1px;
     border: 4px solid white;
     border-right-color: transparent;
     border-radius: 50%;
     animation: rotate 1s infinite linear;
-}
-
-.run-page-execution > .execution code .stdin {
-    display: inline-block;
-    width: calc(100% - 25px);
-    overflow-y: auto;
-    vertical-align: top;
 }
 
 .run-page-execution > .execution code .stdin:before {
@@ -60,7 +60,7 @@
 
 .run-page-execution > .execution .duration {
     display: inline-block;
-    width: 80px;
+    width: 75px;
     padding: 5px 0;
     vertical-align: top;
     font-size: 12px;
