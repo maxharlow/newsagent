@@ -144,7 +144,13 @@ async function build(agent) {
         const clientInfo = await client.info()
         const context = await buildContext(client, agent.id, agent.recipe)
         const image = await buildImage(client, agent.id, context)
-        const container = await client.createContainer({ name: agent.id, Image: image.id })
+        const container = await client.createContainer({
+            name: agent.id,
+            Image: image.id,
+            HostConfig: {
+                RestartPolicy: { Name: 'on-failure', MaximumRetryCount: 10 }
+            }
+        })
         await container.start()
         const agentStarted = {
             state: 'started',
