@@ -19,7 +19,9 @@ export async function setup(filename) {
     const recipe = JSON.parse(data.toString())
     await Database.add('system', 'recipe', recipe)
     await Promisify(FS.mkdir)(Config.sourceLocation)
-    const commands = recipe.setup.map(command => command.replace(/^require /, 'apk add --no-cache '))
+    const commands = recipe.setup
+          .map(command => command.replace(/^require /, 'apk add --no-cache '))
+          .map(command => command.replace(/ ~/, ' /root'))
     const results = await sequentially(commands, shell(Config.sourceLocation))
     results.forEach(result => {
         result.log.forEach(message => {
