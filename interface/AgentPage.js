@@ -26,7 +26,7 @@ export default class AgentPage extends React.Component {
 
     load() {
         const abort = error => {
-            console.error('Could not load agents', error)
+            console.error('Could not load agent', error)
         }
         const update = response => {
             if (!this.node) return
