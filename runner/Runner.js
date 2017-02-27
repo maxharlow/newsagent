@@ -58,12 +58,13 @@ export async function enqueue(initiator) {
     const runsIdenticalQueued = runs.filter(run => run.state === 'queued' && run.initiator === initiator)
     if (runsIdenticalQueued.length > 0) throw new Error('duplicate')
     const dateQueued = new Date().toISOString()
+    const id = dateQueued.replace(/\D/g, '')
     const run = {
         state: 'queued',
         initiator,
         dateQueued
     }
-    return Database.add('run', dateQueued, run)
+    return Database.add('run', id, run)
 }
 
 export async function dequeue() {
