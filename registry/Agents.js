@@ -165,7 +165,7 @@ async function build(agent) {
 }
 
 async function buildContext(client, id, recipe) {
-    const packages = [ 'build-base', 'git', 'curl', 'wget', 'bash', 'python2', 'py2-pip', 'python3', 'ruby', 'nodejs-current' ]
+    const packages = [ 'build-base', 'git', 'curl', 'wget', 'bash', 'python2', 'python2-dev', 'py2-pip', 'python3', 'python3-dev', 'ruby', 'ruby-dev', 'nodejs-current' ]
     const dockerfile = 'FROM alpine:3.5'
           + '\n' + 'RUN apk add -q --no-cache ' + packages.join(' ')
           + '\n' + 'COPY runner /runner'
