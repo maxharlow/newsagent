@@ -1,6 +1,7 @@
 'use strict'
 
 import Express from 'express'
+import Morgan from 'morgan'
 import BodyParser from 'body-parser'
 import * as Database from './Database'
 import * as Agents from './Agents'
@@ -8,6 +9,7 @@ import Config from './config.json'
 
 export function listen() {
     const app = Express()
+    app.use(Morgan('tiny'))
     app.use(BodyParser.json())
     app.use((_, response, next) => {
         response.header('Access-Control-Allow-Origin', '*')

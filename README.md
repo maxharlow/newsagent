@@ -31,7 +31,10 @@ In these cases nothing needs to be added to the file.
 
 This requires [Virtualbox] (https://www.virtualbox.org/). Create a new virtual machine, and open the necessary ports:
 
-    $ docker-machine create -d virtualbox newsagent
+    $ docker-machine create -d virtualbox \
+        --engine-opt log-opt=max-size=1m \
+        --engine-opt log-opt=max-file=1 \
+        newsagent
     $ eval "$(docker-machine env newsagent)"
     $ VBoxManage controlvm newsagent natpf1 'registry,tcp,,4001,,4001'
     $ VBoxManage controlvm newsagent natpf1 'interface,tcp,,4000,,4000'
@@ -48,6 +51,8 @@ Newsagent should now be available at http://localhost:4000/.
 This requires the [AWS CLI] (https://github.com/aws/aws-cli) to be installed and configured. Create a new AWS EC2 machine, and open the necessary ports:
 
     $ docker-machine create -d amazonec2 \
+        --engine-opt log-opt=max-size=1m \
+        --engine-opt log-opt=max-file=1 \
         --amazonec2-region 'eu-west-1' \
         --amazonec2-instance-type 't2.medium' \
         newsagent
