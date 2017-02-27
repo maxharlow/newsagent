@@ -248,10 +248,13 @@ async function fromContainer(id, method, path, data) {
         stream.on('end', () => {
             if (response === '' && method === 'GET') reject(new Error('no response')) // probably timed out
             else if (response === '') resolve()
-            else {
+            else try {
                 const data = JSON.parse(response)
                 if (data.error) reject(new Error(data.error))
                 else resolve(data)
+            }
+            catch (e) {
+                reject(e)
             }
         })
     })
