@@ -148,7 +148,7 @@ async function build(agent) {
             name: agent.id,
             Image: image.id,
             HostConfig: {
-                RestartPolicy: { Name: 'on-failure', MaximumRetryCount: 10 }
+                RestartPolicy: { Name: 'always' }
             }
         })
         await container.start()
