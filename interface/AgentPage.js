@@ -17,7 +17,8 @@ export default class AgentPage extends React.Component {
     }
 
     shouldComponentUpdate(_, nextState) {
-        return JSON.stringify(this.state) !== JSON.stringify(nextState)
+        const withoutTimeout = object => Object.assign({}, object, { timeout: null })
+        return JSON.stringify(withoutTimeout(this.state)) !== JSON.stringify(withoutTimeout(nextState))
     }
 
     componentWillMount() {
