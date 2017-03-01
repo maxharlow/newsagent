@@ -6,12 +6,14 @@ export default class AgentPageBuild extends React.Component {
 
     constructor() {
         super()
-        this.state = { loading: false }
+        this.state = {
+            loading: false
+        }
         this.load = this.load.bind(this)
     }
 
     componentWillMount() {
-        if (this.props.state === 'starting') this.load()
+        if (this.props.state !== 'started') this.load()
     }
 
     componentWillUnmount() {
