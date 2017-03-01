@@ -19,7 +19,7 @@
     font-family: monospace;
 }
 
-.new-agent-page > .validation {
+.new-agent-page > div .validation {
     float: right;
     padding-bottom: 5px;
     color: #a60000;
