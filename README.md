@@ -79,7 +79,7 @@ To update to a new version, first select our Newsagent stack:
 Then wipe out all existing containers and images:
 
     $ docker container stop $(docker container ls -q)
-    $ docker system prune -f
+    $ docker system prune -af
 
 Now just follow the respective instructions above to build and run the new version.
 
