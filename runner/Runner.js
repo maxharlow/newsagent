@@ -165,31 +165,17 @@ async function run(id) {
 }
 
 async function execute(id, commands) {
-    const invoke = shell(Config.sourceLocation)
-    const start = await Database.add('execution', id, {
-        results: [
-            { command: commands[0], dateStarted: new Date().toISOString() }
-        ]
-    })
-    const outputs = await sequentially(commands, (command, previous) => {
-        const write = (result, failure) => {
-            const resultsBefore = previous.map(output => output.result).concat(result)
-            const results = previous.length + 1 === commands.length || failure
-                  ? resultsBefore
-                  : resultsBefore.concat({
-                      command: commands[previous.length + 1],
-                      dateStarted: new Date().toISOString()
-                  })
-            const rev = previous.length === 0 ? start.rev : previous[previous.length - 1].rev
-            return Database.update('execution', id, { results }, rev).then(update => {
-                if (failure) throw { result }
-                else return { result, rev: update.rev }
-            })
-        }
-        const abort = result => write(result, true)
-        return invoke(command).then(write).catch(abort)
-    })
-    return outputs.map(output => output.result)
+    var   results = []
+    const resultsCreation = await Database.add('execution', id, { results })
+    var   resultsRevision = resultsCreation.rev
+    const resultsUpdate = () => {
+        Database.update('execution', id, { results }, resultsRevision)
+            .then(update => resultsRevision = update.rev)
+            .catch(e => {}) // ignore conficts
+    }
+    const resultsUpdater = setInterval(resultsUpdate, 1 * 1000) // in milliseconds
+    const invoke = shell(Config.sourceLocation, results)
+    return sequentially(commands, invoke)
 }
 
 async function removeOldRuns() {
@@ -214,22 +200,22 @@ function trigger(diff, triggers, name) {
 }
 
 function sequentially(array, fn, a = []) {
-    return fn(array[0], a)
+    return fn(array[0], a.length)
         .then(data => array.length > 1 ? sequentially(Array.from(array).splice(1), fn, a.concat(data)) : a.concat(data))
         .catch(data => a.concat(data))
 }
 
-function shell(location) {
+function shell(location, results = []) {
     const options = {
         cwd: Path.resolve(location),
         maxBuffer: 8000 * 1024 // largest amount of bytes allows on stdout/stderr before process killed
     }
-    return command => {
-        var log = []
+    return (command, i) => {
         const date = new Date()
+        results.push({ command, dateStarted: new Date().toISOString(), log: [] })
         const process = ChildProcess.exec(command, options)
-        process.stdout.on('data', data => log.push({ type: 'stdout', value: data }))
-        process.stderr.on('data', data => log.push({ type: 'stderr', value: data }))
+        process.stdout.on('data', data => results[i].log.push({ type: 'stdout', value: data }))
+        process.stderr.on('data', data => results[i].log.push({ type: 'stderr', value: data }))
         return new Promise((resolve, reject) => {
             process.on('exit', code => {
                 const result = {
@@ -237,8 +223,9 @@ function shell(location) {
                     code: code === null ? -1 : code, // null code means process was killed
                     dateStarted: date.toISOString(),
                     duration: new Date() - date,
-                    log
+                    log: results[i].log
                 }
+                results[i] = result
                 if (code > 0 || code === null) reject(result)
                 else resolve(result)
             })

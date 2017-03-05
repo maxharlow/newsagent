@@ -54,26 +54,23 @@ export default class RunPageExecution extends React.Component {
         else {
             const execution = this.state.execution.map(line => {
                 const command = React.DOM.span({ className: 'stdin' }, line.command + '\n')
-                if (line.code !== undefined) {
+                if (line.state === 'running' && this.props.state !== 'running') { // run failed on this line
+                    return React.DOM.div({ className: 'execution' }, React.DOM.code({}, command))
+                }
+                else { // line has run or is running
                     const maxLogLength = 500
                     const outputs = line.log.slice(0, maxLogLength).map(entry => React.DOM.span({ className: entry.type }, entry.value))
                     const unseen = line.log.length > maxLogLength
                           ? React.DOM.span({ className: 'unseen' }, 'Output too large to display: ' + (line.log.length - maxLogLength).toLocaleString() + ' rows hidden.')
                           : null
                     const exit = line.code > 0 ? React.DOM.span({ className: 'exit' }, 'Exited with code ' + line.code + '.') : null
-                    const durationText = Moment.duration(line.duration, 'ms').format('h[h] m[m] s[s]')
-                    const duration = React.DOM.span({ className: 'duration' }, durationText)
-                    const state = line.code === 0 ? 'success' : 'failure'
-                    return React.DOM.div({ className: 'execution ' + state }, React.DOM.code({}, command, ...outputs), duration, unseen, exit)
-                }
-                else if (this.props.state !== 'running') { // run failed on this line
-                    return React.DOM.div({ className: 'execution' }, React.DOM.code({}, command))
-                }
-                else { // line still running
-                    const durationNow = new Date() - new Date(line.dateStarted)
+                    const durationNow = line.duration || new Date() - new Date(line.dateStarted)
                     const durationText = Moment.duration(durationNow, 'ms').format('h[h] m[m] s[s]')
                     const duration = React.DOM.span({ className: 'duration' }, durationText)
-                    return React.DOM.div({ className: 'execution running' }, React.DOM.code({}, command), duration)
+                    const state = line.code === undefined ? 'running'
+                          : line.code === 0 ? 'success'
+                          : 'failure'
+                    return React.DOM.div({ className: 'execution ' + state }, React.DOM.code({}, command, ...outputs), duration, unseen, exit)
                 }
             })
             const finishing = this.props.state === 'running' && this.state.execution[this.state.execution.length - 1].code !== undefined
