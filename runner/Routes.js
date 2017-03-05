@@ -37,22 +37,34 @@ export function listen() {
     app.get('/runs/:id', (request, response) => {
         Runner.describeRun(request.params.id)
             .then(run => response.status(200).send(run))
-            .catch(e => response.status(500).send({ error: e.message }))
+            .catch(e => {
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'not found' })
+                else response.status(500).send({ error: e.message })
+            })
     })
     app.get('/runs/:id/execution', (request, response) => {
         Database.retrieve('execution', request.params.id)
             .then(execution => response.status(200).send(execution.results))
-            .catch(e => response.status(500).send({ error: e.message }))
+            .catch(e => {
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'not found' })
+                else response.status(500).send({ error: e.message })
+            })
     })
     app.get('/runs/:id/data', (request, response) => {
         Database.retrieveSet('data', request.params.id)
             .then(data => response.status(200).send(data))
-            .catch(e => response.status(500).send({ error: e.message }))
+            .catch(e => {
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'not found' })
+                else response.status(500).send({ error: e.message })
+            })
     })
     app.get('/runs/:id/diff', (request, response) => {
         Runner.difference(request.params.id)
             .then(diff => response.status(200).send(diff))
-            .catch(e => response.status(500).send({ error: e.message }))
+            .catch(e => {
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'not found' })
+                else response.status(500).send({ error: e.message })
+            })
     })
     app.listen(Config.port)
 }

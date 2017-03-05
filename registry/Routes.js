@@ -75,7 +75,8 @@ export function listen() {
         Database.retrieve('build', request.params.id)
             .then(build => response.status(200).send({ id: build.id, log: build.log.slice(request.query.since || 0) }))
             .catch(e => {
-                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent build not found' })
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent not found' })
+                else if (e && e.message && e.message === 'not found') response.status(404).send({ error: 'agent build not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -84,7 +85,8 @@ export function listen() {
         Agents.getRuns(request.params.agent)
             .then(runs => response.status(200).send(runs))
             .catch(e => {
-                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent runs not found' })
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent not found' })
+                else if (e && e.message && e.message === 'not found') response.status(404).send({ error: 'agent runs not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -93,7 +95,8 @@ export function listen() {
         Agents.getRun(request.params.agent, request.params.run)
             .then(run => response.status(200).send(run))
             .catch(e => {
-                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent run not found' })
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent not found' })
+                else if (e && e.message && e.message === 'not found') response.status(404).send({ error: 'agent run not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -102,7 +105,8 @@ export function listen() {
         Agents.getRunExecution(request.params.agent, request.params.run)
             .then(execution => response.status(200).send(execution))
             .catch(e => {
-                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent execution not found' })
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent not found' })
+                else if (e && e.message && e.message === 'not found') response.status(404).send({ error: 'agent execution not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -115,7 +119,8 @@ export function listen() {
                 response.status(200).send(data)
             })
             .catch(e => {
-                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent data not found' })
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent not found' })
+                else if (e && e.message && e.message === 'not found') response.status(404).send({ error: 'agent data not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -128,7 +133,8 @@ export function listen() {
                 response.status(200).send(data)
             })
             .catch(e => {
-                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent diff not found' })
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent not found' })
+                else if (e && e.message && e.message === 'not found') response.status(404).send({ error: 'agent diff not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
@@ -141,7 +147,8 @@ export function listen() {
                 response.status(200).send(data)
             })
             .catch(e => {
-                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent diff not found' })
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent not found' })
+                else if (e && e.message && e.message === 'not found') response.status(404).send({ error: 'agent diff not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })
                 else response.status(500).send({ error: 'unknown error' })
             })
