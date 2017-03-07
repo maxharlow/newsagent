@@ -45,6 +45,7 @@ export default class DashboardPage extends React.Component {
         const input = document.createElement('input')
         input.setAttribute('type', 'file')
         input.setAttribute('accept', 'application/json')
+        input.setAttribute('style', 'display: none')
         input.addEventListener('change', eventInput => {
             const file = eventInput.target.files[0]
             const fileReader = new FileReader()
@@ -57,6 +58,7 @@ export default class DashboardPage extends React.Component {
             })
             fileReader.readAsText(file)
         })
+        document.body.appendChild(input)
         input.click()
     }
 
