@@ -109,7 +109,7 @@ export default class AgentPageRuns extends React.Component {
                             React.DOM.span({ className: 'recipient' }, trigger.recipient),
                             React.DOM.span({ className: 'status' }, trigger.status)
                         ]
-                        return React.DOM.li({}, status)
+                        return React.DOM.li({}, ...status)
                     })
                     const info = [
                         React.DOM.span({ className: 'initiator' }, run.initiator),
