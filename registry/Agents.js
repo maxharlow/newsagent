@@ -151,13 +151,19 @@ async function build(agent) {
                 RestartPolicy: { Name: 'always' }
             }
         })
-        await container.start()
-        const agentStarted = {
-            state: 'started',
-            builtDate,
-            client: clientInfo.ID
+        await container.start() // counter-intuitively resolves before container has actually started
+        const write = () => {
+            const agentStarted = {
+                state: 'started',
+                builtDate,
+                client: clientInfo.ID
+            }
+            Database.update('agent', agent.id, agentStarted, agent.rev)
         }
-        Database.update('agent', agent.id, agentStarted, agent.rev)
+        const checkStarted = () => {
+            fromContainer(agent.id, 'GET', '/runs').then(write).catch(checkStarted)
+        }
+        checkStarted()
     }
     catch (e) {
         const agentFailed = {
