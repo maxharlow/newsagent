@@ -161,7 +161,7 @@ async function build(agent) {
             Database.update('agent', agent.id, agentStarted, agent.rev)
         }
         const checkStarted = () => {
-            fromContainer(agent.id, 'GET', '/runs').then(write).catch(checkStarted)
+            fromContainer(agent.id, 'GET', '/').then(write).catch(checkStarted)
         }
         checkStarted()
     }
