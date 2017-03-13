@@ -58,6 +58,10 @@
     color: #999;
 }
 
+.run-page-execution > .execution code .stderr {
+    color: #ed5c5c;
+}
+
 .run-page-execution > .execution .duration {
     display: inline-block;
     width: 75px;
