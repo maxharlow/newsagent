@@ -53,13 +53,13 @@ export default class RunPageExecution extends React.Component {
         }
         else {
             const execution = this.state.execution.map(line => {
-                const command = React.DOM.span({ className: 'stdin' }, line.command + '\n')
+                const command = React.DOM.li({ className: 'stdin' }, line.command + '\n')
                 if (line.state === 'running' && this.props.state !== 'running') { // run failed on this line
                     return React.DOM.div({ className: 'execution' }, React.DOM.code({}, command))
                 }
                 else { // line has run or is running
                     const maxLogLength = 500
-                    const outputs = line.log.slice(0, maxLogLength).map(entry => React.DOM.span({ className: entry.type }, entry.value))
+                    const outputs = line.log.slice(0, maxLogLength).map(entry => React.DOM.li({ className: entry.type }, entry.value))
                     const unseen = line.log.length > maxLogLength
                           ? React.DOM.span({ className: 'unseen' }, 'Output too large to display: ' + (line.log.length - maxLogLength).toLocaleString() + ' rows hidden.')
                           : null
@@ -70,7 +70,8 @@ export default class RunPageExecution extends React.Component {
                     const state = line.code === undefined ? 'running'
                           : line.code === 0 ? 'success'
                           : 'failure'
-                    return React.DOM.div({ className: 'execution ' + state }, React.DOM.code({}, command, ...outputs), duration, unseen, exit)
+                    const code = React.DOM.code({}, React.DOM.ol({}, command, ...outputs))
+                    return React.DOM.div({ className: 'execution ' + state }, code, duration, unseen, exit)
                 }
             })
             const finishing = this.props.state === 'running' && this.state.execution[this.state.execution.length - 1].code !== undefined

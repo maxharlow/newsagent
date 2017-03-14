@@ -28,15 +28,13 @@
 
 .run-page-execution > .execution code {
     display: inline-block;
-    width: calc(100% - 95px);
-    padding-left: 10px;
-    padding-right: 10px;
+    width: calc(100% - 91px);
     vertical-align: top;
 }
 
 .run-page-execution > .execution.running code {
-    width: calc(100% - 120px);
-    border-right: 25px solid #212121;
+    width: calc(100% - 107px);
+    border-right: 22px solid #212121;
 }
 
 .run-page-execution > .execution.running:after {
@@ -52,20 +50,10 @@
     animation: rotate 1s infinite linear;
 }
 
-.run-page-execution > .execution code .stdin:before {
-    content: '$';
-    margin-right: 8px;
-    color: #999;
-}
-
-.run-page-execution > .execution code .stderr {
-    color: #ed5c5c;
-}
-
 .run-page-execution > .execution .duration {
     display: inline-block;
     width: 75px;
-    padding: 5px 0;
+    padding: 8px 0;
     vertical-align: top;
     font-size: 12px;
     text-align: right;

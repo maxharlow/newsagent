@@ -9,21 +9,6 @@
     font-size: 13px;
 }
 
-.agent-page-recipe > code ol {
-    display: inline-block;
-    width: 100%;
-    overflow-x: auto;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-
-.agent-page-recipe > code ol li:before {
-    content: '$';
-    margin: 0 8px 0 5px;
-    color: #999;
-}
-
 .agent-page-recipe > .field {
     display: block;
     margin: 2px 0;

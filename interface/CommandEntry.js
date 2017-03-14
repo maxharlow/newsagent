@@ -51,9 +51,9 @@ export default class CommandEntry extends React.Component {
         this.commands = {}
         const commands = lines.map((line, i) => {
             const add = input => this.commands[i] = input
-            return React.DOM.input({ key: line, ref: add, defaultValue: line, onKeyUp: this.press(i), onBlur: this.leave })
+            return React.DOM.input({ ref: add, defaultValue: line, onKeyUp: this.press(i), onBlur: this.leave })
         })
-        return React.DOM.code({ className: 'command-entry' }, React.DOM.ol({}, commands.map((command, i) => React.DOM.li({ key: i }, command))))
+        return React.DOM.code({ className: 'command-entry' }, React.DOM.ol({}, ...commands.map(command => React.DOM.li({ className: 'stdin' }, command))))
     }
 
     componentDidUpdate() {

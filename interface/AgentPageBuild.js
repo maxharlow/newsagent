@@ -47,9 +47,9 @@ export default class AgentPageBuild extends React.Component {
     render() {
         if (this.state.log) {
             const entries = Object.keys(this.state.log).map(i => {
-                return React.DOM.span({ className: this.state.log[i].type }, this.state.log[i].value)
+                return React.DOM.li({ className: this.state.log[i].type }, this.state.log[i].value)
             })
-            const log = React.DOM.div({ className: 'log' }, React.DOM.code({ ref: 'build' }, ...entries))
+            const log = React.DOM.div({ className: 'log' }, React.DOM.code({ ref: 'build' }, React.DOM.ol({}, ...entries)))
             return React.DOM.div({ className: 'agent-page-build', ref: node => this.node = node }, React.DOM.h3({}, 'Build'), log)
         }
         else if (this.state.loading) {

@@ -129,13 +129,37 @@ hr {
 
 code {
     display: block;
-    overflow-x: scroll;
-    padding: 5px;
+    padding: 8px;
     border-radius: 2px;
     background: #212121;
     white-space: pre;
     color: #e8e8e8;
     font-size: 12px;
+}
+
+code ol {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+code ol li {
+    margin: 0 4px;
+}
+
+code ol li.stdin:before,
+code ol li.stdin input:before {
+    content: '$';
+    margin: 0 8px 0 0;
+    color: #999;
+}
+
+code ol li.stderr {
+    color: #ed5c5c;
 }
 
 p code {
