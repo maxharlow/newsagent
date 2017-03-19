@@ -250,8 +250,8 @@ async function fromContainer(id, method, path, data) {
         const parser = new Stream.PassThrough()
         parser.on('data', data => response += data)
         parser.on('error', reject)
-        container.modem.demuxStream(stream, parser, parser)
-        stream.on('end', () => {
+        container.modem.demuxStream(stream.output, parser, parser)
+        stream.output.on('end', () => {
             if (response === '' && method === 'GET') reject(new Error('no response')) // probably timed out
             else if (response === '') resolve()
             else try {
