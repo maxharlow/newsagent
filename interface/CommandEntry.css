@@ -6,3 +6,11 @@
     color: inherit;
     font: inherit;
 }
+
+@media (max-width: 450px) {
+
+    .command-entry > ol li {
+        font-size: 16px;
+    }
+
+}

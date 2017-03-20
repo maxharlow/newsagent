@@ -182,3 +182,12 @@ p code {
         transform: rotate(360deg);
     }
 }
+
+@media (max-width: 450px) {
+
+    input,
+    button {
+        font-size: 16px;
+    }
+
+}

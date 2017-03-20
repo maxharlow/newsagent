@@ -75,3 +75,13 @@
     padding: 0 8px 2px 8px;
     font-size: 16px;
 }
+
+@media (max-width: 450px) {
+
+    .trigger-entry > ol li span,
+    .trigger-entry > .adder .event,
+    .trigger-entry > .adder .action {
+        font-size: 16px;
+    }
+
+}
