@@ -9,13 +9,13 @@ Newsagent lets you easily create bots to periodically gather data that you are i
 Deploying
 ---------
 
-Firstly you'll need to clone this repository. You will also need [Docker] (https://www.docker.com/products/docker-engine) and [Docker Machine] (https://www.docker.com/products/docker-machine).
+Firstly you'll need to clone this repository. You will also need [Docker](https://github.com/docker/docker) and [Docker Machine](https://github.com/docker/machine).
 
 Next we need to create configuration files based on existing example files. The first is for the Runner component which is responsible for each agent running periodically and sending emails when differences are detected. To do this first copy the example file:
 
     $ cp runner/config.example.json runner/config.json
 
-Then edit the `runner/config.json` file, and set the `email` portion -- this should be in [Nodemailer format] (https://github.com/nodemailer/nodemailer-wellknown/blob/master/README.md). You can use Gmail or other services but the easiest choice is to get a free account at an email delivery service such as [Mailgun] (http://www.mailgun.com/).
+Then edit the `runner/config.json` file, and set the `email` portion -- this should be in [Nodemailer format](https://github.com/nodemailer/nodemailer-wellknown/blob/master/README.md). You can use Gmail or other services but the easiest choice is to get a free account at an email delivery service such as [Mailgun](https://www.mailgun.com/).
 
 The second configuration file is for the Registry, which creates and manages the agents. Copy the example file for this:
 
@@ -29,7 +29,7 @@ In these cases nothing needs to be added to the file.
 
 ### On your local machine
 
-This requires [Virtualbox] (https://www.virtualbox.org/). Create a new virtual machine, and open the necessary ports:
+This requires [Virtualbox](https://www.virtualbox.org/). Create a new virtual machine, and open the necessary ports:
 
     $ docker-machine create -d virtualbox \
         --engine-opt log-opt=max-size=1m \
@@ -48,7 +48,7 @@ Newsagent should now be available at http://localhost:4000/.
 
 ### On an AWS machine
 
-This requires the [AWS CLI] (https://github.com/aws/aws-cli) to be installed and configured. Create a new AWS EC2 machine, and open the necessary ports:
+This requires the [AWS CLI](https://github.com/aws/aws-cli) to be installed and configured. Create a new AWS EC2 machine, and open the necessary ports:
 
     $ docker-machine create -d amazonec2 \
         --engine-opt log-opt=max-size=1m \
@@ -61,7 +61,7 @@ This requires the [AWS CLI] (https://github.com/aws/aws-cli) to be installed and
     $ aws ec2 authorize-security-group-ingress --group-id $NEWSAGENT_GROUP --protocol tcp --port 4001 --cidr 0.0.0.0/0
     $ aws ec2 authorize-security-group-ingress --group-id $NEWSAGENT_GROUP --protocol tcp --port 4000 --cidr 0.0.0.0/0
 
-This uses a `t2.medium` machine, which is pretty much the minimum. If you are expecting to have many long-running agents you may need [a more powerful/expensive machine] (https://aws.amazon.com/ec2/instance-types/).
+This uses a `t2.medium` machine, which is pretty much the minimum. If you are expecting to have many long-running agents you may need [a more powerful/expensive machine](https://aws.amazon.com/ec2/instance-types/).
 
 You can now build and run Newsagent:
 
@@ -102,7 +102,7 @@ Development
 
 If you are developing Newsagent it is much easier to run it outside of Docker.
 
-You will need [Node] (https://nodejs.org/en/), [Docker] (https://www.docker.com/products/docker-engine), and [Docker Machine] (https://www.docker.com/products/docker-machine).
+You will need [Node](https://nodejs.org/), [Docker](https://github.com/docker/docker), and [Docker Machine](https://github.com/docker/machine).
 
 Use Docker Machine to create a new machine with the Virtualbox driver as above, only use a different name -- `'default'` is recommended. You will need to open port 4000 and 4001 as above too.
 
@@ -135,12 +135,12 @@ You then should be able to access the Newsagent interface on port 4000, and the 
 Similar tools
 -------------
 
-* [Some unnamed tool built by the LA Times] (https://www.youtube.com/watch?v=iP-On8PzEy8)
-* [Morph] (https://morph.io/)
-* [Huginn] (https://github.com/cantino/huginn)
-* [Stakeout] (https://github.com/veltman/stakeout)
-* [Change Detection] (https://www.changedetection.com/)
-* [Datawire] (https://github.com/arc64/datawi.re)
-* [Datastringer] (https://github.com/BBC-News-Labs/datastringer)
-* [Logstash] (https://www.elastic.co/products/logstash)
-* [Yahoo Pipes] (https://en.wikipedia.org/wiki/Yahoo!_Pipes)
+* [Some unnamed tool built by the LA Times](https://www.youtube.com/watch?v=iP-On8PzEy8)
+* [Morph](https://morph.io/)
+* [Huginn](https://github.com/cantino/huginn)
+* [Stakeout](https://github.com/veltman/stakeout)
+* [Change Detection](https://www.changedetection.com/)
+* [Datawire](https://github.com/arc64/datawi.re)
+* [Datastringer](https://github.com/BBC-News-Labs/datastringer)
+* [Logstash](https://www.elastic.co/products/logstash)
+* [Yahoo Pipes](https://en.wikipedia.org/wiki/Yahoo!_Pipes)
