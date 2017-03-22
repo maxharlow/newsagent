@@ -198,7 +198,10 @@ async function buildContext(client, id, recipe) {
 }
 
 async function buildImage(client, id, tar) {
-    const stream = await client.buildImage(tar, { t: id })
+    const stream = await client.buildImage(tar, {
+        tag: id,
+        compress: true
+    })
     var   log = []
     const logCreation = await Database.add('build', id, { log })
     var   logRevision = logCreation.rev
