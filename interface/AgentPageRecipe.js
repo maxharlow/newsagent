@@ -8,7 +8,7 @@ export default class AgentPageRecipe extends React.Component {
             React.DOM.p({}, 'Runs ' + PrettyCron.toString(this.props.recipe.schedule).toLowerCase() + (this.props.state === 'started' ? '. Next run is ' + PrettyCron.getNext(this.props.recipe.schedule).toLowerCase() : '') + '.'),
             React.DOM.h4({}, 'Setup commands'),
             this.props.recipe.setup.length > 0
-                ? React.DOM.code({}, React.DOM.ol({}, ...this.props.recipe.setup.map(step => React.DOM.li({}, step))))
+                ? React.DOM.code({}, React.DOM.ol({}, ...this.props.recipe.setup.map(step => React.DOM.li({ className: 'stdin' }, step))))
                 : React.DOM.span({ className: 'note' }, 'This agent has no setup.'),
             React.DOM.h4({}, 'Run commands'),
             React.DOM.code({}, React.DOM.ol({}, ...this.props.recipe.run.map(step => React.DOM.li({ className: 'stdin' }, step)))),
