@@ -199,7 +199,7 @@ async function buildContext(client, id, recipe) {
 
 async function buildImage(client, id, tar) {
     const stream = await client.buildImage(tar, {
-        tag: id,
+        t: id,
         compress: true
     })
     var   log = []
