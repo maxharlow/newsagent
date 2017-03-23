@@ -2,9 +2,9 @@
     display: inline;
 }
 
-.agent-page-edit > .validation {
+.agent-page-edit > .dialog div .validation {
     float: right;
-    padding-bottom: 5px;
+    margin: 15px 0 5px 0;
     color: #a60000;
     font-size: 11px;
 }

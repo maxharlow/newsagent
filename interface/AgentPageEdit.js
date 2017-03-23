@@ -25,6 +25,7 @@ export default class AgentPageEdit extends React.Component {
 
     validate() {
         const validation = {
+            name: this.state.recipe.name === '',
             run: this.state.recipe.run.length === 0 || this.state.recipe.run[0] === '',
             result: this.state.recipe.result === ''
         }
@@ -47,6 +48,7 @@ export default class AgentPageEdit extends React.Component {
     render() {
         const body = [
             React.DOM.h5({}, 'Edit agent'),
+            this.state.validation['name'] ? React.DOM.span({ className: 'validation' }, 'You must give this agent a name') : null,
             React.DOM.h4({}, 'Name'),
             React.DOM.input({ value: this.state.recipe.name, onChange: this.set('name') }),
             React.DOM.h4({}, 'Description'),
@@ -56,7 +58,6 @@ export default class AgentPageEdit extends React.Component {
             this.state.validation['run'] ? React.DOM.span({ className: 'validation' }, 'At least one command needs to be entered') : null,
             React.DOM.h4({}, 'Run commands'),
             React.createElement(CommandEntry, { value: this.state.recipe.run, onChange: this.set('run') }),
-            React.DOM.p({}, ''),
             this.state.validation['result'] ? React.DOM.span({ className: 'validation' }, 'You must give the name of the file that gets created by this agent') : null,
             React.DOM.h4({}, 'Result file'),
             React.DOM.input({ className: 'filename', value: this.state.recipe.result, onChange: this.set('result') }),
