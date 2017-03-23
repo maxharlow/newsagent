@@ -125,7 +125,7 @@ export default class AgentPageRuns extends React.Component {
                         React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
                         React.DOM.div({ className: 'info' }, ...info),
                         React.DOM.div({ className: 'buttons' }, ...buttons),
-                        run.triggered.length > 0 ? React.DOM.ol({ className: 'triggered' }, triggered) : null
+                        run.triggered.length > 0 ? React.DOM.ol({ className: 'triggered' }, ...triggered) : null
                     ]
                     return React.DOM.li({ className: run.state }, ...fields)
                 }
