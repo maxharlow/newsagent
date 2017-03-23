@@ -79,8 +79,7 @@ export async function destroy(id) {
     else if (agent.state === 'started') {
         const client = await Docker.client(agent.client)
         const container = client.getContainer(id)
-        await container.stop()
-        await container.remove()
+        await container.remove({ force: true }) // force means it stops container first
         const image = client.getImage(id)
         await image.remove()
     }
