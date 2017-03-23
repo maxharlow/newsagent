@@ -8,3 +8,7 @@
     color: #a60000;
     font-size: 11px;
 }
+
+.agent-page-edit > .dialog div .filename {
+        font-family: monospace;
+}

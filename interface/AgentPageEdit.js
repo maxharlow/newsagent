@@ -59,7 +59,7 @@ export default class AgentPageEdit extends React.Component {
             React.DOM.p({}, ''),
             this.state.validation['result'] ? React.DOM.span({ className: 'validation' }, 'You must give the name of the file that gets created by this agent') : null,
             React.DOM.h4({}, 'Result file'),
-            React.DOM.input({ value: this.state.recipe.result, onChange: this.set('result') }),
+            React.DOM.input({ className: 'filename', value: this.state.recipe.result, onChange: this.set('result') }),
             React.DOM.h4({}, 'Triggers'),
             React.createElement(TriggerEntry, { value: this.state.recipe.triggers, onChange: this.set('triggers') })
         ]
