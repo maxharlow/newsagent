@@ -28,20 +28,20 @@
 
 .run-page-execution > .execution code {
     display: inline-block;
-    width: calc(100% - 91px);
+    width: calc(100% - 93px);
     vertical-align: top;
 }
 
 .run-page-execution > .execution.running code {
-    width: calc(100% - 107px);
-    border-right: 22px solid #212121;
+    width: calc(100% - 115px);
+    border-right: 24px solid #212121;
 }
 
 .run-page-execution > .execution.running:after {
     content: '';
     position: absolute;
-    top: 12px;
-    right: 87px;
+    top: 15px;
+    right: 89px;
     width: 8px;
     height: 8px;
     border: 4px solid white;
