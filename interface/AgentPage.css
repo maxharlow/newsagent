@@ -5,23 +5,18 @@
     padding: 0 10px;
 }
 
-.agent-page > .breadcrumbs {
-    margin-top: 15px;
-    font-size: 14px;
-}
-
 .agent-page > h2 {
     display: inline-block;
 }
 
 .agent-page > .description {
     margin: 0;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .agent-page > .buttons {
     position: absolute;
-    top: 15px;
+    top: 57px;
     right: 10px;
     text-align: right;
 }

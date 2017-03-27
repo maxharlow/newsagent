@@ -51,7 +51,7 @@ export default class AgentPage extends React.Component {
             React.DOM.div({ className: 'loading' })
         ])
         const summarise = (title, value) => React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, title), value)
-        const breadcrumbs = React.DOM.div({ className: 'breadcrumbs' }, React.DOM.a({ href: '/' }, 'Agents'), ' ▸ ')
+        const breadcrumbs = React.DOM.div({ className: 'breadcrumbs' }, React.DOM.a({ href: '/' }, 'Agents'))
         const title = React.DOM.h2({}, this.state.recipe.name)
         const description = React.DOM.p({ className: 'description' }, this.state.recipe.description)
         const hr = React.DOM.hr({})
