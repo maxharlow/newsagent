@@ -139,16 +139,20 @@ code {
 
 code ol {
     display: inline-block;
-    width: 100%;
+    width: calc(100% - 10px);
     height: 100%;
     overflow-x: auto;
-    margin: 0;
+    margin: 0 4px;
     padding: 0;
     list-style-type: none;
 }
 
 code ol li {
-    margin: 0 4px;
+    display: inline;
+}
+
+code ol li.stdin {
+    display: block;
 }
 
 code ol li.stdin:before,
