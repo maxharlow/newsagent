@@ -190,9 +190,11 @@ width: calc((100% - 40px) / 4 - 1px);
 
     .agent-page-runs > ol > li .info span,
     .agent-page-runs > ol > li .info span:nth-of-type(4) {
-        width: calc((100% - 20px) / 2);
+        width: calc((100% - 26px) / 2);
         border-right: none;
         padding: 6px 0 6px 10px;
+        vertical-align: top;
+        white-space: normal;
     }
 
     .agent-page-runs > ol > li .buttons {
