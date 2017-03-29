@@ -46,14 +46,8 @@ export default class CommandEntry extends React.Component {
         if (external) this.setState({ commands: this.state.commands.filter(command => command !== ''), focus: undefined })
     }
 
-    render() {
-        const lines = this.state.commands.length === 0 ? this.state.commands.concat(['']) : this.state.commands
-        this.commands = {}
-        const commands = lines.map((line, i) => {
-            const add = input => this.commands[i] = input
-            return React.DOM.input({ ref: add, defaultValue: line, onKeyUp: this.press(i), onBlur: this.leave })
-        })
-        return React.DOM.code({ className: 'command-entry' }, React.DOM.ol({}, ...commands.map(command => React.DOM.li({ className: 'stdin' }, command))))
+    shouldComponentUpdate(_, nextState) {
+        return this.state !== nextState
     }
 
     componentDidUpdate() {
@@ -70,8 +64,17 @@ export default class CommandEntry extends React.Component {
                 range.moveStart('character', this.state.focus.selectionEnd)
                 range.select()
             }
-
         }
+    }
+
+    render() {
+        const lines = this.state.commands.length === 0 ? this.state.commands.concat(['']) : this.state.commands
+        this.commands = {}
+        const commands = lines.map((line, i) => {
+            const add = input => this.commands[i] = input
+            return React.DOM.input({ key: line, ref: add, defaultValue: line, onKeyUp: this.press(i), onBlur: this.leave })
+        })
+        return React.DOM.code({ className: 'command-entry' }, React.DOM.ol({}, ...commands.map(command => React.DOM.li({ className: 'stdin' }, command))))
     }
 
 }
