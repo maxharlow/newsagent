@@ -54,7 +54,7 @@ export default class RunPageExecution extends React.Component {
         else {
             const execution = this.state.execution.map(line => {
                 const command = React.DOM.li({ className: 'stdin' }, line.command + '\n')
-                if (line.state === 'running' && this.props.state !== 'running') { // run failed on this line
+                if (line.code === undefined && this.props.state !== 'running') { // run failed on this line
                     return React.DOM.div({ className: 'execution' }, React.DOM.code({}, command))
                 }
                 else { // line has run or is running
