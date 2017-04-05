@@ -1,0 +1,29 @@
+.run-data-download > .dialog div {
+    width: 35%;
+}
+
+.run-data-download > .dialog div button:not(.modal) {
+    display: block;
+    margin: 15px auto 0 auto;
+    width: 80%;
+    text-align: center;
+}
+
+.run-data-download > .dialog div button span {
+    display: block;
+    font-size: 11px;
+    font-weight: normal;
+    text-align: center;
+}
+
+@media (max-width: 850px) {
+
+    .run-data-download > .dialog div {
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+        max-height: none;
+        margin: 0;
+        padding: 10px;
+    }
+
+}

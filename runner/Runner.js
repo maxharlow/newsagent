@@ -155,6 +155,7 @@ async function run(id) {
             dateQueued: queued.dateQueued,
             dateStarted: dateStarted.toISOString(),
             duration: new Date() - dateStarted,
+            records: rows.length,
             recordsAdded: diff.added.length,
             recordsRemoved: diff.removed.length,
             triggered

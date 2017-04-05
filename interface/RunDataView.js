@@ -10,7 +10,6 @@ export default class RunDataView extends React.Component {
         super()
         this.updateMode = this.updateMode.bind(this)
         this.load = this.load.bind(this)
-        this.download = this.download.bind(this)
         this.state = {
             mode: 'data',
             data: null,
@@ -50,29 +49,14 @@ export default class RunDataView extends React.Component {
         HTTP.get(location, []).then(update).catch(abort)
     }
 
-    download() {
-        const abort = error => {
-            console.error('Could not download data', error)
-        }
-        const get = response => {
-            const blob = new Blob([response], { type: 'data:text/csv;charset=utf-8,' })
-            const anchor = document.createElement('a')
-            anchor.setAttribute('href', URL.createObjectURL(blob))
-            anchor.setAttribute('download', `${this.props.id}-${this.props.run}.csv`)
-            document.body.appendChild(anchor)
-            anchor.click()
-        }
-        HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + this.props.run + '/data', [{ 'Accept': 'text/csv' }]).then(get).catch(abort)
-    }
-
     render() {
-        const title = React.DOM.h3({}, Moment(this.props.date).format('LLL'))
+        const title = React.DOM.h2({}, Moment(this.props.date).format('LLL'))
         const modes = ['data', 'added', 'removed'].map(mode => {
             const input = React.DOM.input({ type: 'radio', name: mode, value: mode, checked: mode === this.state.mode, onChange: this.updateMode })
             const text = React.DOM.span({}, mode)
             return React.DOM.label({}, input, text)
         })
-        const closeButton = React.DOM.button({ className: 'close', onClick: this.props.close }, 'Close')
+        const closeButton = React.DOM.button({ className: 'close', onClick: this.props.close }, '⬅')
         if (this.state[this.state.mode] === null) {
             const loading = React.DOM.div({ className: 'loading' })
             const data = React.DOM.div({ className: 'data' }, loading)
@@ -89,8 +73,7 @@ export default class RunDataView extends React.Component {
             const table = React.createElement(ScrollTable, { data: this.state[this.state.mode] })
             const data = React.DOM.div({ className: 'data' }, table)
             const count = React.DOM.span({ className: 'count' }, this.state[this.state.mode].length.toLocaleString() + ' rows')
-            const downloadButton = React.DOM.button({ className: 'download', onClick: this.download }, 'Download')
-            const box = React.DOM.div({ onClick: e => e.stopPropagation() }, closeButton, downloadButton, title, data, ...modes, count)
+            const box = React.DOM.div({ onClick: e => e.stopPropagation() }, closeButton, title, data, ...modes, count)
             return React.DOM.div({ className: 'run-data-view', ref: node => this.node = node, onClick: this.props.close }, box)
         }
     }

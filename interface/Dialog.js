@@ -21,7 +21,9 @@ export default class Dialog extends React.Component {
         }
         else {
             const cancelButton = React.DOM.button({ className: 'modal', onClick: this.props.cancel }, 'Cancel')
-            const acceptButton = React.DOM.button({ className: 'modal', onClick: this.proceed }, this.props.acceptText)
+            const acceptButton = !this.props.acceptText
+                  ? null
+                  : React.DOM.button({ className: 'modal', onClick: this.proceed }, this.props.acceptText)
             const box = React.DOM.div({ onClick: e => e.stopPropagation() }, ...this.props.body, cancelButton, acceptButton)
             return React.DOM.div({ className: 'dialog', onClick: this.props.cancel }, box)
         }

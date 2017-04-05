@@ -64,7 +64,7 @@ export default class AgentPageEdit extends React.Component {
             React.DOM.h4({}, 'Triggers'),
             React.createElement(TriggerEntry, { value: this.state.recipe.triggers, onChange: this.set('triggers') })
         ]
-        const dialog = !this.state.confirming ? undefined : React.createElement(Dialog, {
+        const dialog = !this.state.confirming ? null : React.createElement(Dialog, {
             body,
             acceptText: 'Save changes',
             accept: this.send,

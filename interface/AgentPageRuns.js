@@ -1,6 +1,7 @@
 import React from 'react'
 import Moment from 'moment'
 import RunDataView from '/RunDataView.js'
+import RunDataDownload from '/RunDataDownload.js'
 import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
@@ -9,7 +10,6 @@ export default class AgentPageRuns extends React.Component {
     constructor() {
         super()
         this.load = this.load.bind(this)
-        this.download = this.download.bind(this)
         this.unhide = this.unhide.bind(this)
     }
 
@@ -29,23 +29,6 @@ export default class AgentPageRuns extends React.Component {
             this.props.setRunDisabled(response.find(run => run.state === 'queued' && run.initiator === 'manual'))
         }
         HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs').then(update).catch(abort)
-    }
-
-    download(run) {
-        return error => {
-            const abort = error => {
-                console.error('Could not download data', error)
-            }
-            const send = response => {
-                const blob = new Blob([response], { type: 'data:text/csv;charset=utf-8,' })
-                const anchor = document.createElement('a')
-                anchor.setAttribute('href', URL.createObjectURL(blob))
-                anchor.setAttribute('download', `${this.props.id}-${run}.csv`)
-                document.body.appendChild(anchor)
-                anchor.click()
-            }
-            HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + run + '/data', [{ 'Accept': 'text/csv' }]).then(send).catch(abort)
-        }
     }
 
     unhide() {
@@ -119,7 +102,7 @@ export default class AgentPageRuns extends React.Component {
                     ]
                     const buttons = [
                         React.DOM.button({ onClick: () => this.setState({ viewing: run }) }, 'View'),
-                        React.DOM.button({ onClick: this.download(run.id) }, 'Download')
+                        React.DOM.button({ onClick: () => this.setState({ downloading: run }) }, 'Download')
                     ]
                     const fields = [
                         React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
@@ -137,14 +120,27 @@ export default class AgentPageRuns extends React.Component {
             const view = !this.state.viewing ? null : React.createElement(RunDataView, {
                 id: this.props.id,
                 run: this.state.viewing.id,
-                date: this.state.viewing.date,
+                date: this.state.viewing.dateStarted,
+                records: this.state.viewing.records,
+                recordsAdded: this.state.viewing.recordsAdded,
+                recordsRemoved: this.state.viewing.recordsRemoved,
                 close: () => this.setState({ viewing: null })
+            })
+            const download = !this.state.downloading ? null : React.createElement(RunDataDownload, {
+                id: this.props.id,
+                run: this.state.downloading.id,
+                date: this.state.downloading.dateStarted,
+                records: this.state.downloading.records,
+                recordsAdded: this.state.downloading.recordsAdded,
+                recordsRemoved: this.state.downloading.recordsRemoved,
+                close: () => this.setState({ downloading: null })
             })
             return React.DOM.div({ className: 'agent-page-runs', ref: node => this.node = node }, ...[
                 React.DOM.h3({}, 'Runs'),
                 list,
                 unhide,
-                view
+                view,
+                download
             ])
         }
     }
