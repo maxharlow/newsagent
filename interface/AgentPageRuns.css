@@ -206,6 +206,7 @@ width: calc((100% - 40px) / 4 - 1px);
     .agent-page-runs > ol > li .buttons button {
         width: calc(50% - 6px);
         margin: 0 0 6px 6px;
+        padding: 6px 0;
     }
 
     .agent-page-runs > ol > li .buttons button + button {
