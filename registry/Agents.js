@@ -105,17 +105,20 @@ export function getRunExecution(agent, run) {
 
 export async function getRunData(agent, run, asCSV) {
     const data = await fromContainer(agent, 'GET', '/runs/' + run + '/data')
-    return asCSV ? ToCSV(data) : data
+    if (data.length === 0) return asCSV ? '' : []
+    else return asCSV ? ToCSV(data) : data
 }
 
-export async function getDiffAdded(agent, run, asCSV) {
-    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/diff')
-    return asCSV ? ToCSV(data.added) : data.added
+export async function getRunDataAdded(agent, run, asCSV) {
+    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/data/added')
+    if (data.length === 0) return asCSV ? '' : []
+    else return asCSV ? ToCSV(data) : data
 }
 
-export async function getDiffRemoved(agent, run, asCSV) {
-    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/diff')
-    return asCSV ? ToCSV(data.removed) : data.removed
+export async function getRunDataRemoved(agent, run, asCSV) {
+    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/data/removed')
+    if (data.length === 0) return asCSV ? '' : []
+    else return asCSV ? ToCSV(data) : data
 }
 
 function validate(recipe, isUpdate) {

@@ -71,9 +71,18 @@ export function listen() {
                 else response.status(500).send({ error: 'unknown error' })
             })
     })
-    app.get('/runs/:id/diff', (request, response) => {
-        Runner.difference(request.params.id)
-            .then(diff => response.status(200).send(diff))
+    app.get('/runs/:id/data/added', (request, response) => {
+        Database.retrieveSet('data-added', request.params.id)
+            .then(data => response.status(200).send(data))
+            .catch(e => {
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'not found' })
+                else if (e && e.message) response.status(500).send({ error: e.message })
+                else response.status(500).send({ error: 'unknown error' })
+            })
+    })
+    app.get('/runs/:id/data/removed', (request, response) => {
+        Database.retrieveSet('data-removed', request.params.id)
+            .then(data => response.status(200).send(data))
             .catch(e => {
                 if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'not found' })
                 else if (e && e.message) response.status(500).send({ error: e.message })

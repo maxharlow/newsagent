@@ -148,6 +148,8 @@ async function run(id) {
         const rows = await csv(Config.sourceLocation + '/' + recipe.result)
         await Database.addSet('data', id, rows)
         const diff = await difference(id)
+        await Database.addSet('data-added', id, diff.added)
+        await Database.addSet('data-removed', id, diff.removed)
         const triggered = await trigger(diff, recipe.triggers, recipe.name)
         const runSuccess = {
             state: 'success',

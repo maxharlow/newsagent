@@ -127,7 +127,7 @@ export function listen() {
     })
     app.get('/agents/:agent/runs/:run/data/added', (request, response) => {
         const asCSV = request.accepts(['application/json', 'text/csv']) === 'text/csv'
-        Agents.getDiffAdded(request.params.agent, request.params.run, asCSV)
+        Agents.getRunDataAdded(request.params.agent, request.params.run, asCSV)
             .then(data => {
                 if (asCSV) response.append('Content-Type', 'text/csv')
                 response.status(200).send(data)
@@ -141,7 +141,7 @@ export function listen() {
     })
     app.get('/agents/:agent/runs/:run/data/removed', (request, response) => {
         const asCSV = request.accepts(['application/json', 'text/csv']) === 'text/csv'
-        Agents.getDiffRemoved(request.params.agent, request.params.run, asCSV)
+        Agents.getRunDataRemoved(request.params.agent, request.params.run, asCSV)
             .then(data => {
                 if (asCSV) response.append('Content-Type', 'text/csv')
                 response.status(200).send(data)
