@@ -18,15 +18,16 @@
 }
 
 .run-data-view > div button.close {
+    position: absolute;
     display: inline;
     margin-left: 15px;
     padding: 5px 10px;
 }
 
 .run-data-view > div h2 {
-    float: right;
-    display: inline-block;
-    margin: 0 15px;
+    width: 100%;
+    margin: 0 0 15px 0;
+    text-align: center;
 }
 
 .run-data-view > div .data {
@@ -41,10 +42,14 @@
     margin-top: 150px;
 }
 
-.run-data-view > div .data .no-data {
+.run-data-view > div .data .message {
     display: block;
     margin-top: 175px;
     text-align: center;
+}
+
+.run-data-view > div .data .message button {
+    margin: 10px;
 }
 
 .run-data-view > div label input {
@@ -89,7 +94,7 @@
     }
 
     .run-data-view > div h2 {
-        margin: 0 10px 0 0;
+        margin: 0 0 10px 0;
     }
 
     .run-data-view > div .data {
@@ -111,8 +116,8 @@
 @media (max-width: 450px) {
 
     .run-data-view > div h2 {
+        margin: 5px 0 15px 0;
         font-size: 16px;
-        margin: 5px 10px 3px 0;
     }
 
     .run-data-view > div .data {

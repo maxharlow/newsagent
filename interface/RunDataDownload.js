@@ -31,7 +31,7 @@ export default class RunDataDownload extends React.Component {
     changesFor(number) {
         return number === 0 ? 'no rows'
             : number === 1 ? '1 row'
-            : number + ' rows'
+            : number.toLocaleString() + ' rows'
     }
 
     render() {
