@@ -67,7 +67,7 @@ export default class RunDataView extends React.Component {
             const text = React.DOM.span({}, mode)
             return React.DOM.label({}, input, text)
         })
-        const closeButton = React.DOM.button({ className: 'close', onClick: this.props.close }, '⬅')
+        const closeButton = React.DOM.button({ className: 'close', onClick: this.props.close }, '❮')
         const countNumber = this.state.mode === 'added' ? this.props.recordsAdded
               : this.state.mode === 'removed' ? this.props.recordsRemoved
               : this.props.records
