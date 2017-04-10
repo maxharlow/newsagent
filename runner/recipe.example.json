@@ -6,8 +6,8 @@
     "run": [],
     "result": "",
     "triggers": [
-	    {
+        {
             "recipient": ""
-	    }
+        }
     ]
 }
