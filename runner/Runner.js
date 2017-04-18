@@ -75,7 +75,7 @@ export async function dequeue() {
         if (isRunning || runsQueued.length === 0) return
         else run(runsQueued[0].id)
     }
-    setInterval(pluck, 10 * 1000) // in milliseconds
+    setInterval(pluck, 30 * 1000) // in milliseconds
 }
 
 export async function describe() {
