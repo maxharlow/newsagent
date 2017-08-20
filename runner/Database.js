@@ -1,5 +1,6 @@
 'use strict'
 
+import Events from 'events'
 import PouchDB from 'pouchdb'
 import Config from './config.json'
 
@@ -55,4 +56,18 @@ export async function removeSet(type, id) {
     const documents = await retrieveSet(type, id)
     const removals = documents.map(db.remove)
     return Promise.all(removals)
+}
+
+export function monitor(type) {
+    const emitter = new Events()
+    const changes = db.changes({
+        since: 'now',
+        live: true,
+        include_docs: true,
+        filter: document => document._id.startsWith(type + '/')
+    })
+    changes.on('change', document => {
+        emitter.emit('change', Object.assign({ id: document.id.replace(type + '/', '') }, document.doc.data))
+    })
+    return emitter
 }
