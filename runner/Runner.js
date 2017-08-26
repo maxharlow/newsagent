@@ -1,6 +1,6 @@
 'use strict'
 
-import Promisify from 'promisify-node'
+import Util from 'util'
 import FS from 'fs'
 import Path from 'path'
 import Process from 'process'
@@ -15,10 +15,10 @@ import Config from './config.json'
 export async function setup(filename) {
     const id = Path.parse(filename).name
     const dateStarted = new Date()
-    const data = await Promisify(FS.readFile)(filename)
+    const data = await Util.promisify(FS.readFile)(filename)
     const recipe = JSON.parse(data.toString())
     await Database.add('system', 'recipe', recipe)
-    await Promisify(FS.mkdir)(Config.sourceLocation)
+    await Util.promisify(FS.mkdir)(Config.sourceLocation)
     const commands = recipe.setup
           .map(command => command.replace(/^require /, 'apk add --no-cache '))
           .map(command => command.replace(/ ~/, ' /root'))
@@ -186,7 +186,7 @@ async function removeOldRuns() {
 }
 
 async function csv(location) {
-    const data = await Promisify(FS.readFile)(location)
+    const data = await Util.promisify(FS.readFile)(location)
     return NeatCSV(data)
 }
 
@@ -198,7 +198,8 @@ function trigger(diff, triggers, name) {
 }
 
 function sequentially(array, fn, a = []) {
-    return fn(array[0], a.length)
+    if (array.length === 0) return Promise.resolve([])
+    else return fn(array[0], a.length)
         .then(data => array.length > 1 ? sequentially(Array.from(array).splice(1), fn, a.concat(data)) : a.concat(data))
         .catch(data => a.concat(data))
 }

@@ -1,8 +1,10 @@
-FROM alpine:3.5
+FROM alpine:3.6
 
 VOLUME /data
 
-RUN apk add --no-cache docker nodejs-current nginx
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories # as the default doesn't yet have Node v8
+RUN apk add --no-cache docker nodejs-current nginx \
+    build-base python2 # needed to compile leveldown
 
 COPY runner/*.js           /runner/
 COPY runner/package.json   /runner/

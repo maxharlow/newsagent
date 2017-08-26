@@ -1,9 +1,9 @@
 'use strict'
 
+import Util from 'util'
 import FS from 'fs'
 import Path from 'path'
 import Stream from 'stream'
-import Promisify from 'promisify-node'
 import TarStream from 'tar-stream'
 import Glob from 'glob'
 import JsonSchema from 'jsonschema'
@@ -180,17 +180,21 @@ async function build(agent) {
 
 async function buildContext(client, id, recipe) {
     const packages = [ 'build-base', 'git', 'curl', 'wget', 'bash', 'python2-dev', 'py2-pip', 'python3-dev', 'ruby-dev', 'ruby-irb', 'ruby-rdoc', 'ruby-bundler', 'nodejs-current' ]
-    const dockerfile = 'FROM alpine:3.5'
+    const dockerfile = 'FROM alpine:3.6'
+          + '\n' + 'RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories' // as the default doesn't yet have Node v8
           + '\n' + 'RUN apk add -q --no-cache ' + packages.join(' ')
           + '\n' + 'COPY runner /runner'
           + '\n' + 'WORKDIR /runner'
-          + '\n' + 'RUN npm install --depth 0'
+          + '\n' + 'RUN npm install -q'
           + '\n' + `RUN node Start setup ${id}.json`
           + '\n' + `CMD node Start serve ${id}.json`
-    const tar = Promisify(TarStream.pack())
-    const files = await Promisify(Glob)('../runner/*(package.json|config.json|**.js)')
+    const tar = TarStream.pack()
+    const files = await Util.promisify(Glob)('../runner/*(package.json|config.json|**.js)')
     const entries = files.map(filename => {
-        return Promisify(FS.readFile)(filename).then(contents => tar.entry({ name: 'runner/' + Path.basename(filename) }, contents))
+        return Util.promisify(FS.readFile)(filename).then(contents => {
+            const throwErrors = e => { if (e) throw e }
+            return tar.entry({ name: 'runner/' + Path.basename(filename) }, contents, throwErrors)
+        })
     })
     await Promise.all(entries)
     await tar.entry({ name: `runner/${id}.json` }, JSON.stringify(recipe))

@@ -2,16 +2,14 @@
     "name": "newsagent-runner",
     "private": true,
     "dependencies": {
-        "babel-register": "6.22.x",
-        "babel-plugin-transform-async-to-generator": "6.22.x",
-        "babel-plugin-transform-es2015-modules-commonjs": "6.22.x",
-        "promisify-node": "0.4.x",
-        "express": "4.14.x",
+        "babel-register": "6.26.x",
+        "babel-plugin-transform-es2015-modules-commonjs": "6.26.x",
+        "express": "4.15.x",
         "morgan": "1.8.x",
-        "body-parser": "1.15.x",
+        "body-parser": "1.17.x",
         "node-schedule": "1.2.x",
         "neat-csv": "2.1.x",
-        "pouchdb": "6.1.x",
-        "nodemailer": "2.6.x"
+        "pouchdb": "6.3.x",
+        "nodemailer": "4.0.x"
     }
 }
