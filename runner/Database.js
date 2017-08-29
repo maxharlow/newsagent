@@ -4,7 +4,9 @@ import Events from 'events'
 import PouchDB from 'pouchdb'
 import Config from './config.json'
 
-const db = new PouchDB(Config.pouchLocation)
+const db = new PouchDB(Config.pouchLocation, {
+    revs_limit: 1
+})
 
 export function add(type, id, data) {
     return db.put({ _id: type + '/' + id, data })

@@ -3,7 +3,9 @@
 import PouchDB from 'pouchdb'
 import Config from './config.json'
 
-const db = new PouchDB(Config.pouchLocation)
+const db = new PouchDB(Config.pouchLocation, {
+    revs_limit: 1
+})
 
 export async function add(type, id, data) {
     try {
