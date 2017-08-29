@@ -10,6 +10,6 @@
         "node-schedule": "1.2.x",
         "neat-csv": "2.1.x",
         "pouchdb": "6.3.x",
-        "nodemailer": "4.0.x"
+        "nodemailer": "4.1.x"
     }
 }
