@@ -4,8 +4,12 @@ import PrettyCron from 'prettycron'
 export default class AgentPageRecipe extends React.Component {
 
     render() {
+        const schedule = 'Runs ' + PrettyCron.toString(this.props.recipe.schedule).toLowerCase() + '.'
+        const next = this.props.state === 'started'
+              ? 'Next run is ' + PrettyCron.getNext(this.props.recipe.schedule).toLowerCase() + '.'
+              : ''
         const elements = [
-            React.DOM.p({}, 'Runs ' + PrettyCron.toString(this.props.recipe.schedule).toLowerCase() + (this.props.state === 'started' ? '. Next run is ' + PrettyCron.getNext(this.props.recipe.schedule).toLowerCase() : '') + '.'),
+            React.DOM.p({}, this.props.recipe.schedule === '' ? 'Not scheduled to run.' : schedule + next),
             React.DOM.h4({}, 'Setup commands'),
             this.props.recipe.setup.length > 0
                 ? React.DOM.code({}, React.DOM.ol({}, ...this.props.recipe.setup.map(step => React.DOM.li({ className: 'stdin' }, step))))
