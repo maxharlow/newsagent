@@ -2,7 +2,6 @@ import React from 'react'
 import Moment from 'moment'
 import MomentDurationFormat from 'moment-duration-format'
 import RunPageExecution from '/RunPageExecution.js'
-import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
 export default class RunPage extends React.Component {
@@ -31,7 +30,10 @@ export default class RunPage extends React.Component {
             const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState(Object.assign({ timeout }, response))
         }
-        HTTP.get(Config.registry + '/agents/' + this.props.agent + '/runs/' + this.props.run).then(update).catch(retry)
+        fetch(Config.registry + '/agents/' + this.props.agent + '/runs/' + this.props.run)
+            .then(response => response.json())
+            .then(update)
+            .catch(retry)
     }
 
     render() {

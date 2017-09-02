@@ -6,7 +6,7 @@ export default class AgentPageRecipe extends React.Component {
     render() {
         const schedule = 'Runs ' + PrettyCron.toString(this.props.recipe.schedule).toLowerCase() + '.'
         const next = this.props.state === 'started'
-              ? 'Next run is ' + PrettyCron.getNext(this.props.recipe.schedule).toLowerCase() + '.'
+              ? ' Next run is ' + PrettyCron.getNext(this.props.recipe.schedule).toLowerCase() + '.'
               : ''
         const elements = [
             React.DOM.p({}, this.props.recipe.schedule === '' ? 'Not scheduled to run.' : schedule + next),

@@ -1,7 +1,6 @@
 import React from 'react'
 import Moment from 'moment'
 import ScrollTable from '/ScrollTable.js'
-import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
 export default class RunDataView extends React.Component {
@@ -57,7 +56,10 @@ export default class RunDataView extends React.Component {
             if (!this.node) return
             this.setState({ [mode]: response })
         }
-        HTTP.get(location, []).then(update).catch(abort)
+        fetch(location)
+            .then(response => response.json())
+            .then(update)
+            .catch(abort)
     }
 
     render() {

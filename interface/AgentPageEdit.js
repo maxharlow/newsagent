@@ -3,7 +3,6 @@ import Dialog from '/Dialog.js'
 import CronEntry from '/CronEntry.js'
 import CommandEntry from '/CommandEntry.js'
 import TriggerEntry from '/TriggerEntry.js'
-import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
 export default class AgentPageEdit extends React.Component {
@@ -42,7 +41,13 @@ export default class AgentPageEdit extends React.Component {
             if (!this.node) return
             this.setState({ confirming: false })
         }
-        HTTP.patch(Config.registry + '/agents/' + this.props.id, [], this.state.recipe).then(update).catch(abort)
+        fetch(Config.registry + '/agents/' + this.props.id, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.state.recipe)
+        })
+            .then(update)
+            .catch(abort)
     }
 
     render() {

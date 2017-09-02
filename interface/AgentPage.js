@@ -5,7 +5,6 @@ import AgentPageDelete from '/AgentPageDelete.js'
 import AgentPageRecipe from '/AgentPageRecipe.js'
 import AgentPageRuns from '/AgentPageRuns.js'
 import AgentPageBuild from '/AgentPageBuild.js'
-import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
 export default class AgentPage extends React.Component {
@@ -34,7 +33,10 @@ export default class AgentPage extends React.Component {
             const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState(Object.assign({ timeout }, response))
         }
-        HTTP.get(Config.registry + '/agents/' + this.props.id).then(update).catch(abort)
+        fetch(Config.registry + '/agents/' + this.props.id)
+            .then(response => response.json())
+            .then(update)
+            .catch(abort)
     }
 
     run() {
@@ -43,7 +45,7 @@ export default class AgentPage extends React.Component {
             this.setState({ runDisabled: false })
             console.error('Could not run agent', error)
         }
-        HTTP.post(Config.registry + '/agents/' + this.props.id).catch(abort)
+        fetch(Config.registry + '/agents/' + this.props.id, { method: 'POST' }).catch(abort)
     }
 
     render() {

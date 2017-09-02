@@ -1,7 +1,6 @@
 import React from 'react'
 import Moment from 'moment'
 import MomentDurationFormat from 'moment-duration-format'
-import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
 export default class RunPageExecution extends React.Component {
@@ -39,7 +38,10 @@ export default class RunPageExecution extends React.Component {
             }
             if (shouldScroll) document.body.scrollTop = document.body.scrollHeight - window.innerHeight
         }
-        HTTP.get(Config.registry + '/agents/' + this.props.agent + '/runs/' + this.props.run + '/execution').then(update).catch(retry)
+        fetch(Config.registry + '/agents/' + this.props.agent + '/runs/' + this.props.run + '/execution')
+            .then(response => response.json())
+            .then(update)
+            .catch(retry)
     }
 
     render() {

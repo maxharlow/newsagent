@@ -1,5 +1,4 @@
 import React from 'react'
-import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
 export default class AgentPageBuild extends React.Component {
@@ -41,7 +40,10 @@ export default class AgentPageBuild extends React.Component {
             })
             if (shouldScroll && this.refs['build']) this.refs['build'].scrollTop = this.refs['build'].scrollHeight
         }
-        HTTP.get(Config.registry + '/agents/' + this.props.id + '/build?since=' + since).then(update).catch(retry)
+        fetch(Config.registry + '/agents/' + this.props.id + '/build?since=' + since)
+            .then(response => response.json())
+            .then(update)
+            .catch(retry)
     }
 
     render() {

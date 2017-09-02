@@ -2,7 +2,6 @@ import React from 'react'
 import Moment from 'moment'
 import RunDataView from '/RunDataView.js'
 import RunDataDownload from '/RunDataDownload.js'
-import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
 export default class AgentPageRuns extends React.Component {
@@ -28,7 +27,10 @@ export default class AgentPageRuns extends React.Component {
             this.setState({ runs: response, hidden, timeout })
             this.props.setRunDisabled(response.find(run => run.state === 'queued' && run.initiator === 'manual'))
         }
-        HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs').then(update).catch(abort)
+        fetch(Config.registry + '/agents/' + this.props.id + '/runs')
+            .then(response => response.json())
+            .then(update)
+            .catch(abort)
     }
 
     unhide() {

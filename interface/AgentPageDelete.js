@@ -1,7 +1,6 @@
 import React from 'react'
 import Page from 'page'
 import Dialog from '/Dialog.js'
-import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
 export default class AgentPageDelete extends React.Component {
@@ -13,7 +12,12 @@ export default class AgentPageDelete extends React.Component {
     }
 
     send() {
-        HTTP.delete(Config.registry + '/agents/' + this.props.id).then(() => Page('/'))
+        const abort = error => {
+            console.error('Could not delete agent', error)
+        }
+        fetch(Config.registry + '/agents/' + this.props.id, { method: 'DELETE' })
+            .then(() => Page('/'))
+            .catch(abort)
     }
 
     render() {

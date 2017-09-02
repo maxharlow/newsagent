@@ -3,7 +3,6 @@ import Page from 'page'
 import CronEntry from '/CronEntry.js'
 import CommandEntry from '/CommandEntry.js'
 import TriggerEntry from '/TriggerEntry.js'
-import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
 export default class NewAgentPage extends React.Component {
@@ -41,7 +40,12 @@ export default class NewAgentPage extends React.Component {
         const isValid = Object.keys(validation).every(key => validation[key] === false)
         if (!isValid) return
         this.setState({ loading: true })
-        HTTP.post(Config.registry + '/agents', [], this.state.recipe)
+        fetch(Config.registry + '/agents', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.state.recipe)
+        })
+            .then(response => response.json())
             .then(response => Page('/agents/' + response.id))
             .catch(e => {
                 if (!this.node) return

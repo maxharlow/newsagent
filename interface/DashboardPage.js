@@ -1,7 +1,6 @@
 import React from 'react'
 import Page from 'page'
 import PrettyCron from 'prettycron'
-import HTTP from '/HTTP.js'
 import Config from '/Config.js'
 
 export default class DashboardPage extends React.Component {
@@ -34,7 +33,10 @@ export default class DashboardPage extends React.Component {
             const timeout = setTimeout(this.load, 1 * 1000) // in milliseconds
             this.setState({ agents: response, agentsFiltered: this.doFilter(response, this.state.filter), timeout })
         }
-        HTTP.get(Config.registry + '/agents').then(update).catch(abort)
+        fetch(Config.registry + '/agents')
+            .then(response => response.json())
+            .then(update)
+            .catch(abort)
     }
 
     create() {
@@ -54,7 +56,12 @@ export default class DashboardPage extends React.Component {
                 const abort = error => {
                     console.error('Could not import agents', error)
                 }
-                HTTP.post(Config.registry + '/import', [], data).catch(abort)
+                fetch(Config.registry + '/import', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                    .catch(abort)
             })
             fileReader.readAsText(file)
         })
@@ -74,7 +81,10 @@ export default class DashboardPage extends React.Component {
             document.body.appendChild(anchor)
             anchor.click()
         }
-        HTTP.get(Config.registry + '/export').then(get).catch(abort)
+        fetch(Config.registry + '/export')
+            .then(response => response.json())
+            .then(get)
+            .catch(abort)
     }
 
     doFilter(agents, value) {

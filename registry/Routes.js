@@ -162,7 +162,7 @@ export function listen() {
             })
     })
     app.post('/import', (request, response) => {
-        Promise.all(request.body.map(Agents.create))
+        if (Array.isArray(request.body)) Promise.all(request.body.map(Agents.create))
             .then(() => response.status(204).send())
             .catch(e => {
                 if (e && e.message) response.status(500).send({ error: e.message })

@@ -1,6 +1,5 @@
 import React from 'react'
 import Dialog from '/Dialog.js'
-import HTTP from '/HTTP.js'
 import Moment from 'moment'
 import Config from '/Config.js'
 
@@ -24,7 +23,12 @@ export default class RunDataDownload extends React.Component {
                 document.body.appendChild(anchor)
                 anchor.click()
             }
-            HTTP.get(Config.registry + '/agents/' + this.props.id + '/runs/' + this.props.run + '/' + mode, [{ 'Accept': 'text/csv' }]).then(send).catch(abort)
+            fetch(Config.registry + '/agents/' + this.props.id + '/runs/' + this.props.run + '/' + mode, {
+                headers: { 'Accept': 'text/csv' }
+            })
+                .then(response => response.text())
+                .then(send)
+                .catch(abort)
         }
     }
 
