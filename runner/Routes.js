@@ -9,7 +9,7 @@ import Config from './config.json'
 
 export function listen() {
     const app = Express()
-    app.use(Morgan('tiny'))
+    app.use(Morgan(':date[iso] :response-time ms :method :status :url'))
     app.use(BodyParser.json())
     app.get('/', (request, response) => {
         Runner.describe()
