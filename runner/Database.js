@@ -66,6 +66,7 @@ export function monitor(type) {
         since: 'now',
         live: true,
         include_docs: true,
+        return_docs: false,
         filter: document => document._id.startsWith(type + '/')
     })
     changes.on('change', document => {
