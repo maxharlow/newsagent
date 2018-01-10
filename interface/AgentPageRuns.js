@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 import Moment from 'moment'
 import RunDataView from '/RunDataView.js'
 import RunDataDownload from '/RunDataDownload.js'
@@ -39,12 +40,12 @@ export default class AgentPageRuns extends React.Component {
 
     render() {
         if (this.state === null) {
-            const loading = React.DOM.div({ className: 'loading' })
-            return React.DOM.div({ className: 'agent-page-runs', ref: node => this.node = node }, React.DOM.h3({}, 'Runs'), loading)
+            const loading = HTML.div({ className: 'loading' })
+            return HTML.div({ className: 'agent-page-runs', ref: node => this.node = node }, HTML.h3({}, 'Runs'), loading)
         }
         else if (this.state.runs === undefined || this.state.runs.length === 0) {
-            const message = React.DOM.span({ className: 'not-yet' }, 'This agent has not run yet.')
-            return React.DOM.div({ className: 'agent-page-runs', ref: node => this.node = node }, React.DOM.h3({}, 'Runs'), message)
+            const message = HTML.span({ className: 'not-yet' }, 'This agent has not run yet.')
+            return HTML.div({ className: 'agent-page-runs', ref: node => this.node = node }, HTML.h3({}, 'Runs'), message)
         }
         else {
             const keys = Object.keys(this.state.runs)
@@ -53,36 +54,36 @@ export default class AgentPageRuns extends React.Component {
                 const run = this.state.runs[i]
                 if (run.state === 'queued') {
                     const info = [
-                        React.DOM.span({ className: 'initiator' }, run.initiator)
+                        HTML.span({ className: 'initiator' }, run.initiator)
                     ]
                     const fields = [
-                        React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
-                        React.DOM.div({ className: 'info' }, ...info)
+                        HTML.span({ className: 'state ' + run.state }, HTML.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
+                        HTML.div({ className: 'info' }, ...info)
                     ]
-                    return React.DOM.li({ className: run.state }, ...fields)
+                    return HTML.li({ className: run.state }, ...fields)
                 }
                 else if (run.state === 'running') {
                     const info = [
-                        React.DOM.span({ className: 'initiator' }, run.initiator),
-                        React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'started ' + Moment(run.dateStarted).fromNow())
+                        HTML.span({ className: 'initiator' }, run.initiator),
+                        HTML.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'started ' + Moment(run.dateStarted).fromNow())
                     ]
                     const fields = [
-                        React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
-                        React.DOM.div({ className: 'info' }, ...info)
+                        HTML.span({ className: 'state ' + run.state }, HTML.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
+                        HTML.div({ className: 'info' }, ...info)
                     ]
-                    return React.DOM.li({ className: run.state }, ...fields)
+                    return HTML.li({ className: run.state }, ...fields)
                 }
                 else if (run.state === 'failure') {
                     const info = [
-                        React.DOM.span({ className: 'initiator' }, run.initiator),
-                        React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'ran ' + Moment(run.dateStarted).fromNow()),
-                        React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize())
+                        HTML.span({ className: 'initiator' }, run.initiator),
+                        HTML.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'ran ' + Moment(run.dateStarted).fromNow()),
+                        HTML.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize())
                     ]
                     const fields = [
-                        React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
-                        React.DOM.div({ className: 'info' }, ...info)
+                        HTML.span({ className: 'state ' + run.state }, HTML.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
+                        HTML.div({ className: 'info' }, ...info)
                     ]
-                    return React.DOM.li({ className: run.state }, ...fields)
+                    return HTML.li({ className: run.state }, ...fields)
                 }
                 else {
                     const records = run.recordsAdded === 0 && run.recordsRemoved === 0
@@ -90,35 +91,35 @@ export default class AgentPageRuns extends React.Component {
                           : 'added ' + run.recordsAdded.toLocaleString() + ', removed ' + run.recordsRemoved.toLocaleString()
                     const triggered = run.triggered.map(trigger => {
                         const status = [
-                            React.DOM.span({ className: 'type' }, trigger.type),
-                            React.DOM.span({ className: 'recipient' }, trigger.recipient),
-                            React.DOM.span({ className: 'status' }, trigger.status)
+                            HTML.span({ className: 'type' }, trigger.type),
+                            HTML.span({ className: 'recipient' }, trigger.recipient),
+                            HTML.span({ className: 'status' }, trigger.status)
                         ]
-                        return React.DOM.li({}, ...status)
+                        return HTML.li({}, ...status)
                     })
                     const info = [
-                        React.DOM.span({ className: 'initiator' }, run.initiator),
-                        React.DOM.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'ran ' + Moment(run.dateStarted).fromNow()),
-                        React.DOM.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize()),
-                        React.DOM.span({ className: 'records' }, records)
+                        HTML.span({ className: 'initiator' }, run.initiator),
+                        HTML.span({ className: 'date', title: Moment(run.dateStarted).format('LLL') }, 'ran ' + Moment(run.dateStarted).fromNow()),
+                        HTML.span({ className: 'duration', title: run.duration + 'ms' }, 'took ' + Moment.duration(run.duration).humanize()),
+                        HTML.span({ className: 'records' }, records)
                     ]
                     const buttons = [
-                        React.DOM.button({ onClick: () => this.setState({ viewing: run }) }, 'View'),
-                        React.DOM.button({ onClick: () => this.setState({ downloading: run }) }, 'Download')
+                        HTML.button({ onClick: () => this.setState({ viewing: run }) }, 'View'),
+                        HTML.button({ onClick: () => this.setState({ downloading: run }) }, 'Download')
                     ]
                     const fields = [
-                        React.DOM.span({ className: 'state ' + run.state }, React.DOM.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
-                        React.DOM.div({ className: 'info' }, ...info),
-                        React.DOM.div({ className: 'buttons' }, ...buttons),
-                        run.triggered.length > 0 ? React.DOM.ol({ className: 'triggered' }, ...triggered) : null
+                        HTML.span({ className: 'state ' + run.state }, HTML.a({ href: `/agents/${this.props.id}/runs/${run.id}` }, run.state)),
+                        HTML.div({ className: 'info' }, ...info),
+                        HTML.div({ className: 'buttons' }, ...buttons),
+                        run.triggered.length > 0 ? HTML.ol({ className: 'triggered' }, ...triggered) : null
                     ]
-                    return React.DOM.li({ className: run.state }, ...fields)
+                    return HTML.li({ className: run.state }, ...fields)
                 }
             })
-            const list = React.DOM.ol({}, ...items)
+            const list = HTML.ol({}, ...items)
             const unhide = this.state.hidden === 0
                   ? ''
-                  : React.DOM.button({ onClick: this.unhide, className: 'secondary unhide' }, `Show ${this.state.hidden.toLocaleString()} more...`)
+                  : HTML.button({ onClick: this.unhide, className: 'secondary unhide' }, `Show ${this.state.hidden.toLocaleString()} more...`)
             const view = !this.state.viewing ? null : React.createElement(RunDataView, {
                 id: this.props.id,
                 run: this.state.viewing.id,
@@ -137,8 +138,8 @@ export default class AgentPageRuns extends React.Component {
                 recordsRemoved: this.state.downloading.recordsRemoved,
                 close: () => this.setState({ downloading: null })
             })
-            return React.DOM.div({ className: 'agent-page-runs', ref: node => this.node = node }, ...[
-                React.DOM.h3({}, 'Runs'),
+            return HTML.div({ className: 'agent-page-runs', ref: node => this.node = node }, ...[
+                HTML.h3({}, 'Runs'),
                 list,
                 unhide,
                 view,

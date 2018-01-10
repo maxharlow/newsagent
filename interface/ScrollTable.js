@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 
 export default class ScrollTable extends React.Component {
 
@@ -36,18 +37,18 @@ export default class ScrollTable extends React.Component {
 
     render() {
         const data = this.props.data.slice(this.state.spacesAbove, this.state.spacesAbove + this.props.rowsBelow)
-        const header = React.DOM.tr({}, ...Object.keys(this.props.data[0]).map(column => React.DOM.th({}, column)))
+        const header = HTML.tr({}, ...Object.keys(this.props.data[0]).map(column => HTML.th({}, column)))
         const setHeight = row => this.rowHeight = row ? row.getBoundingClientRect().height : this.rowHeight
         const rows = data.map((row, i) => {
-            const columns = Object.keys(row).map(i => React.DOM.td({}, row[i]))
-            return React.DOM.tr(i === 0 ? { ref: setHeight } : {}, ...columns)
+            const columns = Object.keys(row).map(i => HTML.td({}, row[i]))
+            return HTML.tr(i === 0 ? { ref: setHeight } : {}, ...columns)
         })
-        const head = React.DOM.thead({}, header)
-        const spacer = React.DOM.td({ colSpan: Object.keys(data[0]).length, style: { padding: 0, border: 'none' } })
-        const spaceAbove = React.DOM.tr({ style: { height: this.state.spacesAbove * this.state.rowHeight } }, spacer)
-        const spaceBelow = React.DOM.tr({ style: { height: this.state.spacesBelow * this.state.rowHeight } }, spacer)
-        const body = React.DOM.tbody({}, spaceAbove, ...rows, spaceBelow)
-        return React.DOM.table({ className: 'scroll-table', ref: node => this.node = node }, head, body)
+        const head = HTML.thead({}, header)
+        const spacer = HTML.td({ colSpan: Object.keys(data[0]).length, style: { padding: 0, border: 'none' } })
+        const spaceAbove = HTML.tr({ style: { height: this.state.spacesAbove * this.state.rowHeight } }, spacer)
+        const spaceBelow = HTML.tr({ style: { height: this.state.spacesBelow * this.state.rowHeight } }, spacer)
+        const body = HTML.tbody({}, spaceAbove, ...rows, spaceBelow)
+        return HTML.table({ className: 'scroll-table', ref: node => this.node = node }, head, body)
     }
 
 }

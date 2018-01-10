@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 
 export default class TriggerEntry extends React.Component {
 
@@ -35,22 +36,22 @@ export default class TriggerEntry extends React.Component {
     render() {
         const currentElements = this.state.triggers.map((trigger, i) => {
             const parts = [
-                React.DOM.span({ className: 'event' }, 'If the data changes'),
-                React.DOM.span({ className: 'action' }, 'email'),
-                React.DOM.span({ className: 'recipient' }, trigger.recipient),
-                React.DOM.button({ onClick: this.remove(i) }, '×')
+                HTML.span({ className: 'event' }, 'If the data changes'),
+                HTML.span({ className: 'action' }, 'email'),
+                HTML.span({ className: 'recipient' }, trigger.recipient),
+                HTML.button({ onClick: this.remove(i) }, '×')
             ]
-            return React.DOM.li({}, ...parts)
+            return HTML.li({}, ...parts)
         })
-        const current = React.DOM.ol({}, ...currentElements)
+        const current = HTML.ol({}, ...currentElements)
         const adderElements = [
-            React.DOM.span({ className: 'event' }, 'If the data changes'),
-            React.DOM.span({ className: 'action' }, 'email'),
-            React.DOM.input({ className: 'recipient', value: this.state.current, onChange: this.update, onKeyUp: this.update }),
-            React.DOM.button({ onClick: this.add }, '+')
+            HTML.span({ className: 'event' }, 'If the data changes'),
+            HTML.span({ className: 'action' }, 'email'),
+            HTML.input({ className: 'recipient', value: this.state.current, onChange: this.update, onKeyUp: this.update }),
+            HTML.button({ onClick: this.add }, '+')
         ]
-        const adder = React.DOM.div({ className: 'adder' }, ...adderElements)
-        return React.DOM.div({ className: 'trigger-entry' }, current, adder)
+        const adder = HTML.div({ className: 'adder' }, ...adderElements)
+        return HTML.div({ className: 'trigger-entry' }, current, adder)
     }
 
 }

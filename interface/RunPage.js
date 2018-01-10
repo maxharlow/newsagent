@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 import Moment from 'moment'
 import MomentDurationFormat from 'moment-duration-format'
 import RunPageExecution from '/RunPageExecution.js'
@@ -37,10 +38,10 @@ export default class RunPage extends React.Component {
     }
 
     render() {
-        if (this.state === null) return React.DOM.div({ className: 'run-page', ref: node => this.node = node }, ...[
-            React.DOM.div({ className: 'loading' })
+        if (this.state === null) return HTML.div({ className: 'run-page', ref: node => this.node = node }, ...[
+            HTML.div({ className: 'loading' })
         ])
-        const summarise = (title, value) => React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, title), value)
+        const summarise = (title, value) => HTML.span({ className: 'summary' }, HTML.span({ className: 'title' }, title), value)
         const summary = [
             summarise('Initiator: ', this.state.run.initiator),
             this.state.run.duration === undefined && this.state.run.dateStarted
@@ -52,14 +53,14 @@ export default class RunPage extends React.Component {
             this.state.run.triggered !== undefined ? summarise('Triggers fired: ', this.state.run.triggered.length) : null
         ]
         const date = this.state.run.dateStarted ? this.state.run.dateStarted : this.state.run.dateQueued
-        const breadcrumbs = React.DOM.div({ className: 'breadcrumbs' },
-                                          React.DOM.a({ href: '/' }, 'Agents'),
-                                          React.DOM.a({ href: `/agents/${this.props.agent}` }, this.state.recipe.name))
-        const title = React.DOM.h2({}, Moment(date).format('LLL'))
-        const hr = React.DOM.hr({})
-        const state = React.DOM.span({ className: 'state ' + this.state.run.state }, this.state.run.state)
+        const breadcrumbs = HTML.div({ className: 'breadcrumbs' },
+                                          HTML.a({ href: '/' }, 'Agents'),
+                                          HTML.a({ href: `/agents/${this.props.agent}` }, this.state.recipe.name))
+        const title = HTML.h2({}, Moment(date).format('LLL'))
+        const hr = HTML.hr({})
+        const state = HTML.span({ className: 'state ' + this.state.run.state }, this.state.run.state)
         const execution = React.createElement(RunPageExecution, { agent: this.props.agent, run: this.props.run, state: this.state.run.state })
-        return React.DOM.div({ className: 'run-page', ref: node => this.node = node }, ...[
+        return HTML.div({ className: 'run-page', ref: node => this.node = node }, ...[
             breadcrumbs,
             title,
             hr,

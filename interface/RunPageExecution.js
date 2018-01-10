@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 import Moment from 'moment'
 import MomentDurationFormat from 'moment-duration-format'
 import Config from '/Config.js'
@@ -46,41 +47,41 @@ export default class RunPageExecution extends React.Component {
 
     render() {
         if (this.props.state === 'queued') {
-            const waiting = React.DOM.span({ className: 'not-yet' }, 'Waiting to run...')
-            return React.DOM.div({ className: 'run-page-execution', ref: node => this.node = node }, waiting)
+            const waiting = HTML.span({ className: 'not-yet' }, 'Waiting to run...')
+            return HTML.div({ className: 'run-page-execution', ref: node => this.node = node }, waiting)
         }
         else if (this.state === null || this.state.execution === undefined) {
-            const loading = React.DOM.div({ className: 'loading' })
-            return React.DOM.div({ className: 'run-page-execution', ref: node => this.node = node }, loading)
+            const loading = HTML.div({ className: 'loading' })
+            return HTML.div({ className: 'run-page-execution', ref: node => this.node = node }, loading)
         }
         else {
             const execution = this.state.execution.map(line => {
-                const command = React.DOM.li({ className: 'stdin' }, line.command + '\n')
+                const command = HTML.li({ className: 'stdin' }, line.command + '\n')
                 if (line.code === undefined && this.props.state !== 'running') { // run failed on this line
-                    const code = React.DOM.code({}, React.DOM.ol({}, command))
-                    return React.DOM.div({ className: 'execution' }, code)
+                    const code = HTML.code({}, HTML.ol({}, command))
+                    return HTML.div({ className: 'execution' }, code)
                 }
                 else { // line has run or is running
                     const maxLogLength = 500
-                    const outputs = line.log.slice(0, maxLogLength).map(entry => React.DOM.li({ className: entry.type }, entry.value))
+                    const outputs = line.log.slice(0, maxLogLength).map(entry => HTML.li({ className: entry.type }, entry.value))
                     const unseen = line.log.length > maxLogLength
-                          ? React.DOM.span({ className: 'unseen' }, 'Output too large to display: ' + (line.log.length - maxLogLength).toLocaleString() + ' rows hidden.')
+                          ? HTML.span({ className: 'unseen' }, 'Output too large to display: ' + (line.log.length - maxLogLength).toLocaleString() + ' rows hidden.')
                           : null
-                    const exit = line.code > 0 ? React.DOM.span({ className: 'exit' }, 'Exited with code ' + line.code + '.') : null
+                    const exit = line.code > 0 ? HTML.span({ className: 'exit' }, 'Exited with code ' + line.code + '.') : null
                     const durationNow = line.duration || new Date() - new Date(line.dateStarted)
                     const durationText = Moment.duration(durationNow, 'ms').format('h[h] m[m] s[s]')
-                    const duration = React.DOM.span({ className: 'duration' }, durationText)
+                    const duration = HTML.span({ className: 'duration' }, durationText)
                     const state = line.code === undefined ? 'running'
                           : line.code === 0 ? 'success'
                           : 'failure'
-                    const code = React.DOM.code({}, React.DOM.ol({}, command, ...outputs))
-                    return React.DOM.div({ className: 'execution ' + state }, code, duration, unseen, exit)
+                    const code = HTML.code({}, HTML.ol({}, command, ...outputs))
+                    return HTML.div({ className: 'execution ' + state }, code, duration, unseen, exit)
                 }
             })
             const finishing = this.props.state === 'running' && this.state.execution[this.state.execution.length - 1].code !== undefined
-                  ? React.DOM.div({ className: 'finishing' }, 'Finishing up...')
+                  ? HTML.div({ className: 'finishing' }, 'Finishing up...')
                   : null
-            return React.DOM.div({ className: 'run-page-execution', ref: node => this.node = node }, ...execution, finishing)
+            return HTML.div({ className: 'run-page-execution', ref: node => this.node = node }, ...execution, finishing)
         }
     }
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 import Dialog from '/Dialog.js'
 import Moment from 'moment'
 import Config from '/Config.js'
@@ -40,25 +41,25 @@ export default class RunDataDownload extends React.Component {
 
     render() {
         const body = [
-            React.DOM.h5({}, Moment(this.props.date).format('LLL')),
-            React.DOM.button({ onClick: this.download('data') }, ...[
+            HTML.h5({}, Moment(this.props.date).format('LLL')),
+            HTML.button({ onClick: this.download('data') }, ...[
                 'Download all data',
-                React.DOM.span({}, this.changesFor(this.props.records))
+                HTML.span({}, this.changesFor(this.props.records))
             ]),
-            React.DOM.button({ onClick: this.download('data/added'), disabled: this.props.recordsAdded === 0 }, ...[
+            HTML.button({ onClick: this.download('data/added'), disabled: this.props.recordsAdded === 0 }, ...[
                 'Download added rows',
-                React.DOM.span({}, this.changesFor(this.props.recordsAdded))
+                HTML.span({}, this.changesFor(this.props.recordsAdded))
             ]),
-            React.DOM.button({ onClick: this.download('data/removed'), disabled: this.props.recordsRemoved === 0 }, ...[
+            HTML.button({ onClick: this.download('data/removed'), disabled: this.props.recordsRemoved === 0 }, ...[
                 'Download removed rows',
-                React.DOM.span({}, this.changesFor(this.props.recordsRemoved))
+                HTML.span({}, this.changesFor(this.props.recordsRemoved))
             ])
         ]
         const dialog = React.createElement(Dialog, {
             body,
             cancel: this.props.close
         })
-        return React.DOM.div({ className: 'run-data-download' }, dialog)
+        return HTML.div({ className: 'run-data-download' }, dialog)
     }
 
 }

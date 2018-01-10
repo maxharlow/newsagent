@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 
 export default class Dialog extends React.Component {
 
@@ -16,16 +17,16 @@ export default class Dialog extends React.Component {
 
     render() {
         if (this.state.loading) {
-            const box = React.DOM.div({ onClick: e => e.stopPropagation() }, React.DOM.div({ className: 'loading' }))
-            return React.DOM.div({ className: 'dialog' }, box)
+            const box = HTML.div({ onClick: e => e.stopPropagation() }, HTML.div({ className: 'loading' }))
+            return HTML.div({ className: 'dialog' }, box)
         }
         else {
-            const cancelButton = React.DOM.button({ className: 'modal', onClick: this.props.cancel }, 'Cancel')
+            const cancelButton = HTML.button({ className: 'modal', onClick: this.props.cancel }, 'Cancel')
             const acceptButton = !this.props.acceptText
                   ? null
-                  : React.DOM.button({ className: 'modal', onClick: this.proceed }, this.props.acceptText)
-            const box = React.DOM.div({ onClick: e => e.stopPropagation() }, ...this.props.body, cancelButton, acceptButton)
-            return React.DOM.div({ className: 'dialog', onClick: this.props.cancel }, box)
+                  : HTML.button({ className: 'modal', onClick: this.proceed }, this.props.acceptText)
+            const box = HTML.div({ onClick: e => e.stopPropagation() }, ...this.props.body, cancelButton, acceptButton)
+            return HTML.div({ className: 'dialog', onClick: this.props.cancel }, box)
         }
     }
 

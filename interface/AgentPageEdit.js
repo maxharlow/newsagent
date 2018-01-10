@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 import Dialog from '/Dialog.js'
 import CronEntry from '/CronEntry.js'
 import CommandEntry from '/CommandEntry.js'
@@ -52,21 +53,21 @@ export default class AgentPageEdit extends React.Component {
 
     render() {
         const body = [
-            React.DOM.h5({}, 'Edit agent'),
-            this.state.validation['name'] ? React.DOM.span({ className: 'validation' }, 'You must give this agent a name') : null,
-            React.DOM.h4({}, 'Name'),
-            React.DOM.input({ value: this.state.recipe.name, onChange: this.set('name') }),
-            React.DOM.h4({}, 'Description'),
-            React.DOM.input({ value: this.state.recipe.description, onChange: this.set('description') }),
-            React.DOM.h4({}, 'Run schedule'),
+            HTML.h5({}, 'Edit agent'),
+            this.state.validation['name'] ? HTML.span({ className: 'validation' }, 'You must give this agent a name') : null,
+            HTML.h4({}, 'Name'),
+            HTML.input({ value: this.state.recipe.name, onChange: this.set('name') }),
+            HTML.h4({}, 'Description'),
+            HTML.input({ value: this.state.recipe.description, onChange: this.set('description') }),
+            HTML.h4({}, 'Run schedule'),
             React.createElement(CronEntry, { value: this.state.recipe.schedule, onChange: this.set('schedule') }),
-            this.state.validation['run'] ? React.DOM.span({ className: 'validation' }, 'At least one command needs to be entered') : null,
-            React.DOM.h4({}, 'Run commands'),
+            this.state.validation['run'] ? HTML.span({ className: 'validation' }, 'At least one command needs to be entered') : null,
+            HTML.h4({}, 'Run commands'),
             React.createElement(CommandEntry, { value: this.state.recipe.run, onChange: this.set('run') }),
-            this.state.validation['result'] ? React.DOM.span({ className: 'validation' }, 'You must give the name of the file that gets created by this agent') : null,
-            React.DOM.h4({}, 'Result file'),
-            React.DOM.input({ className: 'filename', value: this.state.recipe.result, onChange: this.set('result') }),
-            React.DOM.h4({}, 'Triggers'),
+            this.state.validation['result'] ? HTML.span({ className: 'validation' }, 'You must give the name of the file that gets created by this agent') : null,
+            HTML.h4({}, 'Result file'),
+            HTML.input({ className: 'filename', value: this.state.recipe.result, onChange: this.set('result') }),
+            HTML.h4({}, 'Triggers'),
             React.createElement(TriggerEntry, { value: this.state.recipe.triggers, onChange: this.set('triggers') })
         ]
         const dialog = !this.state.confirming ? null : React.createElement(Dialog, {
@@ -76,8 +77,8 @@ export default class AgentPageEdit extends React.Component {
             validate: this.validate,
             cancel: () => this.setState({ confirming: false })
         })
-        const editButton = React.DOM.button({ onClick: () => this.setState({ confirming: true }) }, 'Edit')
-        return React.DOM.div({ className: 'agent-page-edit', ref: node => this.node = node }, editButton, dialog)
+        const editButton = HTML.button({ onClick: () => this.setState({ confirming: true }) }, 'Edit')
+        return HTML.div({ className: 'agent-page-edit', ref: node => this.node = node }, editButton, dialog)
     }
 
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 
 export default class CommandEntry extends React.Component {
 
@@ -72,9 +73,9 @@ export default class CommandEntry extends React.Component {
         this.commands = {}
         const commands = lines.map((line, i) => {
             const add = input => this.commands[i] = input
-            return React.DOM.input({ key: line, ref: add, defaultValue: line, onKeyUp: this.press(i), onBlur: this.leave })
+            return HTML.input({ key: line, ref: add, defaultValue: line, onKeyUp: this.press(i), onBlur: this.leave })
         })
-        return React.DOM.code({ className: 'command-entry' }, React.DOM.ol({}, ...commands.map(command => React.DOM.li({ className: 'stdin' }, command))))
+        return HTML.code({ className: 'command-entry' }, HTML.ol({}, ...commands.map(command => HTML.li({ className: 'stdin' }, command))))
     }
 
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 import Page from 'page'
 import CronEntry from '/CronEntry.js'
 import CommandEntry from '/CommandEntry.js'
@@ -54,51 +55,51 @@ export default class NewAgentPage extends React.Component {
     }
 
     render() {
-        const title = React.DOM.h2({}, 'Create a new agent')
-        const hr = React.DOM.hr({})
+        const title = HTML.h2({}, 'Create a new agent')
+        const hr = HTML.hr({})
         if (this.state.error) {
-            const error = React.DOM.h2({}, 'Something went wrong')
-            const info = React.DOM.p({}, 'An error occured whilst creating this agent.')
-            const message = React.DOM.p({}, this.state.error)
-            return React.DOM.div({ className: 'new-agent-page', ref: node => this.node = node }, ...[
+            const error = HTML.h2({}, 'Something went wrong')
+            const info = HTML.p({}, 'An error occured whilst creating this agent.')
+            const message = HTML.p({}, this.state.error)
+            return HTML.div({ className: 'new-agent-page', ref: node => this.node = node }, ...[
                 title,
                 hr,
-                React.DOM.div({ className: 'error' }, error, info, message)
+                HTML.div({ className: 'error' }, error, info, message)
             ])
         }
-        if (this.state.loading) return React.DOM.div({ className: 'new-agent-page', ref: node => this.node = node }, ...[
-            React.DOM.div({ className: 'loading' })
+        if (this.state.loading) return HTML.div({ className: 'new-agent-page', ref: node => this.node = node }, ...[
+            HTML.div({ className: 'loading' })
         ])
         const elements = [
-            this.state.validation['name'] ? React.DOM.span({ className: 'validation' }, 'You must give this agent a name') : null,
-            React.DOM.h4({}, 'Agent name'),
-            React.DOM.input({ onChange: this.set('name') }),
-            React.DOM.h4({}, 'Description'),
-            React.DOM.input({ onChange: this.set('description') }),
-            React.DOM.hr({}),
-            React.DOM.h4({}, 'Setup commands'),
+            this.state.validation['name'] ? HTML.span({ className: 'validation' }, 'You must give this agent a name') : null,
+            HTML.h4({}, 'Agent name'),
+            HTML.input({ onChange: this.set('name') }),
+            HTML.h4({}, 'Description'),
+            HTML.input({ onChange: this.set('description') }),
+            HTML.hr({}),
+            HTML.h4({}, 'Setup commands'),
             React.createElement(CommandEntry, { onChange: this.set('setup') }),
-            React.DOM.p({}, 'These commands will only be executed once, when the agent is being built. Use ', React.DOM.code({}, 'requires'), ' to declare what packages are going to be used.'),
-            React.DOM.hr({}),
-            React.DOM.h4({}, 'When should this agent run?'),
+            HTML.p({}, 'These commands will only be executed once, when the agent is being built. Use ', HTML.code({}, 'requires'), ' to declare what packages are going to be used.'),
+            HTML.hr({}),
+            HTML.h4({}, 'When should this agent run?'),
             React.createElement(CronEntry, { defaultValue: this.state.recipe.schedule, onChange: this.set('schedule') }),
-            this.state.validation['run'] ? React.DOM.span({ className: 'validation' }, 'At least one command needs to be entered') : null,
-            React.DOM.h4({}, 'Run commands'),
+            this.state.validation['run'] ? HTML.span({ className: 'validation' }, 'At least one command needs to be entered') : null,
+            HTML.h4({}, 'Run commands'),
             React.createElement(CommandEntry, { onChange: this.set('run') }),
-            React.DOM.p({}, 'These commands will be executed every time the agent runs.'),
-            this.state.validation['result'] ? React.DOM.span({ className: 'validation' }, 'You must give the name of the file that gets created by this agent') : null,
-            React.DOM.h4({}, 'What file gets created?'),
-            React.DOM.input({ className: 'filename', onChange: this.set('result') }),
-            React.DOM.hr({}),
-            React.DOM.h4({}, 'What should happen next?'),
+            HTML.p({}, 'These commands will be executed every time the agent runs.'),
+            this.state.validation['result'] ? HTML.span({ className: 'validation' }, 'You must give the name of the file that gets created by this agent') : null,
+            HTML.h4({}, 'What file gets created?'),
+            HTML.input({ className: 'filename', onChange: this.set('result') }),
+            HTML.hr({}),
+            HTML.h4({}, 'What should happen next?'),
             React.createElement(TriggerEntry, { onChange: this.set('triggers') }),
-            React.DOM.hr({}),
-            React.DOM.button({ onClick: this.create }, 'Create agent')
+            HTML.hr({}),
+            HTML.button({ onClick: this.create }, 'Create agent')
         ]
-        return React.DOM.div({ className: 'new-agent-page', ref: node => this.node = node }, ...[
+        return HTML.div({ className: 'new-agent-page', ref: node => this.node = node }, ...[
             title,
             hr,
-            React.DOM.div({}, ...elements)
+            HTML.div({}, ...elements)
         ])
     }
 

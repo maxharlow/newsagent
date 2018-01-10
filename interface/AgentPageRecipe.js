@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 import PrettyCron from 'prettycron'
 
 export default class AgentPageRecipe extends React.Component {
@@ -9,21 +10,21 @@ export default class AgentPageRecipe extends React.Component {
               ? ' Next run is ' + PrettyCron.getNext(this.props.recipe.schedule).toLowerCase() + '.'
               : ''
         const elements = [
-            React.DOM.p({}, this.props.recipe.schedule === '' ? 'Not scheduled to run.' : schedule + next),
-            React.DOM.h4({}, 'Setup commands'),
+            HTML.p({}, this.props.recipe.schedule === '' ? 'Not scheduled to run.' : schedule + next),
+            HTML.h4({}, 'Setup commands'),
             this.props.recipe.setup.length > 0
-                ? React.DOM.code({}, React.DOM.ol({}, ...this.props.recipe.setup.map(step => React.DOM.li({ className: 'stdin' }, step))))
-                : React.DOM.span({ className: 'note' }, 'This agent has no setup.'),
-            React.DOM.h4({}, 'Run commands'),
-            React.DOM.code({}, React.DOM.ol({}, ...this.props.recipe.run.map(step => React.DOM.li({ className: 'stdin' }, step)))),
-            React.DOM.h4({}, 'Result file'),
-            React.DOM.span({ className: 'field filename' }, this.props.recipe.result),
-            React.DOM.h4({}, 'Triggers'),
+                ? HTML.code({}, HTML.ol({}, ...this.props.recipe.setup.map(step => HTML.li({ className: 'stdin' }, step))))
+                : HTML.span({ className: 'note' }, 'This agent has no setup.'),
+            HTML.h4({}, 'Run commands'),
+            HTML.code({}, HTML.ol({}, ...this.props.recipe.run.map(step => HTML.li({ className: 'stdin' }, step)))),
+            HTML.h4({}, 'Result file'),
+            HTML.span({ className: 'field filename' }, this.props.recipe.result),
+            HTML.h4({}, 'Triggers'),
             this.props.recipe.triggers.length > 0
-                ? React.DOM.ul({ className: 'triggers' }, ...this.props.recipe.triggers.map(trigger => React.DOM.li({}, trigger.recipient)))
-                : React.DOM.span({ className: 'note' }, 'This agent has no triggers.'),
+                ? HTML.ul({ className: 'triggers' }, ...this.props.recipe.triggers.map(trigger => HTML.li({}, trigger.recipient)))
+                : HTML.span({ className: 'note' }, 'This agent has no triggers.'),
         ]
-        return React.DOM.div({ className: 'agent-page-recipe' }, ...elements)
+        return HTML.div({ className: 'agent-page-recipe' }, ...elements)
     }
 
 }

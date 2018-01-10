@@ -1,10 +1,11 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 
 export default class Menu extends React.Component {
 
     render() {
-        const title = React.DOM.h1({}, React.DOM.a({ href: '/' }, 'Newsagent'))
-        return React.DOM.header({ className: 'menu' }, title)
+        const title = HTML.h1({}, HTML.a({ href: '/' }, 'Newsagent'))
+        return HTML.header({ className: 'menu' }, title)
     }
 
 }

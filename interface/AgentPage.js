@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 import Moment from 'moment'
 import AgentPageEdit from '/AgentPageEdit.js'
 import AgentPageDelete from '/AgentPageDelete.js'
@@ -49,23 +50,23 @@ export default class AgentPage extends React.Component {
     }
 
     render() {
-        if (this.state === null) return React.DOM.div({ className: 'agent-page', ref: node => this.node = node }, ...[
-            React.DOM.div({ className: 'loading' })
+        if (this.state === null) return HTML.div({ className: 'agent-page', ref: node => this.node = node }, ...[
+            HTML.div({ className: 'loading' })
         ])
-        const summarise = (title, value) => React.DOM.span({ className: 'summary' }, React.DOM.span({ className: 'title' }, title), value)
-        const breadcrumbs = React.DOM.div({ className: 'breadcrumbs' }, React.DOM.a({ href: '/' }, 'Agents'))
-        const title = React.DOM.h2({}, this.state.recipe.name)
-        const description = React.DOM.p({ className: 'description' }, this.state.recipe.description)
-        const hr = React.DOM.hr({})
-        const runButton = React.DOM.button({ className: 'run', onClick: this.run, disabled: this.state.runDisabled }, 'Run now')
+        const summarise = (title, value) => HTML.span({ className: 'summary' }, HTML.span({ className: 'title' }, title), value)
+        const breadcrumbs = HTML.div({ className: 'breadcrumbs' }, HTML.a({ href: '/' }, 'Agents'))
+        const title = HTML.h2({}, this.state.recipe.name)
+        const description = HTML.p({ className: 'description' }, this.state.recipe.description)
+        const hr = HTML.hr({})
+        const runButton = HTML.button({ className: 'run', onClick: this.run, disabled: this.state.runDisabled }, 'Run now')
         const editButton = React.createElement(AgentPageEdit, { id: this.props.id, recipe: this.state.recipe })
         const deleteButton = React.createElement(AgentPageDelete, { id: this.props.id })
         const summaryBuiltDate = summarise('Built: ', Moment(this.state.builtDate).format('LLL'))
         const recipe = React.createElement(AgentPageRecipe, { recipe: this.state.recipe, state: this.state.state })
         if (this.state.state === 'starting') {
-            const message = React.DOM.div({ className: 'starting message' }, 'This agent is starting up...')
+            const message = HTML.div({ className: 'starting message' }, 'This agent is starting up...')
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page', ref: node => this.node = node }, ...[
+            return HTML.div({ className: 'agent-page', ref: node => this.node = node }, ...[
                 breadcrumbs,
                 title,
                 description,
@@ -76,10 +77,10 @@ export default class AgentPage extends React.Component {
             ])
         }
         else if (this.state.state === 'failed') {
-            const buttons = React.DOM.div({ className: 'buttons' }, deleteButton)
-            const message = React.DOM.div({ className: 'failed message' }, 'This agent failed to build.')
+            const buttons = HTML.div({ className: 'buttons' }, deleteButton)
+            const message = HTML.div({ className: 'failed message' }, 'This agent failed to build.')
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page', ref: node => this.node = node }, ...[
+            return HTML.div({ className: 'agent-page', ref: node => this.node = node }, ...[
                 breadcrumbs,
                 title,
                 description,
@@ -92,7 +93,7 @@ export default class AgentPage extends React.Component {
             ])
         }
         else {
-            const buttons = React.DOM.div({ className: 'buttons' }, deleteButton, editButton, runButton)
+            const buttons = HTML.div({ className: 'buttons' }, deleteButton, editButton, runButton)
             const summary = [
                 summaryBuiltDate,
                 this.state.status.averageRunTime ? summarise('Average run time: ', Moment.duration(this.state.status.averageRunTime).humanize()) : null,
@@ -105,7 +106,7 @@ export default class AgentPage extends React.Component {
             const setRunDisabled = runDisabled => this.setState({ runDisabled })
             const runs = React.createElement(AgentPageRuns, { id: this.props.id, setRunDisabled })
             const build = React.createElement(AgentPageBuild, { id: this.props.id, state: this.state.state })
-            return React.DOM.div({ className: 'agent-page', ref: node => this.node = node }, ...[
+            return HTML.div({ className: 'agent-page', ref: node => this.node = node }, ...[
                 breadcrumbs,
                 title,
                 description,

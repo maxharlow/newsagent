@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 import PrettyCron from 'prettycron'
 
 export default class CronEntry extends React.Component {
@@ -26,16 +27,16 @@ export default class CronEntry extends React.Component {
 
     render() {
         const presets = this.presets.map(preset => {
-            const input = React.DOM.input({ type: 'radio', name: preset.name, value: preset.value, checked: preset.name === this.state.name, onChange: this.update })
-            const text = React.DOM.span({}, preset.name)
-            return React.DOM.label({}, input, text)
+            const input = HTML.input({ type: 'radio', name: preset.name, value: preset.value, checked: preset.name === this.state.name, onChange: this.update })
+            const text = HTML.span({}, preset.name)
+            return HTML.label({}, input, text)
         })
-        const customRadio = React.DOM.input({ type: 'radio', name: 'Custom', value: this.state.value, checked: this.state.name === 'Custom', onChange: this.update })
-        const customInput = React.DOM.input({ ref: input => this.custom = input, name: 'Custom', value: this.state.value, disabled: this.state.name !== 'Custom', onChange: this.update })
-        const customText = React.DOM.span({}, 'Custom...', customInput)
-        const custom = React.DOM.label({}, customRadio, customText)
-        const description = React.DOM.p({}, this.state.value === '' ? 'Never runs.' : 'Run at ' + PrettyCron.toString(this.state.value).toLowerCase() + '.')
-        return React.DOM.div({ className: 'cron-entry' }, ...presets, custom, description)
+        const customRadio = HTML.input({ type: 'radio', name: 'Custom', value: this.state.value, checked: this.state.name === 'Custom', onChange: this.update })
+        const customInput = HTML.input({ ref: input => this.custom = input, name: 'Custom', value: this.state.value, disabled: this.state.name !== 'Custom', onChange: this.update })
+        const customText = HTML.span({}, 'Custom...', customInput)
+        const custom = HTML.label({}, customRadio, customText)
+        const description = HTML.p({}, this.state.value === '' ? 'Never runs.' : 'Run at ' + PrettyCron.toString(this.state.value).toLowerCase() + '.')
+        return HTML.div({ className: 'cron-entry' }, ...presets, custom, description)
     }
 
     componentDidUpdate(_, prevState) {

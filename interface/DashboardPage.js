@@ -1,4 +1,5 @@
 import React from 'react'
+import HTML from 'react-dom-factories'
 import Page from 'page'
 import PrettyCron from 'prettycron'
 import Config from '/Config.js'
@@ -100,41 +101,41 @@ export default class DashboardPage extends React.Component {
     }
 
     render() {
-        const title = React.DOM.h2({}, React.DOM.a({ href: '/' }, 'Agents'))
-        const hr = React.DOM.hr({})
-        const createButton = React.DOM.button({ onClick: this.create }, 'Create new agent')
-        const importButton = React.DOM.button({ onClick: this.import }, 'Import')
-        const exportButton = React.DOM.button({ onClick: this.export }, 'Export')
+        const title = HTML.h2({}, HTML.a({ href: '/' }, 'Agents'))
+        const hr = HTML.hr({})
+        const createButton = HTML.button({ onClick: this.create }, 'Create new agent')
+        const importButton = HTML.button({ onClick: this.import }, 'Import')
+        const exportButton = HTML.button({ onClick: this.export }, 'Export')
         if (this.state.agents === null) {
-            const buttons = React.DOM.div({ className: 'buttons' }, importButton, createButton)
-            const loading = React.DOM.div({ className: 'loading' })
-            return React.DOM.div({ className: 'dashboard-page', ref: node => this.node = node }, title, buttons, hr, loading)
+            const buttons = HTML.div({ className: 'buttons' }, importButton, createButton)
+            const loading = HTML.div({ className: 'loading' })
+            return HTML.div({ className: 'dashboard-page', ref: node => this.node = node }, title, buttons, hr, loading)
         }
         else if (this.state.agents.length === 0) {
-            const buttons = React.DOM.div({ className: 'buttons' }, importButton, createButton)
-            const message = React.DOM.p({}, 'No agents have been created.')
-            return React.DOM.div({ className: 'dashboard-page', ref: node => this.node = node }, title, buttons, hr, message)
+            const buttons = HTML.div({ className: 'buttons' }, importButton, createButton)
+            const message = HTML.p({}, 'No agents have been created.')
+            return HTML.div({ className: 'dashboard-page', ref: node => this.node = node }, title, buttons, hr, message)
         }
         else {
-            const count = React.DOM.span({ className: 'count' }, this.state.agentsFiltered.length === 1 ? '1 agent' : this.state.agentsFiltered.length + ' agents')
-            const filter = React.DOM.input({ placeholder: 'Filter agents...', className: 'filter', onInput: this.onFilter })
-            const buttons = React.DOM.div({ className: 'buttons' }, exportButton, importButton, createButton)
+            const count = HTML.span({ className: 'count' }, this.state.agentsFiltered.length === 1 ? '1 agent' : this.state.agentsFiltered.length + ' agents')
+            const filter = HTML.input({ placeholder: 'Filter agents...', className: 'filter', onInput: this.onFilter })
+            const buttons = HTML.div({ className: 'buttons' }, exportButton, importButton, createButton)
             const agents = this.state.agentsFiltered.map(agent => {
                 const fields = [
                     agent.state === 'started' && agent.recipe.schedule
-                        ? React.DOM.div({ className: 'schedule' }, 'runs at ' + PrettyCron.toString(agent.recipe.schedule).toLowerCase()) : null,
+                        ? HTML.div({ className: 'schedule' }, 'runs at ' + PrettyCron.toString(agent.recipe.schedule).toLowerCase()) : null,
                     agent.state !== 'started'
-                        ? React.DOM.div({ className: 'state ' + agent.state }, agent.state) : null,
-                    React.DOM.h5({}, agent.recipe ? agent.recipe.name : '[' + agent.id + ']'),
-                    React.DOM.div({ className: 'description' }, agent.recipe ? agent.recipe.description : null)
+                        ? HTML.div({ className: 'state ' + agent.state }, agent.state) : null,
+                    HTML.h5({}, agent.recipe ? agent.recipe.name : '[' + agent.id + ']'),
+                    HTML.div({ className: 'description' }, agent.recipe ? agent.recipe.description : null)
                 ]
                 const inner = agent.state !== 'unresponsive'
-                      ? React.DOM.a({ href: '/agents/' + agent.id }, ...fields)
-                      : React.DOM.span({}, ...fields)
-                return React.DOM.li({ className: agent.state }, inner)
+                      ? HTML.a({ href: '/agents/' + agent.id }, ...fields)
+                      : HTML.span({}, ...fields)
+                return HTML.li({ className: agent.state }, inner)
             })
-            const list = React.DOM.ol({}, ...agents)
-            return React.DOM.div({ className: 'dashboard-page', ref: node => this.node = node }, ...[
+            const list = HTML.ol({}, ...agents)
+            return HTML.div({ className: 'dashboard-page', ref: node => this.node = node }, ...[
                 title,
                 buttons,
                 hr,
