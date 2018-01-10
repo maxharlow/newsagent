@@ -2,7 +2,6 @@ FROM alpine:3.7
 
 VOLUME /data
 
-RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories
 RUN apk add --no-cache docker nodejs nodejs-npm nginx \
     build-base python2 # needed to compile leveldown
 
