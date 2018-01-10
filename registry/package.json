@@ -10,7 +10,7 @@
         "jsonschema": "1.2.x",
         "glob": "7.1.x",
         "tar-stream": "1.5.x",
-        "dockerode": "2.4.x",
+        "dockerode": "2.5.x",
         "json-stream": "1.0.x",
         "to-csv": "0.1.x",
         "strip-ansi": "4.0.x",
