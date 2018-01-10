@@ -39,7 +39,7 @@ export async function get(id) {
             spaceUsed: Math.round((inspection.SizeRootFs / 1024 / 1024) * 100) / 100 // in MB
         }
         const description = await fromContainer(id, 'GET', '/')
-        return Object.assign({ id: entry.id, state: entry.state }, description, system)
+        return Object.assign({ id: entry.id, state: entry.state, builtDate: entry.builtDate }, description, system)
     }
 }
 
