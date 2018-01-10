@@ -179,13 +179,13 @@ async function build(agent) {
 }
 
 async function buildContext(client, id, recipe) {
-    const packages = [ 'build-base', 'git', 'curl', 'wget', 'bash', 'python2-dev', 'py2-pip', 'python3-dev', 'ruby-dev', 'ruby-irb', 'ruby-rdoc', 'ruby-bundler', 'nodejs-current' ]
-    const dockerfile = 'FROM alpine:3.6'
-          + '\n' + 'RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories' // as the default doesn't yet have Node v8
-          + '\n' + 'RUN apk add -q --no-cache ' + packages.join(' ')
+    const packages = [ 'build-base', 'curl', 'nodejs', 'nodejs-npm', 'python2-dev' ]
+    const dockerfile = 'FROM alpine:3.7'
+          + '\n' + 'RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories'
+          + '\n' + 'RUN apk add --no-cache -q ' + packages.join(' ')
           + '\n' + 'COPY runner /runner'
           + '\n' + 'WORKDIR /runner'
-          + '\n' + 'RUN npm install -q'
+          + '\n' + 'RUN npm install -q --build-from-source'
           + '\n' + `RUN node Start setup ${id}.json`
           + '\n' + `CMD node Start serve ${id}.json`
     const tar = TarStream.pack()

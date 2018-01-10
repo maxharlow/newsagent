@@ -20,7 +20,7 @@ export async function setup(filename) {
     await Database.add('system', 'recipe', recipe)
     await Util.promisify(FS.mkdir)(Config.sourceLocation)
     const commands = recipe.setup
-          .map(command => command.replace(/^require /, 'apk add --no-cache '))
+          .map(requirements)
           .map(command => command.replace(/ ~/, ' /root'))
     const results = await sequentially(commands, shell(Config.sourceLocation))
     results.forEach(result => {
@@ -169,7 +169,7 @@ async function execute(id, commands) {
     const resultsUpdate = () => {
         Database.update('execution', id, { results }, resultsRevision)
             .then(update => resultsRevision = update.rev)
-            .catch(e => {}) // ignore conficts
+            .catch(e => {}) // ignore conflicts
     }
     const resultsUpdater = setInterval(resultsUpdate, 1 * 1000) // in milliseconds
     const invoke = shell(Config.sourceLocation, results)
@@ -188,6 +188,14 @@ async function removeOldRuns() {
 async function csv(location) {
     const data = await Util.promisify(FS.readFile)(location)
     return NeatCSV(data)
+}
+
+function requirements(command) {
+    if (!command.startsWith('requires ')) return command
+    const packages = command.split(' ').slice(1).map(name => {
+        return Config.requirementNicknames[name] || name
+    })
+    return 'apk add --no-cache ' + packages.join(' ')
 }
 
 function trigger(diff, triggers, name) {
@@ -216,6 +224,7 @@ function shell(location, results = []) {
         process.stdout.on('data', data => results[i].log.push({ type: 'stdout', value: data }))
         process.stderr.on('data', data => results[i].log.push({ type: 'stderr', value: data }))
         return new Promise((resolve, reject) => {
+            process.on('error', reject)
             process.on('exit', code => {
                 const result = {
                     command,
