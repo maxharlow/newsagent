@@ -6,8 +6,8 @@ System.config({
         'page': 'https://unpkg.com/page@1.7.x/page.js',
         'react': 'https://unpkg.com/react@15.6.x/dist/react.js',
         'react-dom': 'https://unpkg.com/react-dom@15.6.x/dist/react-dom.js',
-        'moment': 'https://unpkg.com/moment@2.18.x',
-        'moment-duration-format': 'https://unpkg.com/moment-duration-format@1.3.x',
+        'moment': 'https://unpkg.com/moment@2.20.x',
+        'moment-duration-format': 'https://unpkg.com/moment-duration-format@2.1.x',
         'later': 'https://unpkg.com/later@1.2.x/later.js',
         'prettycron': 'https://cdn.rawgit.com/azza-bazoo/prettycron/master/prettycron.js'
     },

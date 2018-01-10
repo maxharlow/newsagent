@@ -4,9 +4,9 @@
     "dependencies": {
         "babel-register": "6.26.x",
         "babel-plugin-transform-es2015-modules-commonjs": "6.26.x",
-        "express": "4.15.x",
-        "morgan": "1.8.x",
-        "body-parser": "1.17.x",
+        "express": "4.16.x",
+        "morgan": "1.9.x",
+        "body-parser": "1.18.x",
         "jsonschema": "1.2.x",
         "glob": "7.1.x",
         "tar-stream": "1.5.x",
