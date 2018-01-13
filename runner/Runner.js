@@ -99,21 +99,42 @@ export async function modify(recipeNew) {
     return Database.update('system', 'recipe', recipeNew, recipeCurrent.rev).then(schedule)
 }
 
-export async function difference(id) {
+export async function difference(id, recipe) {
     const runs = await Database.retrieveAll('run', true)
     const runsCurrent = runs.filter(run => run.id === id || run.state === 'success')
     const index = runsCurrent.findIndex(run => run.id === id)
-    if (index === runsCurrent.length - 1) return { added: [], removed: [] } // it's the first set of data
     const current = await Database.retrieveSet('data', runsCurrent[index].id)
-    const previous = await Database.retrieveSet('data', runsCurrent[index + 1].id)
-    const toHash = item => Object.keys(item).map(key => item[key]).sort().join('-')
-    const currentHash = current.map(toHash)
-    const previousHash = previous.map(toHash)
-    const diff = {
-        added: current.filter(item => previousHash.indexOf(toHash(item)) < 0),
-        removed: previous.filter(item => currentHash.indexOf(toHash(item)) < 0)
+    if (index === runsCurrent.length - 1) return { // it's the first set of data
+        added: current.reverse(), // so it's the same order as the others
+        removed: [],
+        changed: recipe.key && current[0][recipe.key] ? [] : null
     }
-    return diff
+    const previous = await Database.retrieveSet('data', runsCurrent[index + 1].id)
+    const toHash = item => Object.values(item).sort().join('-')
+    const isKeyValid = recipe.key && current[0][recipe.key] && previous[0][recipe.key] // there's a key and items use it
+    if (isKeyValid) { // we have a key, and it's in the data; can compute changes
+        const currentKeys = current.map(item => item[recipe.key])
+        const previousKeys = previous.map(item => item [recipe.key])
+        const diff = {
+            added: current.filter(item => previousKeys.indexOf(item[recipe.key]) < 0),
+            removed: previous.filter(item => currentKeys.indexOf(item[recipe.key]) < 0),
+            changed: current.filter(item => { // key in both, but different hash
+                const itemPrevious = previous.find(previousItem => previousItem[recipe.key] == item[recipe.key])
+                return itemPrevious && toHash(item) !== toHash(itemPrevious)
+            })
+        }
+        return diff
+    }
+    else { // otherwise use hashing to work out added and removed rows
+        const currentHash = current.map(toHash)
+        const previousHash = previous.map(toHash)
+        const diff = {
+            added: current.filter(item => previousHash.indexOf(toHash(item)) < 0),
+            removed: previous.filter(item => currentHash.indexOf(toHash(item)) < 0),
+            changed: null
+        }
+        return diff
+    }
 }
 
 async function run(id) {
@@ -142,9 +163,10 @@ async function run(id) {
     else {
         const rows = await csv(Config.sourceLocation + '/' + recipe.result)
         await Database.addSet('data', id, rows)
-        const diff = await difference(id)
+        const diff = await difference(id, recipe)
         await Database.addSet('data-added', id, diff.added)
         await Database.addSet('data-removed', id, diff.removed)
+        if (diff.changed) await Database.addSet('data-changed', id, diff.changed)
         const triggered = await trigger(diff, recipe.triggers, recipe.name)
         const runSuccess = {
             state: 'success',
@@ -155,6 +177,7 @@ async function run(id) {
             records: rows.length,
             recordsAdded: diff.added.length,
             recordsRemoved: diff.removed.length,
+            recordsChanged: diff.changed ? diff.changed.length : null,
             triggered
         }
         await Database.update('run', id, runSuccess, running.rev)
@@ -200,7 +223,8 @@ function requirements(command) {
 
 function trigger(diff, triggers, name) {
     const responses = triggers.map(trigger => {
-        return (diff.added.length > 0 || diff.removed.length > 0) ? Email.send(trigger.recipient, name, Email.format(diff, name)) : null
+        const difference = diff.added.length > 0 || diff.removed.length > 0 || (diff.changed && diff.changed.length > 0)
+        return difference ? Email.send(trigger.recipient, name, Email.format(diff, name)) : null
     })
     return Promise.all(responses.filter(Boolean))
 }

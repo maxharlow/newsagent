@@ -153,6 +153,20 @@ export function listen() {
                 else response.status(500).send({ error: 'unknown error' })
             })
     })
+    app.get('/agents/:agent/runs/:run/data/changed', (request, response) => {
+        const asCSV = request.accepts(['application/json', 'text/csv']) === 'text/csv'
+        Agents.getRunDataChanged(request.params.agent, request.params.run, asCSV)
+            .then(data => {
+                if (asCSV) response.append('Content-Type', 'text/csv')
+                response.status(200).send(data)
+            })
+            .catch(e => {
+                if (e && e.message && e.message === 'missing') response.status(404).send({ error: 'agent not found' })
+                else if (e && e.message && e.message === 'not found') response.status(404).send({ error: 'agent diff not found' })
+                else if (e && e.message) response.status(500).send({ error: e.message })
+                else response.status(500).send({ error: 'unknown error' })
+            })
+    })
     app.get('/export', (request, response) => {
         Agents.listRecipes()
             .then(agents => response.status(200).send(agents))

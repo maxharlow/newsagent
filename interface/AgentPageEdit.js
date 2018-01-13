@@ -19,7 +19,7 @@ export default class AgentPageEdit extends React.Component {
     set(field) {
         return event => {
             const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
-            this.setState({ recipe: Object.assign(this.state.recipe, { [field]: value }) })
+            this.setState({ recipe: Object.assign({}, this.state.recipe, { [field]: value }) })
         }
     }
 
@@ -42,10 +42,13 @@ export default class AgentPageEdit extends React.Component {
             if (!this.node) return
             this.setState({ confirming: false })
         }
+        const recipe = this.state.recipe.key !== '' // turn empty string into null
+              ? this.state.recipe
+              : Object.assign(this.state.recipe, { key: null })
         fetch(Config.registry + '/agents/' + this.props.id, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.state.recipe)
+            body: JSON.stringify(recipe)
         })
             .then(update)
             .catch(abort)
@@ -67,6 +70,8 @@ export default class AgentPageEdit extends React.Component {
             this.state.validation['result'] ? HTML.span({ className: 'validation' }, 'You must give the name of the file that gets created by this agent') : null,
             HTML.h4({}, 'Result file'),
             HTML.input({ className: 'filename', value: this.state.recipe.result, onChange: this.set('result') }),
+            HTML.h4({}, 'ID field'),
+            HTML.input({ value: this.state.recipe.key || '', onChange: this.set('key') }),
             HTML.h4({}, 'Triggers'),
             React.createElement(TriggerEntry, { value: this.state.recipe.triggers, onChange: this.set('triggers') })
         ]

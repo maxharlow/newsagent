@@ -12,13 +12,15 @@ export default class RunDataView extends React.Component {
         this.load = this.load.bind(this)
         const checkingThreshold = 10000 // check if we really want to load data bigger than this
         this.state = {
-            mode: 'data',
-            data: null,
-            dataChecking: props.records > checkingThreshold,
+            mode: 'all',
+            all: null,
+            allChecking: props.records > checkingThreshold,
             added: null,
             addedChecking: props.recordsAdded > checkingThreshold,
             removed: null,
-            removedChecking: props.recordsRemoved > checkingThreshold
+            removedChecking: props.recordsRemoved > checkingThreshold,
+            changed: null,
+            changedChecking: props.recordsChanged > checkingThreshold
         }
     }
 
@@ -29,9 +31,10 @@ export default class RunDataView extends React.Component {
     shouldComponentUpdate(_, nextState) {
         return this.state.mode !== nextState.mode
             || this.state[this.state.mode] !== nextState[nextState.mode]
-            || this.state.dataChecking !== nextState.dataChecking
+            || this.state.allChecking !== nextState.allChecking
             || this.state.addedChecking !== nextState.addedChecking
             || this.state.removedChecking !== nextState.removedChecking
+            || this.state.changedChecking !== nextState.changedChecking
     }
 
     componentDidUpdate() {
@@ -45,11 +48,12 @@ export default class RunDataView extends React.Component {
     load() {
         const mode = this.state.mode // copy it, as it might change during
         if (this.state[mode]) return
-        if (mode === 'data' && this.state.dataChecking) return
+        if (mode === 'all' && this.state.allChecking) return
         if (mode === 'added' && this.state.addedChecking) return
         if (mode === 'removed' && this.state.removedChecking) return
+        if (mode === 'changed' && this.state.changedChecking) return
         const locationBase = Config.registry + '/agents/' + this.props.id + '/runs/' + this.props.run + '/data'
-        const location = mode === 'data' ? locationBase : locationBase + '/' + mode
+        const location = mode === 'all' ? locationBase : locationBase + '/' + mode
         const abort = error => {
             console.error('Could not load data', error)
         }
@@ -65,7 +69,10 @@ export default class RunDataView extends React.Component {
 
     render() {
         const title = HTML.h2({}, Moment(this.props.date).format('LLL'))
-        const modes = ['data', 'added', 'removed'].map(mode => {
+        const modesList = this.props.recordsChanged === null
+              ? ['all', 'added', 'removed']
+              : ['all', 'added', 'removed', 'changed']
+        const modes = modesList.map(mode => {
             const input = HTML.input({ type: 'radio', name: mode, value: mode, checked: mode === this.state.mode, onChange: this.updateMode })
             const text = HTML.span({}, mode)
             return HTML.label({}, input, text)
@@ -73,6 +80,7 @@ export default class RunDataView extends React.Component {
         const closeButton = HTML.button({ className: 'close', onClick: this.props.close }, '❮')
         const countNumber = this.state.mode === 'added' ? this.props.recordsAdded
               : this.state.mode === 'removed' ? this.props.recordsRemoved
+              : this.state.mode === 'changed' ? this.props.recordsChanged
               : this.props.records
         const countText = countNumber === 0 ? 'no rows'
               : countNumber === 1 ? '1 row'

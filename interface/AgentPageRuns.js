@@ -86,9 +86,13 @@ export default class AgentPageRuns extends React.Component {
                     return HTML.li({ className: run.state }, ...fields)
                 }
                 else {
-                    const records = run.recordsAdded === 0 && run.recordsRemoved === 0
-                          ? 'nothing changed'
-                          : 'added ' + run.recordsAdded.toLocaleString() + ', removed ' + run.recordsRemoved.toLocaleString()
+                    const recordsAreDifferent = run.recordsAdded === 0
+                          && run.recordsRemoved === 0
+                          && (run.recordsChanged === null || run.recordsChanged === 0)
+                    const recordsDifferences = 'adds ' + run.recordsAdded.toLocaleString()
+                          + ', removes ' + run.recordsRemoved.toLocaleString()
+                          + (run.recordsChanged === null ? '' : ', changes ' + run.recordsChanged.toLocaleString())
+                    const records = recordsAreDifferent ? 'no differences' : recordsDifferences
                     const triggered = run.triggered.map(trigger => {
                         const status = [
                             HTML.span({ className: 'type' }, trigger.type),
@@ -127,6 +131,7 @@ export default class AgentPageRuns extends React.Component {
                 records: this.state.viewing.records,
                 recordsAdded: this.state.viewing.recordsAdded,
                 recordsRemoved: this.state.viewing.recordsRemoved,
+                recordsChanged: this.state.viewing.recordsChanged,
                 close: () => this.setState({ viewing: null })
             })
             const download = !this.state.downloading ? null : React.createElement(RunDataDownload, {
@@ -136,6 +141,7 @@ export default class AgentPageRuns extends React.Component {
                 records: this.state.downloading.records,
                 recordsAdded: this.state.downloading.recordsAdded,
                 recordsRemoved: this.state.downloading.recordsRemoved,
+                recordsChanged: this.state.downloading.recordsChanged,
                 close: () => this.setState({ downloading: null })
             })
             return HTML.div({ className: 'agent-page-runs', ref: node => this.node = node }, ...[

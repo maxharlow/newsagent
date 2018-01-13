@@ -123,7 +123,7 @@ export default class DashboardPage extends React.Component {
             const agents = this.state.agentsFiltered.map(agent => {
                 const fields = [
                     agent.state === 'started' && agent.recipe.schedule
-                        ? HTML.div({ className: 'schedule' }, 'runs at ' + PrettyCron.toString(agent.recipe.schedule).toLowerCase()) : null,
+                        ? HTML.div({ className: 'schedule' }, 'runs ' + PrettyCron.toString(agent.recipe.schedule).toLowerCase()) : null,
                     agent.state !== 'started'
                         ? HTML.div({ className: 'state ' + agent.state }, agent.state) : null,
                     HTML.h5({}, agent.recipe ? agent.recipe.name : '[' + agent.id + ']'),

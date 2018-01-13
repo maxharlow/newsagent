@@ -11,14 +11,17 @@ export function format(diff, name) {
              + data.map(d => '<tr>' + Object.keys(d).map(key => '<td>' + d[key] + '</td>').join('') + '</tr>').join('')
              + '</table>'
     }
-    return `<h1>${name}</h1>` + '<h2>Added</h2>' + table(diff.added) + '<h2>Removed</h2>' + table(diff.removed)
+    return `<h1>${name}</h1>`
+        + '<h2>Added</h2>' + table(diff.added)
+        + '<h2>Removed</h2>' + table(diff.removed)
+        + (diff.changed === null ? '' : '<h2>Changed</h2>' + table(diff.changed))
 }
 
 export async function send(recipient, name, text) {
     const message = {
         from: 'Newsagent <' + Config.email.from + '>',
         to: recipient,
-        subject: '[ALERT] ' + name,
+        subject: 'Alert: ' + name,
         html: text
     }
     const sent = await Nodemailer.createTransport(Config.email).sendMail(message)

@@ -19,6 +19,7 @@ export default class NewAgentPage extends React.Component {
             setup: [],
             run: [],
             result: '',
+            key: '',
             triggers: []
         }
         this.state = { loading: false, validation: {}, recipe }
@@ -41,10 +42,13 @@ export default class NewAgentPage extends React.Component {
         const isValid = Object.keys(validation).every(key => validation[key] === false)
         if (!isValid) return
         this.setState({ loading: true })
+        const recipe = this.state.recipe.key !== '' // turn empty string into null
+              ? this.state.recipe
+              : Object.assign(this.state.recipe, { key: null })
         fetch(Config.registry + '/agents', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.state.recipe)
+            body: JSON.stringify(recipe)
         })
             .then(response => response.json())
             .then(response => Page('/agents/' + response.id))
@@ -90,6 +94,9 @@ export default class NewAgentPage extends React.Component {
             this.state.validation['result'] ? HTML.span({ className: 'validation' }, 'You must give the name of the file that gets created by this agent') : null,
             HTML.h4({}, 'What file gets created?'),
             HTML.input({ className: 'filename', onChange: this.set('result') }),
+            HTML.h4({}, 'If there is an ID column, what is it called? '),
+            HTML.input({ className: 'key', onChange: this.set('key') }),
+            HTML.p({}, 'An ID column it can be used to discover changes, otherwise only additions and deletions can be determined.'),
             HTML.hr({}),
             HTML.h4({}, 'What should happen next?'),
             React.createElement(TriggerEntry, { onChange: this.set('triggers') }),

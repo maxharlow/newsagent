@@ -19,6 +19,10 @@ export default class AgentPageRecipe extends React.Component {
             HTML.code({}, HTML.ol({}, ...this.props.recipe.run.map(step => HTML.li({ className: 'stdin' }, step)))),
             HTML.h4({}, 'Result file'),
             HTML.span({ className: 'field filename' }, this.props.recipe.result),
+            HTML.h4({}, 'ID field'),
+            this.props.recipe.key
+                ? HTML.span({ className: 'field' }, this.props.recipe.key)
+                : HTML.span({ className: 'note' }, 'This agent has no ID field defined.'),
             HTML.h4({}, 'Triggers'),
             this.props.recipe.triggers.length > 0
                 ? HTML.ul({ className: 'triggers' }, ...this.props.recipe.triggers.map(trigger => HTML.li({}, trigger.recipient)))

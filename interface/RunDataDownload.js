@@ -40,6 +40,10 @@ export default class RunDataDownload extends React.Component {
     }
 
     render() {
+        const changesButton = this.props.recordsChanged === null ? null : HTML.button({ onClick: this.download('data/changed'), disabled: this.props.recordsChanged === 0 }, ...[
+            'Download changed rows',
+            HTML.span({}, this.changesFor(this.props.recordsChanged))
+        ])
         const body = [
             HTML.h5({}, Moment(this.props.date).format('LLL')),
             HTML.button({ onClick: this.download('data') }, ...[
@@ -53,7 +57,8 @@ export default class RunDataDownload extends React.Component {
             HTML.button({ onClick: this.download('data/removed'), disabled: this.props.recordsRemoved === 0 }, ...[
                 'Download removed rows',
                 HTML.span({}, this.changesFor(this.props.recordsRemoved))
-            ])
+            ]),
+            changesButton
         ]
         const dialog = React.createElement(Dialog, {
             body,

@@ -121,6 +121,12 @@ export async function getRunDataRemoved(agent, run, asCSV) {
     else return asCSV ? ToCSV(data) : data
 }
 
+export async function getRunDataChanged(agent, run, asCSV) {
+    const data = await fromContainer(agent, 'GET', '/runs/' + run + '/data/changed')
+    if (data.length === 0) return asCSV ? '' : []
+    else return asCSV ? ToCSV(data) : data
+}
+
 function validate(recipe, isUpdate) {
     const schema = {
         type: 'object',
@@ -131,10 +137,11 @@ function validate(recipe, isUpdate) {
             schedule: { type: 'string' },
             run: { type: 'array', minimum: 1, items: { type: 'string' } },
             result: { type: 'string', minLength: 1 },
+            key: { type: ['string', 'null'], minLength: 1 },
             triggers: { type: 'array', items: { type: 'object', properties: { recipient: { type: 'string' } }, required: [ 'recipient' ] } }
         }
     }
-    if (!isUpdate) schema.required = [ 'name', 'description', 'setup', 'schedule', 'run', 'result', 'triggers' ]
+    if (!isUpdate) schema.required = [ 'name', 'description', 'setup', 'schedule', 'run', 'result', 'key', 'triggers' ]
     const validation = new JsonSchema.Validator().validate(recipe, schema)
     return validation.errors.map(e => e.stack)
 }
