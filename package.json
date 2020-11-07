@@ -1,0 +1,28 @@
+{
+    "name": "newsagent",
+    "version": "1.0.0",
+    "author": "Max Harlow <contact@maxharlow.com> (https://maxharlow.com/)",
+    "license": "Apache-2.0",
+    "type": "module",
+    "preferGlobal": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/maxharlow/newsagent.git"
+    },
+    "dependencies": {
+        "axios": "0.19.x",
+        "bree": "3.3.x",
+        "chalk": "4.1.x",
+        "cheerio": "1.0.0-rc.3",
+        "fs-extra": "9.0.x",
+        "nodemailer": "6.4.x",
+        "playwright": "1.5.x",
+        "yaml": "1.10.x",
+        "yargs": "16.1.x",
+        "zod": "1.11.x"
+    },
+    "main": "newsagent.js",
+    "bin": {
+        "newsagent": "./bin.js"
+    }
+}
