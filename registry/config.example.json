@@ -1,9 +1,0 @@
-{
-    "port": 4001,
-    "pouchLocation": "data",
-    "dockerHosts": [
-        {
-            "socketPath": "/var/run/docker.sock"
-        }
-    ]
-}
