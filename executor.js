@@ -3,9 +3,9 @@ import ObjectHash from 'object-hash'
 import FSExtra from 'fs-extra'
 
 async function sourcing() {
-    const { default: method } = await import(`./../methods/source-${watch.source.method}.js`)
-    const items = await method(watch.source)
-    if (items.length === 0) throw new Error('source is empty')
+    const { method, ...settings } = watch.source // omit method name
+    const { default: f } = await import(`./../methods/source-${watch.source.method}.js`)
+    const items = await f(settings)
     return items.map(content => {
         const id = ObjectHash(content)
         return { id, content }

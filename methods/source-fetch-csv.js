@@ -4,15 +4,14 @@ import Papaparse from 'papaparse'
 
 function validate(source) {
     const schema = Zod.object({
-        method: Zod.string(),
         url: Zod.string().url()
     })
     schema.parse(source)
 }
 
-async function run(source) {
-    validate(source)
-    const response = await Axios.get(source.url)
+async function run(settings) {
+    validate(settings)
+    const response = await Axios.get(settings.url)
     return Papaparse.parse(response.data, { header: true }).data
 }
 
