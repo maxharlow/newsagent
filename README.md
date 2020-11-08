@@ -79,6 +79,12 @@ Fetch a Json file, and extract data from it.
 * `url` The URL to fetch
 * `selection` A [JmesPath selector](https://jmespath.org/tutorial.html)
 
+##### ► `fetch-csv`
+
+Fetch a CSV file.
+
+* `url` The URL to fetch
+
 <hr>
 
 #### `schedule`
