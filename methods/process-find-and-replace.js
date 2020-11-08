@@ -5,12 +5,13 @@ function validate(source) {
         settings: Zod.object({
             method: Zod.string().regex(/find-and-replace/),
             find: Zod.string(),
-            replace: Zod.string()
+            replace: Zod.string(),
+            field: Zod.string().optional()
         }),
         change: Zod.object({
             id: Zod.string(),
             difference: Zod.string().regex(/addition|removal/),
-            content: Zod.string()
+            content: Zod.union([Zod.string(), Zod.object()])
         })
     })
     schema.parse(source)
@@ -18,8 +19,10 @@ function validate(source) {
 
 async function run(settings, change) {
     validate({ settings, change })
-    const transformed = change.content.replace(new RegExp(settings.find, 'g'), settings.replace)
-    return { ...change, content: transformed }
+    const field = settings.field ? change.content[settings.field] : change.content
+    const transformed = field.replace(new RegExp(settings.find, 'g'), settings.replace)
+    const contentUpdated = settings.field ? { ...change.content, [settings.field]: transformed } : transformed
+    return { ...change, content: contentUpdated }
 }
 
 export default run

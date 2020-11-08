@@ -3,14 +3,15 @@ import Zod from 'zod'
 function validate(source) {
     const schema = Zod.object({
         settings: Zod.object({
-            method: Zod.string(),
+            method: Zod.string().regex(/match-transform/),
             match: Zod.string(),
-            transform: Zod.string()
+            transform: Zod.string(),
+            field: Zod.string().optional()
         }),
         change: Zod.object({
             id: Zod.string(),
             difference: Zod.string().regex(/addition|removal/),
-            content: Zod.string()
+            content: Zod.union([Zod.string(), Zod.object()])
         })
     })
     schema.parse(source)
@@ -18,12 +19,14 @@ function validate(source) {
 
 async function run(settings, change) {
     validate({ settings, change })
-    const matches = change.content.match(new RegExp(settings.match))
+    const field = settings.field ? change.content[settings.field] : change.content
+    const matches = field.match(new RegExp(settings.match))
     if (!matches) return null
     const transformed = matches.reduce((s, match, i) => {
         return s.replace(`\\${i}`, match)
     }, settings.transform)
-    return { ...change, content: transformed }
+    const contentUpdated = settings.field ? { ...change.content, [settings.field]: transformed } : transformed
+    return { ...change, content: contentUpdated }
 }
 
 export default run

@@ -68,8 +68,9 @@ Where the data is going to come from. The `method` field should be one of the fo
 Fetch a HTML page, and extract text from it.
 
 * `url` The URL to fetch
-* `browser` (optional) If not specified simply fetches the HTML, specify either `chromium`, `webkit`, or `firefox` to fetch the page using that browser
+* `browser` (optional) Specify either `chromium`, `webkit`, or `firefox` to fetch the page using that browser, if not specified simply fetches the HTML
 * `selection` A CSS selector for one or more text elements, or the more advanced [Playwright format](https://playwright.dev/#path=docs/selectors.md) if a browser is specified
+* `subselection` (optional) Specify fields within that selection, each with their own selector
 
 <hr>
 
@@ -91,17 +92,19 @@ An optional section. A list of processes which the changes are pushed through, o
 
 ##### ► `match-transform`
 
-Expects text input, and outputs text. If it matches the regular expression in the `match` section it goes through to the `transform`.
+If it matches the regular expression in the `match` section it goes through to the `transform`. Expects text input, and outputs text, unless `field` is specified.
 
 * `match` A regular expression
 * `transform` Text to output, using groups from the match, eg. `\\1`
+* `field` (optional) The field within the input data to manipulate.
 
 ##### ► `find-and-replace`
 
-Expects text input, and outputs text. Looks for text and replaces it with something else.
+Looks for text and replaces it with something else. Expects text input, and outputs text, unless `field` is specified.
 
 * `find` The text to look for.
 * `replace` What to replace it with.
+* `field` (optional) The field within the input data to manipulate.
 
 <hr>
 
