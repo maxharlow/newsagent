@@ -1,5 +1,5 @@
 import Process from 'process'
-import Crypto from 'crypto'
+import ObjectHash from 'object-hash'
 import FSExtra from 'fs-extra'
 
 async function sourcing() {
@@ -11,7 +11,7 @@ async function sourcing() {
 
 async function diffing(items) {
     const keyFields = [watch.source, watch.monitor, watch.processes] // changing these will result in a new cachefile
-    const key = Crypto.createHash('md5').update(JSON.stringify(keyFields)).digest('hex')
+    const key = ObjectHash(keyFields)
     const path = `.newsagent-cache/${key}`
     const hashset = items.map(item => item.id)
     const cachefileExists = await FSExtra.pathExists(path)

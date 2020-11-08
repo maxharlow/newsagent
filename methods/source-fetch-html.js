@@ -1,5 +1,5 @@
-import Crypto from 'crypto'
 import Zod from 'zod'
+import ObjectHash from 'object-hash'
 import Axios from 'axios'
 import Cheerio from 'cheerio'
 import Playwright from 'playwright'
@@ -37,7 +37,7 @@ async function run(source) {
     validate(source)
     const items = await (source.browser ? withBrowser : withoutBrowser)(source)
     return items.map(content => {
-        const id = Crypto.createHash('md5').update(content).digest('hex')
+        const id = ObjectHash(content)
         return { id, content }
     })
 }
