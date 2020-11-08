@@ -70,7 +70,15 @@ Fetch a HTML page, and extract text from it.
 * `url` The URL to fetch
 * `browser` (optional) Specify either `chromium`, `webkit`, or `firefox` to fetch the page using that browser, if not specified simply fetches the HTML
 * `selection` A CSS selector for one or more text elements, or the more advanced [Playwright format](https://playwright.dev/#path=docs/selectors.md) if a browser is specified
-* `subselection` (optional) Specify fields within that selection, each with their own selector
+* `subselection` (optional) Fields within that selection, each with their own selector
+
+##### ► `fetch-json`
+
+Fetch a Json file, and extract data from it.
+
+* `url` The URL to fetch
+* `selection` A [JmesPath selector](https://jmespath.org/tutorial.html)
+* `subselection` (optional) Fields within that selection, each with their own selector
 
 <hr>
 
@@ -90,9 +98,22 @@ What kinds of changes do you want to be alerted on? Set to either `additions-and
 
 An optional section. A list of processes which the changes are pushed through, one after another. They can modify or filter out what goes through to fire alerts.
 
+##### ► `select`
+
+Select specific fields to retain from the data.
+
+* `fields` Specify fields, each with their own [JmesPath selector](https://jmespath.org/tutorial.html)
+
+##### ► `filter`
+
+Filters out anything not matching a regular expression. Expects text input and outputs text, unless `field` is specified.
+
+* `match` A regular expression
+* `field` (optional) The field within the input data to manipulate.
+
 ##### ► `match-transform`
 
-If it matches the regular expression in the `match` section it goes through to the `transform`. Expects text input, and outputs text, unless `field` is specified.
+Select parts of text using a regular expression and transform them. Expects text input, and outputs text, unless `field` is specified.
 
 * `match` A regular expression
 * `transform` Text to output, using groups from the match, eg. `\\1`
@@ -100,7 +121,7 @@ If it matches the regular expression in the `match` section it goes through to t
 
 ##### ► `find-and-replace`
 
-Looks for text and replaces it with something else. Expects text input, and outputs text, unless `field` is specified.
+Looks for text and replaces it with something else. Expects text input and outputs text, unless `field` is specified.
 
 * `find` The text to look for.
 * `replace` What to replace it with.
