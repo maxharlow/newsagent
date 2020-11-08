@@ -151,6 +151,12 @@ Sends an email.
 * `smtpUsername` Your SMTP username (for a Gmail account, use your email address)
 * `smtpPassword` Your SMTP password (for a Gmail account, use [an app password](https://myaccount.google.com/apppasswords))
 
+##### ► `macos-notification`
+
+Shows a MacOS notification.
+
+* `field` (optional) A specific field to use for the notification text.
+
 <hr>
 
 
