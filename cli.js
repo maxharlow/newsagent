@@ -14,7 +14,7 @@ function display(watches) {
     console.error(`\n${Chalk.bold('Logs:')}\n`)
     const message = (source, event, data) => {
         const timestamp = new Date().toISOString()
-        console.log(`${Chalk.grey(timestamp)} ${Chalk.yellow(source || '(unknown)')} ${event}`, data ? Util.inspect(data) : '')
+        console.log(`${Chalk.grey(timestamp)} ${Chalk.yellow(source || '(unknown)')} ${event}`, data ? Util.inspect(data, { depth: Infinity }) : '')
     }
     newsagent(watches, message)
 }

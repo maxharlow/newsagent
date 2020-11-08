@@ -132,6 +132,7 @@ Inspiration
 -----------
 
 * [Some unnamed tool built by the LA Times](https://www.youtube.com/watch?v=iP-On8PzEy8)
+* [Workbench](https://workbenchdata.com/)
 * [Morph](https://morph.io/)
 * [Huginn](https://github.com/huginn/huginn)
 * [Visualping](https://visualping.io/), nee Change Detection
