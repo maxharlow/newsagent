@@ -6,8 +6,7 @@ function validate(source) {
     const schema = Zod.object({
         method: Zod.string(),
         url: Zod.string().url(),
-        selection: Zod.string(),
-        subselection: Zod.object().optional()
+        selection: Zod.string()
     })
     schema.parse(source)
 }
@@ -15,15 +14,7 @@ function validate(source) {
 async function run(source) {
     validate(source)
     const response = await Axios.get(source.url)
-    const items = [JmesPath.search(response.data, source.selection)].flat()
-    if (!source.subselection) return items
-    return items.map(item => {
-        const entries = Object.entries(source.subselection).map(([key, value]) => {
-            const selection = JmesPath.search(item, value)
-            return [key, selection]
-        })
-        return Object.fromEntries(entries)
-    })
+    return [JmesPath.search(response.data, source.selection)].flat()
 }
 
 export default run

@@ -78,7 +78,6 @@ Fetch a Json file, and extract data from it.
 
 * `url` The URL to fetch
 * `selection` A [JmesPath selector](https://jmespath.org/tutorial.html)
-* `subselection` (optional) Fields within that selection, each with their own selector
 
 <hr>
 
