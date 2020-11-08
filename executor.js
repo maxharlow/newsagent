@@ -13,8 +13,7 @@ async function sourcing() {
 }
 
 async function diffing(items) {
-    const keyFields = [watch.source, watch.monitor, watch.processes] // changing these will result in a new cachefile
-    const key = ObjectHash(keyFields)
+    const key = ObjectHash(watch.source)
     const path = `.newsagent-cache/${key}`
     const hashset = items.map(item => item.id)
     const cachefileExists = await FSExtra.pathExists(path)
