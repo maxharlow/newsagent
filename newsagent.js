@@ -7,11 +7,11 @@ function validate(watches) {
     const schema = Zod.array(
         Zod.object({
             name: Zod.string(),
-            source: Zod.object(),
+            source: Zod.object({ method: Zod.string() }).nonstrict(),
             schedule: Zod.string(),
             monitor: Zod.string().regex(/additions-only|additions-and-removals|removals-only/),
-            processes: Zod.array(Zod.object()).optional(),
-            alerts: Zod.array(Zod.object())
+            processes: Zod.array(Zod.object({ method: Zod.string() }).nonstrict()).optional(),
+            alerts: Zod.array(Zod.object({ method: Zod.string() }).nonstrict())
         })
     )
     return schema.parse(watches)

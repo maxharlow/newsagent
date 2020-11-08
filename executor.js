@@ -6,7 +6,10 @@ async function sourcing() {
     const { default: method } = await import(`./../methods/source-${watch.source.method}.js`)
     const items = await method(watch.source)
     if (items.length === 0) throw new Error('source is empty')
-    return items
+    return items.map(content => {
+        const id = ObjectHash(content)
+        return { id, content }
+    })
 }
 
 async function diffing(items) {
@@ -41,17 +44,23 @@ async function diffing(items) {
 }
 
 async function processing(changes) {
-    return (watch.processes || []).reduce(async (a, process) => {
-        const { default: method } = await import(`./../methods/process-${process.method}.js`)
-        const all = await Promise.all((await a).map(change => method(process, change)))
-        return all.filter(x => x)
+    if (!watch.processes) return changes
+    return watch.processes.reduce(async (a, process) => {
+        const { method, ...settings } = process // omit method name
+        const { default: f } = await import(`./../methods/process-${process.method}.js`)
+        const all = await Promise.all((await a).map(async change => {
+            const contentNew = await f(change.content, settings)
+            return { ...change, content: contentNew }
+        }))
+        return all.filter(x => x.content)
     }, changes)
 }
 
 async function alerting(results) {
     const firings = watch.alerts.map(async alert => {
-        const { default: method } = await import(`./../methods/alert-${alert.method}.js`)
-        results.forEach(result => method(watch.name, alert, result))
+        const { method, ...settings } = alert // omit method name
+        const { default: f } = await import(`./../methods/alert-${alert.method}.js`)
+        results.forEach(result => f(watch.name, result.difference, result.content, settings))
     })
     await Promise.all(firings)
 }
