@@ -16,13 +16,15 @@ async function sourcing() {
 async function diffing(items) {
     const key = ObjectHash(watch.source)
     const path = `.newsagent-cache/${key}`
+    const hash = ObjectHash(items)
     const hashset = items.map(item => item.id)
     const cachefileExists = await FSExtra.pathExists(path)
     if (!cachefileExists) {
-        await FSExtra.writeJson(path, { hashset, amalgam: items })
+        await FSExtra.writeJson(path, { hash, hashset, amalgam: items })
         return []
     }
     const cachefile = await FSExtra.readJson(path)
+    if (cachefile.hash === hash) return [] // whole-data hash is the same, so we can avoid looking at individual records
     const additions = () => {
         return items.filter(item => !cachefile.hashset.includes(item.id)).map(item => {
             return { ...item, difference: 'addition' }
@@ -37,9 +39,9 @@ async function diffing(items) {
     const changesAdditions = watch.monitor === 'additions-and-removals' || watch.monitor === 'additions-only' ? additions() : []
     const changesRemovals = watch.monitor === 'additions-and-removals' || watch.monitor === 'removals-only' ? removals() : []
     const amalgam = cachefile.amalgam
-          .filter(item => !changesRemovals.find(change => change.id === item.id))
-          .concat(changesAdditions.map(change => ({ id: change.id, content: change.content }))) // so omit difference field
-    await FSExtra.writeJson(path, { hashset, amalgam })
+        .filter(item => !changesRemovals.find(change => change.id === item.id))
+        .concat(changesAdditions.map(change => ({ id: change.id, content: change.content }))) // so omit difference field
+    await FSExtra.writeJson(path, { hash, hashset, amalgam })
     return [...changesAdditions, ...changesRemovals]
 }
 
