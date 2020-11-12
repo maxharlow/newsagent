@@ -1,4 +1,5 @@
 import Process from 'process'
+import WorkerThreads from 'worker_threads'
 import ObjectHash from 'object-hash'
 import FSExtra from 'fs-extra'
 
@@ -72,7 +73,19 @@ async function execute() {
         await alerting(processed)
     }
     catch (e) {
-        console.error(`Error: ${e.message}`)
+        if (e.constructor.name === 'ZodError') {
+            const error = e.errors[0]
+            WorkerThreads.parentPort.postMessage({
+                event: 'execution-invalid',
+                data: { error: `${error.message}: ${error.path.join('.')} wanted ${error.expected} but got ${error.received}` }
+            })
+        }
+        else {
+            WorkerThreads.parentPort.postMessage({
+                event: 'execution-failure',
+                data: { error: e.message }
+            })
+        }
         Process.exit(1)
     }
 }
