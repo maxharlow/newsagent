@@ -105,20 +105,26 @@ An optional section. A list of processes which the changes are pushed through, o
 
 ##### ► `select`
 
-Select specific fields to retain from the data.
+Select specific fields to retain from the data. Expects data input and outputs data.
 
 * `fields` Specify fields, each with their own [JmesPath selector](https://jmespath.org/tutorial.html)
 
 ##### ► `filter`
 
-Filters out anything not matching a regular expression. Expects text input and outputs text, unless `field` is specified.
+Filters out anything not matching a regular expression. Expects text input, and outputs text unless `field` is specified.
 
 * `match` A regular expression
 * `field` (optional) The field within the input data to manipulate.
 
+##### ► `combine`
+
+Combine different fields together. Expects data input and outputs text.
+
+* `combination` The combined text, with fields included using double braces, eg. `{{field-name}}`
+
 ##### ► `match-transform`
 
-Select parts of text using a regular expression and transform them. Expects text input, and outputs text, unless `field` is specified.
+Select parts of text using a regular expression and transform them. Expects text input, and outputs text unless `field` is specified.
 
 * `match` A regular expression
 * `transform` Text to output, using groups from the match, eg. `\\1`
@@ -126,7 +132,7 @@ Select parts of text using a regular expression and transform them. Expects text
 
 ##### ► `find-and-replace`
 
-Looks for text and replaces it with something else. Expects text input and outputs text, unless `field` is specified.
+Looks for text and replaces it with something else. Expects text input, and outputs text unless `field` is specified.
 
 * `find` The text to look for.
 * `replace` What to replace it with.
