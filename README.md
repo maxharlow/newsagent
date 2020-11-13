@@ -116,6 +116,13 @@ Filters out anything not matching a regular expression. Expects text input, and 
 * `match` A regular expression
 * `field` (optional) The field within the input data to manipulate.
 
+##### ► `split`
+
+Splits out new fields from text. Expects text input unless `field` is specified, and outputs text.
+
+* `fields` Specify fields to output, each with their own regular expression.
+* `field` (optional) The field within the input data to extract data from
+
 ##### ► `combine`
 
 Combine different fields together. Expects data input and outputs text.
