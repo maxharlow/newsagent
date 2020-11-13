@@ -7,15 +7,17 @@ function validate(source) {
             find: Zod.string(),
             replace: Zod.string(),
             field: Zod.string().optional()
-        }),
+        })
     })
     schema.parse(source)
+    if (typeof source.content === 'object' && !source.settings.field) throw new Error('field needs to be specified')
+    if (source.settings.field && source.content[source.settings.field] === undefined) throw new Error(`'${field}' field not found in content`)
 }
 
 async function run(content, settings) {
     validate({ content, settings })
-    const field = settings.field ? content[settings.field] : content
-    const transformed = field.replace(new RegExp(settings.find, 'g'), settings.replace)
+    const text = [typeof content === 'object' ? content[settings.field] : content].flat().join(' ') // in case it's an array
+    const transformed = text.replace(new RegExp(settings.find, 'g'), settings.replace)
     return settings.field ? { ...content, [settings.field]: transformed } : transformed
 }
 

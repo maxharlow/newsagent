@@ -9,6 +9,9 @@ function validate(source) {
         })
     })
     schema.parse(source)
+    Object.keys(source.fields).forEach(field => {
+        if (source.content[source.settings.field === undefined]) throw new Error(`'${field}' field not found in content`)
+    })
 }
 
 async function run(content, settings) {
