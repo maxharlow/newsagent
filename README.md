@@ -170,6 +170,13 @@ Shows a MacOS notification.
 
 * `field` (optional) A specific field to use for the notification text.
 
+##### ► `slack`
+
+Sends a message to a Slack channel.
+
+* `webhook` An incoming webhook URL, which can be created by following [these instructions](https://api.slack.com/messaging/webhooks).
+* `field` (optional) A specific field to use for the message text.
+
 <hr>
 
 
