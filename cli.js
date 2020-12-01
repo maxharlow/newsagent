@@ -25,15 +25,14 @@ async function display(watches) {
 }
 
 async function setup() {
-    const instructions = Yargs(Process.argv)
+    const instructions = Yargs(Process.argv.slice(2))
         .usage('Usage: newsagent <watchfiles...>')
         .wrap(null)
         .help('?').alias('?', 'help')
         .version().alias('v', 'version')
-    if (instructions.argv['get-yargs-completions']) Process.exit(0)
-    if (instructions.argv._.length === 2) instructions.showHelp().exit(0)
+        .demandCommand(1, '')
     try {
-        const watchfiles = instructions.argv._.slice(2)
+        const { _: watchfiles } = instructions.argv
         const parsing = watchfiles.flatMap(async file => {
             const data = await FSExtra.readFile(file, 'utf8')
             return Yaml.parse(data)
