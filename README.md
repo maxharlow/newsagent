@@ -185,8 +185,10 @@ Inspiration
 
 * [Some unnamed tool built by the LA Times](https://www.youtube.com/watch?v=iP-On8PzEy8)
 * [Workbench](https://workbenchdata.com/)
+* [Pipedream](https://pipedream.com/)
 * [Morph](https://morph.io/)
 * [Huginn](https://github.com/huginn/huginn)
+* [Easymorph](https://easymorph.com/)
 * [Visualping](https://visualping.io/), nee Change Detection
 * [Stakeout](https://github.com/veltman/stakeout)
 * [Datawire](https://github.com/arc64/datawi.re)
