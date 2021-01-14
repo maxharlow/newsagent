@@ -17,20 +17,26 @@ async function withBrowser(settings) {
     const browser = await Playwright[settings.browser].launch()
     const page = await browser.newPage()
     await page.goto(settings.url)
-    await page.waitForSelector(settings.selection, { state: 'attached' })
-    const items = await page.$$eval(settings.selection, (elements, subselection) => {
+    const [selector, selectorAttribute] = settings.selection.split(' | ')
+    await page.waitForSelector(selector, { state: 'attached' })
+    const passthrough = {
+        selectorAttribute,
+        subselection: settings.subselection
+    }
+    const items = await page.$$eval(selector, (elements, passthrough) => {
         return elements.map(element => {
-            if (!subselection) return element.textContent
-            const entries = Object.entries(subselection).map(([key, value]) => {
-                const valueContents = Array.from(element.querySelectorAll(value)).map(node => node.textContent)
-                const valueContent = valueContents.length === 0 ? null
-                    : valueContents.length === 1 ? valueContents[0]
-                    : valueContents
-                return [key, valueContent]
+            if (!passthrough.subselection) return passthrough.selectorAttribute ? element[passthrough.selectorAttribute] : element.textContent
+            const entries = Object.entries(passthrough.subselection).map(([key, subselection]) => {
+                const [subselector, subselectorAttribute] = subselection.split(' | ')
+                const contents = Array.from(element.querySelectorAll(subselector)).map(node => subselectorAttribute ? node[subselectorAttribute] : node.textContent)
+                const content = contents.length === 0 ? null
+                    : contents.length === 1 ? contents[0]
+                    : contents
+                return [key, content]
             })
             return Object.fromEntries(entries)
         })
-    }, settings.subselection)
+    }, passthrough)
     await browser.close()
     return items
 }
@@ -38,15 +44,17 @@ async function withBrowser(settings) {
 async function withoutBrowser(settings) {
     const response = await Axios.get(settings.url)
     const page = Cheerio.load(response.data)
-    const items = page(settings.selection).get().map(item => {
-        if (!settings.subselection) return Cheerio(item).text()
-        const entries = Object.entries(settings.subselection).map(([key, value]) => {
+    const [selector, selectorAttribute] = settings.selection.split(' | ')
+    const items = page(selector).get().map(item => {
+        if (!settings.subselection) return selectorAttribute ? Cheerio(item).attr(selectorAttribute) : Cheerio(item).text()
+        const entries = Object.entries(settings.subselection).map(([key, subselection]) => {
+            const [subselector, subselectorAttribute] = subselection.split(' | ')
             const element = Cheerio.load(item)
-            const valueContents = element(value).get().map(node => Cheerio(node).text())
-            const valueContent = valueContents.length === 0 ? null
-                : valueContents.length === 1 ? valueContents[0]
-                : valueContents
-            return [key, valueContent]
+            const contents = element(subselector).get().map(node => subselectorAttribute ? Cheerio(node).attr(subselectorAttribute) : Cheerio(node).text())
+            const content = contents.length === 0 ? null
+                : contents.length === 1 ? contents[0]
+                : contents
+            return [key, content]
         })
         return Object.fromEntries(entries)
     })

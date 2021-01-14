@@ -69,7 +69,7 @@ Fetch a HTML page, and extract text from it.
 
 * `url` The URL to fetch
 * `browser` (optional) Specify either `chromium`, `webkit`, or `firefox` to fetch the page using that browser, if not specified simply fetches the HTML
-* `selection` A CSS selector for one or more text elements, or the more advanced [Playwright format](https://playwright.dev/#path=docs/selectors.md) if a browser is specified
+* `selection` A CSS selector for one or more text elements, or the more advanced [Playwright format](https://playwright.dev/#path=docs/selectors.md) if a browser is specified; to get the content of an attribute use a pipe (`|`) followed by the attribute name
 * `subselection` (optional) Fields within that selection, each with their own selector
 
 ##### ► `fetch-json`
