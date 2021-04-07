@@ -16,8 +16,10 @@ function validate(source) {
 
 async function run(content, settings) {
     validate({ content, settings })
-    const text = [typeof content === 'object' ? content[settings.field] : content].flat().join(' ') // in case it's an array
-    const transformed = text.replace(new RegExp(settings.find, 'g'), settings.replace)
+    const value = typeof content === 'object' ? content[settings.field] : content
+    const transformed = Array.isArray(value)
+        ? value.map(entry => entry.replace(new RegExp(settings.find, 'g'), settings.replace))
+        : value.replace(new RegExp(settings.find, 'g'), settings.replace)
     return settings.field ? { ...content, [settings.field]: transformed } : transformed
 }
 
