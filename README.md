@@ -111,20 +111,20 @@ Select specific fields to retain from the data. Expects data input and outputs d
 
 ##### ► `filter`
 
-Filters out anything not matching a regular expression. Expects text input, and outputs text unless `field` is specified.
+Filters out anything not matching a regular expression. Expects text/text-array input unless `field` is specified, and outputs the same.
 
 * `match` A regular expression
 * `field` (optional) The field within the input data to manipulate.
 
 ##### ► `trim`
 
-Remove whitespace at the start and end. Expects text input, and outputs text unless `field` is specified.
+Remove whitespace at the start and end. Expects text/text-array input unless `field` is specified, and outputs the same.
 
 * `field` (optional) The field within the input data to manipulate.
 
 ##### ► `split`
 
-Splits out new fields from text. Expects text input unless `field` is specified, and outputs text.
+Splits out new fields from text. Expects text/text-array input unless `field` is specified, and outputs the same.
 
 * `fields` Specify fields to output, each with their own regular expression.
 * `field` (optional) The field within the input data to extract data from
@@ -137,7 +137,7 @@ Combine different fields together. Expects data input and outputs text.
 
 ##### ► `match-transform`
 
-Select parts of text using a regular expression and transform them. Expects text input, and outputs text unless `field` is specified.
+Select parts of text using a regular expression and transform them. Expects text/text-array input and outputs text, unless `field` is specified.
 
 * `match` A regular expression
 * `transform` Text to output, using groups from the match, eg. `\\1`
@@ -145,7 +145,7 @@ Select parts of text using a regular expression and transform them. Expects text
 
 ##### ► `find-and-replace`
 
-Looks for text and replaces it with something else. Expects text input, and outputs text unless `field` is specified.
+Looks for text and replaces it with something else. Expects text/text-array input unless `field` is specified, and outputs the same.
 
 * `find` The text to look for.
 * `replace` What to replace it with.
@@ -172,7 +172,7 @@ Sends an email.
 
 ##### ► `macos-notification`
 
-Shows a MacOS notification.
+Shows a MacOS notification. Expects text input unless `field` is specified.
 
 * `field` (optional) A specific field to use for the notification text.
 
