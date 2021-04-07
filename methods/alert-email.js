@@ -6,7 +6,7 @@ function validate(source) {
     const schema = Zod.object({
         name: Zod.string(),
         difference: Zod.string().regex(/addition|removal/),
-        content: Zod.union([Zod.string(), Zod.object()]),
+        content: Zod.union([Zod.string(), Zod.object(), Zod.array(Zod.string())]),
         settings: Zod.object({
             to: Zod.string().email(),
             smtpHost: Zod.string(),

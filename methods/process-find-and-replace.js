@@ -2,7 +2,7 @@ import Zod from 'zod'
 
 function validate(source) {
     const schema = Zod.object({
-        content: Zod.union([Zod.string(), Zod.object()]),
+        content: Zod.union([Zod.string(), Zod.object(), Zod.array(Zod.string())]),
         settings: Zod.object({
             find: Zod.string(),
             replace: Zod.string(),
