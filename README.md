@@ -176,6 +176,7 @@ Sends a message to a Slack channel.
 
 * `webhook` An incoming webhook URL, which can be created by following [these instructions](https://api.slack.com/messaging/webhooks).
 * `field` (optional) A specific field to use for the message text.
+* `url` (optional) A field containing a URL, which will be opened if the notification is clicked.
 
 <hr>
 

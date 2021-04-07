@@ -19,6 +19,7 @@
         "node-notifier": "9.0.x",
         "nodemailer": "6.5.x",
         "object-hash": "2.1.x",
+        "open": "8.0.x",
         "papaparse": "5.3.x",
         "playwright": "1.10.x",
         "yaml": "1.10.x",
