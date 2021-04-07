@@ -116,6 +116,12 @@ Filters out anything not matching a regular expression. Expects text input, and 
 * `match` A regular expression
 * `field` (optional) The field within the input data to manipulate.
 
+##### ► `trim`
+
+Remove whitespace at the start and end. Expects text input, and outputs text unless `field` is specified.
+
+* `field` (optional) The field within the input data to manipulate.
+
 ##### ► `split`
 
 Splits out new fields from text. Expects text input unless `field` is specified, and outputs text.
