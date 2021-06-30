@@ -14,12 +14,18 @@ function validate(source) {
     if (source.settings.field && source.content[source.settings.field] === undefined) throw new Error(`'${field}' field not found in content`)
 }
 
+function withRegex(match) {
+    if (match.split('').filter(c => c == '/').length < 2) throw new Error(`Invalid regular expression: ${match}`)
+    const flagpoint = match.lastIndexOf('/')
+    return RegExp(match.slice(1, flagpoint), match.slice(flagpoint + 1))
+}
+
 async function run(content, settings) {
     validate({ content, settings })
     const value = typeof content === 'object' ? content[settings.field] : content
     const transformed = Array.isArray(value)
-        ? value.map(entry => entry.replace(new RegExp(settings.find, 'g'), settings.replace))
-        : value.replace(new RegExp(settings.find, 'g'), settings.replace)
+        ? value.map(entry => entry.replace(withRegex(settings.find), settings.replace))
+        : value.replace(withRegex(settings.find), settings.replace)
     return settings.field ? { ...content, [settings.field]: transformed } : transformed
 }
 

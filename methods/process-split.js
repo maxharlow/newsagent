@@ -13,11 +13,17 @@ function validate(source) {
     schema.parse(source)
 }
 
+function withRegex(match) {
+    if (match.split('').filter(c => c == '/').length < 2) throw new Error(`Invalid regular expression: ${match}`)
+    const flagpoint = match.lastIndexOf('/')
+    return RegExp(match.slice(1, flagpoint), match.slice(flagpoint + 1))
+}
+
 async function run(content, settings) {
     validate({ content, settings })
     const text = [typeof content === 'object' ? content[settings.field] : content].flat().join(' ') // in case it's an array
     const entries = Object.entries(settings.fields).map(([key, pattern]) => {
-        const matched = text.match(new RegExp(pattern, 'g'))
+        const matched = text.match(withRegex(pattern))
         const value = !matched || matched.length === 0 ? null
             : matched.length === 1 ? matched[0]
             : matched

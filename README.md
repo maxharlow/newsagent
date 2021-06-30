@@ -38,7 +38,7 @@ A watchfile defines how a data source should be monitored, what transforms to ap
 
     processes:
         - method: match-transform
-          match: 'BREAKING: ([A-Za-z]+) ([A-Za-z ]+) wins (.+) to (.+) in (.+)\. #APracecall at (.+)\.'
+          match: '/BREAKING: ([A-Za-z]+) ([A-Za-z ]+) wins (.+) to (.+) in (.+)\. #APracecall at (.+)\./'
           transform: '\\4: \\5 -- \\3 of \\2 (\\1) at \\6'
         - method: find-and-replace
           find: 'U.S.'
