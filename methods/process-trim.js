@@ -1,4 +1,4 @@
-import Zod from 'zod'
+import * as Zod from 'zod'
 
 function validate(source) {
     const schema = Zod.object({

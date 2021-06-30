@@ -1,4 +1,4 @@
-import Zod from 'zod'
+import * as Zod from 'zod'
 import Notifier from 'node-notifier'
 import Open from 'open'
 

@@ -1,4 +1,4 @@
-import Zod from 'zod'
+import * as Zod from 'zod'
 import JmesPath from 'jmespath'
 
 function validate(source) {

@@ -1,4 +1,4 @@
-import Zod from 'zod'
+import * as Zod from 'zod'
 import Axios from 'axios'
 import Cheerio from 'cheerio'
 import Playwright from 'playwright'

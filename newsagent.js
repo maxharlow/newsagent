@@ -1,7 +1,7 @@
 import Process from 'process'
 import FSExtra from 'fs-extra'
 import Bree from 'bree'
-import Zod from 'zod'
+import * as Zod from 'zod'
 
 function validate(watch) {
     const schema = Zod.object({

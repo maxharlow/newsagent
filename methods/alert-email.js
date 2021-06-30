@@ -1,5 +1,5 @@
 import WorkerThreads from 'worker_threads'
-import Zod from 'zod'
+import * as Zod from 'zod'
 import Nodemailer from 'nodemailer'
 
 function validate(source) {
