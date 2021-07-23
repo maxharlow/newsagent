@@ -2,7 +2,7 @@ import * as Zod from 'zod'
 
 function validate(source) {
     const schema = Zod.object({
-        content: Zod.union([Zod.string(), Zod.object(), Zod.array(Zod.string())]),
+        content: Zod.union([Zod.string(), Zod.object({}), Zod.array(Zod.string())]),
         difference: Zod.string().regex(/addition|removal/),
         settings: Zod.object({
             field: Zod.string().optional()

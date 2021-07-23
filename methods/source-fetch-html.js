@@ -8,7 +8,7 @@ function validate(settings) {
         url: Zod.string().url(),
         browser: Zod.string().regex(/chromium|webkit|firefox/).optional(),
         selection: Zod.string(),
-        subselection: Zod.object().optional()
+        subselection: Zod.object({}).optional()
     })
     schema.parse(settings)
 }

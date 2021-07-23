@@ -3,10 +3,10 @@ import JmesPath from 'jmespath'
 
 function validate(source) {
     const schema = Zod.object({
-        content: Zod.object(),
+        content: Zod.object({}),
         difference: Zod.string().regex(/addition|removal/),
         settings: Zod.object({
-            fields: Zod.object()
+            fields: Zod.object({})
         })
     })
     schema.parse(source)

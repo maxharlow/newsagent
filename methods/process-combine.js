@@ -2,7 +2,7 @@ import * as Zod from 'zod'
 
 function validate(source) {
     const schema = Zod.object({
-        content: Zod.object(),
+        content: Zod.object({}),
         difference: Zod.string().regex(/addition|removal/),
         settings: Zod.object({
             combination: Zod.string(),

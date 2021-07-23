@@ -4,7 +4,7 @@ import Axios from 'axios'
 function validate(source) {
     const schema = Zod.object({
         name: Zod.string(),
-        content: Zod.union([Zod.string(), Zod.object(), Zod.array(Zod.string())]),
+        content: Zod.union([Zod.string(), Zod.object({}), Zod.array(Zod.string())]),
         settings: Zod.object({
             url: Zod.string(),
             bodyField: Zod.string().optional()

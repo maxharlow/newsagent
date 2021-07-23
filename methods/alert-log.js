@@ -4,8 +4,8 @@ import * as Zod from 'zod'
 function validate(source) {
     const schema = Zod.object({
         name: Zod.string(),
-        content: Zod.union([Zod.string(), Zod.object(), Zod.array(Zod.string())]),
-        settings: Zod.object()
+        content: Zod.union([Zod.string(), Zod.object({}), Zod.array(Zod.string())]),
+        settings: Zod.object({})
     })
     schema.parse(source)
 }

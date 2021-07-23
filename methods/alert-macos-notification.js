@@ -5,7 +5,7 @@ import Open from 'open'
 function validate(source) {
     const schema = Zod.object({
         name: Zod.string(),
-        content: Zod.union([Zod.string(), Zod.object()]),
+        content: Zod.union([Zod.string(), Zod.object({})]),
         settings: Zod.object({
             bodyField: Zod.string().optional(),
             urlField: Zod.string().optional()
