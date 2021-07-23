@@ -3,6 +3,7 @@ import * as Zod from 'zod'
 function validate(source) {
     const schema = Zod.object({
         content: Zod.union([Zod.string(), Zod.object(), Zod.array(Zod.string())]),
+        difference: Zod.string().regex(/addition|removal/),
         settings: Zod.object({
             find: Zod.string(),
             replace: Zod.string(),
@@ -20,8 +21,8 @@ function withRegex(match) {
     return RegExp(match.slice(1, flagpoint), match.slice(flagpoint + 1))
 }
 
-async function run(content, settings) {
-    validate({ content, settings })
+async function run(content, difference, settings) {
+    validate({ content, difference, settings })
     const value = typeof content === 'object' ? content[settings.field] : content
     const transformed = Array.isArray(value)
         ? value.map(entry => entry.replace(withRegex(settings.find), settings.replace))

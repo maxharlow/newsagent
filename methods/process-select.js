@@ -4,6 +4,7 @@ import JmesPath from 'jmespath'
 function validate(source) {
     const schema = Zod.object({
         content: Zod.object(),
+        difference: Zod.string().regex(/addition|removal/),
         settings: Zod.object({
             fields: Zod.object()
         })
@@ -14,8 +15,8 @@ function validate(source) {
     })
 }
 
-async function run(content, settings) {
-    validate({ content, settings })
+async function run(content, difference, settings) {
+    validate({ content, difference, settings })
     const entries = Object.entries(settings.fields).map(([key, value]) => {
         const selection = JmesPath.search(content, value)
         return [key, selection]

@@ -5,7 +5,6 @@ import Nodemailer from 'nodemailer'
 function validate(source) {
     const schema = Zod.object({
         name: Zod.string(),
-        difference: Zod.string().regex(/addition|removal/),
         content: Zod.union([Zod.string(), Zod.object(), Zod.array(Zod.string())]),
         settings: Zod.object({
             to: Zod.string().email(),
@@ -17,8 +16,8 @@ function validate(source) {
     schema.parse(source)
 }
 
-async function run(name, difference, content, settings) {
-    validate({ name, difference, content, settings })
+async function run(name, content, settings) {
+    validate({ name, content, settings })
     const transporter = Nodemailer.createTransport({
         host: settings.smtpHost,
         auth: {
@@ -26,11 +25,12 @@ async function run(name, difference, content, settings) {
             pass: settings.smtpPassword
         }
     })
+    const body = JSON.stringify(content)
     const info = await transporter.sendMail({
         from: 'Newsagent',
         to: settings.to,
         subject: `Newsagent alert: ${name}`,
-        text: `${difference.toUpperCase()}\n\n${JSON.stringify(content)}`
+        text: body
     })
     WorkerThreads.parentPort.postMessage({
         event: 'alert-email-sent',

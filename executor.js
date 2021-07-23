@@ -51,7 +51,7 @@ async function processing(changes) {
         const { method, ...settings } = process // omit method name
         const { default: f } = await import(`./../methods/process-${process.method}.js`)
         const all = await Promise.all((await a).map(async change => {
-            const contentNew = await f(change.content, settings)
+            const contentNew = await f(change.content, change.difference, settings)
             return { ...change, content: contentNew }
         }))
         return all.filter(x => x.content)
@@ -62,7 +62,7 @@ async function alerting(results) {
     const firings = watch.alerts.map(async alert => {
         const { method, ...settings } = alert // omit method name
         const { default: f } = await import(`./../methods/alert-${alert.method}.js`)
-        results.forEach(result => f(watch.name, result.difference, result.content, settings))
+        results.forEach(result => f(watch.name, result.content, settings))
     })
     await Promise.all(firings)
 }
