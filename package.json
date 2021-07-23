@@ -21,10 +21,10 @@
         "object-hash": "2.2.x",
         "open": "8.2.x",
         "papaparse": "5.3.x",
-        "playwright": "1.12.x",
+        "playwright": "1.13.x",
         "yaml": "1.10.x",
         "yargs": "17.0.x",
-        "zod": "3.2.x"
+        "zod": "3.5.x"
     },
     "exports": "./newsagent.js",
     "bin": {
