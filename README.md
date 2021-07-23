@@ -173,9 +173,10 @@ Sends an email.
 
 ##### ► `macos-notification`
 
-Shows a MacOS notification. Expects text input unless `field` is specified.
+Shows a MacOS notification. Expects text input unless `bodyField` is specified.
 
-* `field` (optional) A specific field to use for the notification text.
+* `bodyField` (optional) A specific field to use for the notification text.
+* `url` (optional) A field containing a URL, which will be opened if the notification is clicked.
 
 ##### ► `webhook`
 

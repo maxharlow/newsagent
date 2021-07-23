@@ -8,8 +8,8 @@ function validate(source) {
         difference: Zod.string().regex(/addition|removal/),
         content: Zod.union([Zod.string(), Zod.object()]),
         settings: Zod.object({
-            field: Zod.string().optional(),
-            url: Zod.string().optional()
+            bodyField: Zod.string().optional(),
+            urlField: Zod.string().optional()
         })
     })
     schema.parse(source)
@@ -17,15 +17,15 @@ function validate(source) {
 
 async function run(name, difference, content, settings) {
     validate({ name, difference, content, settings })
-    const body = settings.field ? content[settings.field]
+    const body = settings.bodyField ? content[settings.bodyField]
         : typeof content === 'string' ? content
         : JSON.stringify(content)
     Notifier.notify({
         title: `Newsagent alert: ${name}`,
-        message: `${difference.toUpperCase()}: ${body}`
+        message: body
     })
-    if (settings.url) Notifier.on('click', () => {
-        Open(content[settings.url])
+    if (settings.urlField) Notifier.on('click', () => {
+        Open(content[settings.urlField])
     })
 }
 
