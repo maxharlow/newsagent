@@ -176,13 +176,12 @@ Shows a MacOS notification. Expects text input unless `field` is specified.
 
 * `field` (optional) A specific field to use for the notification text.
 
-##### ► `slack`
+##### ► `webhook`
 
-Sends a message to a Slack channel.
+Call a webhook, such as a [Slack Webhook Workflow](https://slack.com/intl/en-gb/help/articles/360041352714-Create-more-advanced-workflows-using-webhooks).
 
-* `webhook` An incoming webhook URL, which can be created by following [these instructions](https://api.slack.com/messaging/webhooks).
-* `field` (optional) A specific field to use for the message text.
-* `url` (optional) A field containing a URL, which will be opened if the notification is clicked.
+* `url` A webhook URL to call
+* `bodyField` (optional) A specific field to use for the message text.
 
 <hr>
 

@@ -7,25 +7,23 @@ function validate(source) {
         difference: Zod.string().regex(/addition|removal/),
         content: Zod.union([Zod.string(), Zod.object(), Zod.array(Zod.string())]),
         settings: Zod.object({
-            webhook: Zod.string(),
-            field: Zod.string().optional()
+            url: Zod.string(),
+            bodyField: Zod.string().optional()
         })
     })
     schema.parse(source)
-    if (source.settings.field && source.content[source.settings.field] === undefined) throw new Error('field not found in content')
+    if (source.settings.bodyField && source.content[source.settings.bodyField] === undefined) throw new Error('body field not found in content')
 }
 
 async function run(name, difference, content, settings) {
     validate({ name, difference, content, settings })
-    const text = [
-        typeof content === 'object' && settings.field ? content[settings.field]
-            : typeof content === 'object' ? JSON.stringify(content)
-            : content
-    ].flat().join(' ') // in case it's an array
+    const body = settings.bodyField ? content[settings.bodyField]
+        : Array.isArray(content) ? content.join(', ')
+        : content
     await Axios({
-        url: settings.webhook,
+        url: settings.url,
         method: 'POST',
-        data: { text }
+        data: body
     })
 }
 
