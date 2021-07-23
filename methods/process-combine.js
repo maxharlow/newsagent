@@ -4,7 +4,8 @@ function validate(source) {
     const schema = Zod.object({
         content: Zod.object(),
         settings: Zod.object({
-            combination: Zod.string()
+            combination: Zod.string(),
+            field: Zod.string().optional()
         })
     })
     schema.parse(source)
@@ -17,10 +18,11 @@ function validate(source) {
 
 async function run(content, settings) {
     const fields = validate({ content, settings })
-    return fields.reduce((a, field) => {
+    const output = fields.reduce((a, field) => {
         const value = Array.isArray(content[field]) ? content[field].join(', ') : content[field]
         return a.replace(`{{${field}}}`, value ? value : '')
     }, settings.combination)
+    return settings.field ? { ...content, [settings.field]: output } : output
 }
 
 export default run

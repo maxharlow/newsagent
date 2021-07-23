@@ -131,9 +131,10 @@ Splits out new fields from text. Expects text/text-array input unless `field` is
 
 ##### ► `combine`
 
-Combine different fields together. Expects data input and outputs text.
+Combine different fields together. Expects data input and outputs text unless `field` is specified.
 
 * `combination` The combined text, with fields included using double braces, eg. `{{field-name}}`
+* `field` (optional) The name of a new output field.
 
 ##### ► `match-transform`
 
